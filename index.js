@@ -26,7 +26,6 @@ const appPath = path.join(__dirname, "apps", appName); // get app path from name
 const App = require(path.join(appPath, "_server")); // load app module
 
 class Server {
-// bite !!!!!!!
 	constructor() {
 		this._port = 80; // http port
 		trace("start http", this._port);
