@@ -8,6 +8,7 @@ const http = 		require("http"); 		// http server
 const path = 		require("path"); 		// path
 const fs = 			require("fs");			// file system
 
+
 global._root = __dirname; // keep root directory ref
 global.load = name => require(path.join(_root, path.sep, name)); // hack require.main.require()
 global.outload = name => require(`${name}`); // load modules from outside node app root directory
@@ -29,7 +30,7 @@ class Server {
 	constructor() {
 		this._port = 80; // http port
 		trace("start http", this._port);
-		
+
 		this._connect = Connect(); // connect instance
 		this._connect.use(this.handle.bind(this)); // handle request
 		this._connect.use(this.serve.bind(this)); // check request is file
