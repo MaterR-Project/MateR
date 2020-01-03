@@ -1,17 +1,18 @@
 [
   {
     "Id": 0,
-    "Pseudo": "Admin",
     "Mail": "admin@admin.wdl",
+    "Pseudo": "Admin",
     "Password": "c628995d8ecfc640e4bd183a69178450cb0b8f0c20d941577d3af17e7b175000f79ffc869450b7c4aba0b4dd87f3d5efa9ea7f217f68",
     "Bio": "Je contrôle cet univers dans toutes ses dimensions",
+    "Genre": 0,
     "Year": 0,
+    "Region": "Wonderland",
+    "Country": "Wonderland",
     "Convs": [
       1
     ],
-    "Genre": 0,
-    "Country": "Wonderland",
-    "Region": "Wonderland",
+    "Languages" : ["English"],
     "Games": [
       {
         "Name": "Apex Legends",
@@ -28,17 +29,18 @@
   },
   {
     "Id": 1,
-    "Pseudo": "Caribou",
     "Mail": "kbek.caribou@mail.com",
+    "Pseudo": "Caribou",
     "Password": "628995d8e8f0c29450b7c4abad9bd183a69170c8450cb0bfa9ea7f217f6841577d3af17e7b175000f79ffc860b4dd87f3d5ecfc640e4",
     "Bio": "Vive le Québec libre !",
+    "Genre": 0,
     "Year": 1986,
+    "Region": "Northern America",
+    "Country": "Canada",
+    "Languages" : ["English", "French"],
     "Convs": [
       0
     ],
-    "Genre": 0,
-    "Country": "Canada",
-    "Region": "Northern America",
     "Games": [
       {
         "Name": "Apex Legends",
