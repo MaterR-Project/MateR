@@ -1,0 +1,22 @@
+[
+	{
+		"Pseudo":"Admin",
+		"Mail" : "admin.admin@adminmail.co.uk",
+		"Password" : "c628995d8ecfc640e4bd183a69178450cb0b8f0c20d941577d3af17e7b175000f79ffc869450b7c4aba0b4dd87f3d5efa9ea7f217f68",
+		"Bio" : "Je controle cet univers dans toutes ses dimensions",
+		"Year" : 0,
+		"Convs" : [],
+		"Genre" : 0,
+		"Country" : "Wonderland",
+		"Region" : "Wonderland",
+		"Games" : [
+					{
+						"Name" : "Apex Legends", 
+						"Platform" : "PC", 
+						"Playstyles" : ["Try Hard"], 
+						"Level" : "Pro Player"
+					}
+				  ],
+		"Vocals" : ["Discord"]
+	}
+]
