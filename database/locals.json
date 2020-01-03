@@ -1,6 +1,6 @@
 [
 	{"Western Europe"   : ["Andora", "Austria", "Belgium", "France", "Germany", "Irland", "Italy", "Portugal", "Spain", "Switzerland", "UK"]},
-	{"Eastern Europe"   : ["Czechia", "Greece", "Poland", "Romania", "Ukraine"]}
+	{"Eastern Europe"   : ["Czechia", "Greece", "Poland", "Romania", "Ukraine"]},
 	{"Northern America" : ["Canada", "USA", "Mexico"]},
 	{"Southern America" : ["Argentina", "Brazil", "Chile", "Columbia", "Ecuador","Peru", "Venezuala"]},
 	{"Southern Africa"  : ["Angola", "DR. Congo", "Kenya", "Madagascar", "Mozambique", "Namibia", "South Africa"]},
