@@ -7,17 +7,23 @@
     ],
     "CrossPlay": 0
   },
-  "Insurgency : Sandstorm": {
+  "CS : GO": {
     "Platforms": [
       "Windows",
       "MacOS",
       "Linux",
-      "PS4",
-      "XB1"
+      "XB360",
+      "PS3"
     ],
     "CrossPlay": 0
   },
-  "Overcooked": {
+  "Escape from Tarkov": {
+    "Platforms": [
+      "Windows"
+    ],
+    "CrossPlay": 0
+  },
+  "FIFA 20": {
     "Platforms": [
       "Windows",
       "XB1",
@@ -26,9 +32,35 @@
     ],
     "CrossPlay": 0
   },
-  "Escape from Tarkov": {
+  "Fortnite": {
     "Platforms": [
-      "Windows"
+      "Windows",
+      "MacOS",
+      "XB1",
+      "PS4",
+      "Switch",
+      "iOS",
+      "Android"
+    ],
+    "CrossPlay": 1
+  },
+  "GTA V": {
+    "Platforms": [
+      "Windows",
+      "XB1",
+      "PS4",
+      "PS3",
+      "XB360"
+    ],
+    "CrossPlay": 0
+  },
+  "Insurgency : Sandstorm": {
+    "Platforms": [
+      "Windows",
+      "MacOS",
+      "Linux",
+      "PS4",
+      "XB1"
     ],
     "CrossPlay": 0
   },
@@ -61,19 +93,7 @@
     ],
     "CrossPlay": 0
   },
-  "Fortnite": {
-    "Platforms": [
-      "Windows",
-      "MacOS",
-      "XB1",
-      "PS4",
-      "Switch",
-      "iOS",
-      "Android"
-    ],
-    "CrossPlay": 1
-  },
-  "FIFA 20": {
+  "Overcooked": {
     "Platforms": [
       "Windows",
       "XB1",
@@ -82,13 +102,12 @@
     ],
     "CrossPlay": 0
   },
-  "CS : GO": {
+  "Overwatch": {
     "Platforms": [
       "Windows",
-      "MacOS",
-      "Linux",
-      "XB360",
-      "PS3"
+      "XB1",
+      "PS4",
+      "Switch"
     ],
     "CrossPlay": 0
   },
@@ -97,16 +116,6 @@
       "Windows",
       "XB1",
       "PS4"
-    ],
-    "CrossPlay": 0
-  },
-  "GTA V": {
-    "Platforms": [
-      "Windows",
-      "XB1",
-      "PS4",
-      "PS3",
-      "XB360"
     ],
     "CrossPlay": 0
   },
@@ -126,14 +135,5 @@
       "MacOS"
     ],
     "CrossPlay": 1
-  },
-  "Overwatch": {
-    "Platforms": [
-      "Windows",
-      "XB1",
-      "PS4",
-      "Switch"
-    ],
-    "CrossPlay": 0
   }
 }
