@@ -1,12 +1,12 @@
 [
-	{"Western Europe"   : ["Andora", "Austria", "Belgium", "France", "Germany", "Irland", "Italy", "Portugal", "Spain", "Switzerland", "UK"]},
-	{"Eastern Europe"   : ["Czechia", "Greece", "Poland", "Romania", "Ukraine"]},
+	{"Northern Africa"  : ["Algeria", "Egypt", "Libya", "Mauritania", "Morocco", "Niger", "Tunisia"]},
+	{"Southern Africa"  : ["Angola", "DR. Congo", "Kenya", "Madagascar", "Mozambique", "Namibia", "South Africa"]},
 	{"Northern America" : ["Canada", "USA", "Mexico"]},
 	{"Southern America" : ["Argentina", "Brazil", "Chile", "Columbia", "Ecuador","Peru", "Venezuala"]},
-	{"Southern Africa"  : ["Angola", "DR. Congo", "Kenya", "Madagascar", "Mozambique", "Namibia", "South Africa"]},
-	{"Northern Africa"  : ["Algeria", "Egypt", "Libya", "Mauritania", "Morocco", "Niger", "Tunisia"]},
-	{"Middle East"      : ["Afghanistan", "Qatar", "Iraq", "Iran", "Saudi Arabia",  "Turkey", "Yemen"]},
-	{"Asia"             : ["China", "India", "Japan", "Mongolia", "N-Korea", "Mongolia", "S-Korea"]},
+	{"Northern Asia"    : ["China", "India", "Japan", "Mongolia", "N-Korea", "Russia", "S-Korea"]},
 	{"Southern Asia"    : ["Indonesia", "Laos", "Malaysia", "Philippines", "Singapore", "Vietnam"]},
+	{"Eastern Europe"   : ["Czechia", "Greece", "Poland", "Romania", "Ukraine"]},
+	{"Western Europe"   : ["Andora", "Austria", "Belgium", "France", "Germany", "Irland", "Italy", "Portugal", "Spain", "Switzerland", "UK"]},
+	{"Middle East"      : ["Afghanistan", "Qatar", "Iraq", "Iran", "Saudi Arabia",  "Turkey", "Yemen"]},
 	{"Oceania"          : ["Australia", "New Zealand", "Papua New Guinea"]}
 ]
