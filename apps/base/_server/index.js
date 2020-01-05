@@ -43,9 +43,13 @@ class Base extends ModuleBase {
 	 * @method getIdFromSessionId : id of connect session
 	 * @param {*} sessionId
 	 */
-	getIdFromSessionId(sessionId) {
-		return this.sessionIds.get(sessionId);
-	}
+	 getIdFromSessionId(sessionId) {
+ 		let id = this.sessionIds.get(sessionId);
+ 		if (id === undefined) {
+ 			id = -1
+ 		}
+ 		return id;
+ 	}
 
 	/**
 	 * @method getGameNamesFromDatabase : list of game names
