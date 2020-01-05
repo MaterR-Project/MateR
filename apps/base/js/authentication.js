@@ -8,13 +8,22 @@ class autenticationModel extends Model {
 	async initialize(mvc) {
 		super.initialize(mvc);
 
+		this.sessionId = undefined;
 	}
 
-	async data() {
-		trace("get data");
-		// keep data in class variable ? refresh rate ?
-		let result = await Comm.get("data"); // wait data from server
-		return result.response; // return it to controller
+	async updateWrongPsw(){
+
+	}
+
+	async getSessionId(pseudo, password) {
+		trace("get session id");
+		let result = await Comm.get("login/"+pseudo+"/"+password);
+		trace(result);
+		if (result.status == 200) {
+			this.sessionId = result.response.message
+		}
+		trace(this.sessionId);
+		return result.response;
 	}
 
 }
@@ -50,7 +59,10 @@ class autenticationView extends View {
     this.passwordInput.setAttribute("type","text");
     this.stage.appendChild(this.passwordInput);
 
-    //
+		//champ texte pour le password
+    this.erreur = document.createElement("p");
+    this.stage.appendChild(this.erreur);
+
     //button connect
     this.connectBtn = document.createElement("button");
     this.connectBtn.innerHTML = "connect";
@@ -89,12 +101,16 @@ class autenticationView extends View {
 	}
 
   connectClick(event) {
-    this.mvc.controller.connectBtnWasClicked();
+    this.mvc.controller.connectBtnWasClicked(this.pseudoInput.value,this.passwordInput.value);
   }
 
   createAccountClick(event) {
     this.mvc.controller.createAccountBtnWasClicked();
   }
+
+	updateWrongPsw(message){
+		this.erreur.innerHTML = message
+	}
 
 }
 
@@ -109,12 +125,20 @@ class autenticationController extends Controller {
 
 	}
 
-  async connectBtnWasClicked(params) {
+  async connectBtnWasClicked(pseudo, password) {
+		trace("btn click", pseudo, password);
+		let response = await this.mvc.model.getSessionId(pseudo,password)
+		if (this.mvc.model.sessionId === undefined) {
+			this.mvc.view.updateWrongPsw(response.message);
+		}else{
+			this.mvc.view.destroy();
+	    this.mvc.app.testMVC.view.attach(document.body);
+	    this.mvc.app.testMVC.view.activate();
+		}
   }
 
-  async createAccountBtnWasClicked(params) {
-    this.mvc.view.deactivate();
-    this.mvc.view.detach();
+  async createAccountBtnWasClicked() {
+    this.mvc.view.destroy();
     this.mvc.app.testMVC.view.attach(document.body);
     this.mvc.app.testMVC.view.activate();
   }

@@ -8,8 +8,8 @@ class Base extends ModuleBase {
 
 	/**
 	 * @method hello : world
-	 * @param {*} req 
-	 * @param {*} res 
+	 * @param {*} req
+	 * @param {*} res
 	 * @param  {...*} params : some arguments
 	 */
 	hello(req, res, ... params) {
@@ -20,8 +20,8 @@ class Base extends ModuleBase {
 
 	/**
 	 * @method data : random data response
-	 * @param {*} req 
-	 * @param {*} res 
+	 * @param {*} req
+	 * @param {*} res
 	 */
 	data(req, res) {
 		let data = [ // some random data
@@ -46,6 +46,18 @@ class Base extends ModuleBase {
 		this.sendJSON(req, res, 200, data); // answer JSON
 	}
 
+	/**
+	 * @method data2 : random data response v2
+	 * @param {*} req
+	 * @param {*} res
+	 */
+	login(req, res, pseudo, password) {
+		if (pseudo === "toto" && password === "1234") {
+			this.sendJSON(req, res, 200, {message: 458});
+		} else {
+			this.sendJSON(req, res, 401, {message: "wrong identifiant or password"});
+		}
+	}
 
 	/**
 	 * @method _onIOConnect : new IO client connected
