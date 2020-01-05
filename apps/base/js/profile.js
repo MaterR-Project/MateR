@@ -396,7 +396,7 @@ class ProfileController extends Controller {
 	}
 	async activated(){
 		// execute le modèle qui recupère le profile en utilisant ce SSID
-		this.mvc.view.displayProfile(await this.mvc.model.getProfileFromSsid("1"));
+		this.mvc.view.displayProfile(await this.mvc.model.getProfileFromSsid("123"));
 	}
 
 }
