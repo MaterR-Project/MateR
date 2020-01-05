@@ -49,19 +49,44 @@ class autenticationView extends View {
     this.header.style.fontSize = "60px";
     this.stage.appendChild(this.header);
 
-    //champ texte pour le pseudo
+    //division pour le pseudo
+		this.pseudoDiv = document.createElement("div");
+		this.pseudoDiv.style.display = "flex";
+    this.pseudoDiv.style.flexDirection = "column";
+		this.pseudoDiv.style.margin = "10px";
+
+		this.pseudoLabel = document.createElement("label");
+		this.pseudoLabel.setAttribute("for","username");
+		this.pseudoLabel.innerHTML = "Username :";
+		this.pseudoDiv.appendChild(this.pseudoLabel);
+
     this.pseudoInput = document.createElement("input");
     this.pseudoInput.setAttribute("type","text");
-    this.stage.appendChild(this.pseudoInput);
+		this.pseudoInput.setAttribute("name","username");
+    this.pseudoDiv.appendChild(this.pseudoInput);
 
-    //champ texte pour le password
+		this.stage.appendChild(this.pseudoDiv);
+
+    //division pour le password
+		this.passwordDiv = document.createElement("div");
+		this.passwordDiv.style.display = "flex";
+    this.passwordDiv.style.flexDirection = "column";
+		this.passwordDiv.style.margin = "10px";
+
+		this.passwordLabel = document.createElement("label");
+		this.passwordLabel.setAttribute("for","password");
+		this.passwordLabel.innerHTML = "Password (8 characters minimum) :";
+		this.passwordDiv.appendChild(this.passwordLabel);
+
     this.passwordInput = document.createElement("input");
-    this.passwordInput.setAttribute("type","text");
-    this.stage.appendChild(this.passwordInput);
+    this.passwordInput.setAttribute("type","password");
+		this.passwordInput.setAttribute("name","password");
+    this.passwordDiv.appendChild(this.passwordInput);
 
-		//champ texte pour le password
-    this.erreur = document.createElement("p");
-    this.stage.appendChild(this.erreur);
+		this.stage.appendChild(this.passwordDiv);
+
+		this.erreur = document.createElement("p");
+		this.stage.appendChild(this.erreur);
 
     //button connect
     this.connectBtn = document.createElement("button");
