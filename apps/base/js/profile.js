@@ -19,6 +19,9 @@ class ProfileModel extends Model {
         let result = await Comm.get("data2"); // calls method data2 from server passer le session id
 		return result.response;  */
 		//parse the response
+		let request = "getProfileFromSessionId/"+ssid;
+		trace(request);
+		this.profile = await Comm.get(request);
 		console.log("my ssid");
 	}
 }
@@ -356,7 +359,7 @@ class ProfileView extends View {
     displayProfile(data){
 		trace(data);
 		//display the profile
-		
+
 	}
 }
 
@@ -393,7 +396,7 @@ class ProfileController extends Controller {
 	}
 	async activated(){
 		// execute le modèle qui recupère le profile en utilisant ce SSID
-		this.mvc.view.displayProfile(await this.mvc.model.getProfileFromSsid());
+		this.mvc.view.displayProfile(await this.mvc.model.getProfileFromSsid("1"));
 	}
 
 }
