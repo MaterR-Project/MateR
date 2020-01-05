@@ -10,16 +10,17 @@ class ProfileModel extends Model {
 	}
 	setSessionId(ssid){
 		this.ssid = ssid;
+		console.log(this.ssid);
 	}
 
-	async getProfileFromSsid(ssid){
+	async getProfileFromSsid(){
 		// gets called by auth to get the profile of the guy who connected
 		/* trace("get data2");
         // keep data in class variable ? refresh rate ?
         let result = await Comm.get("data2"); // calls method data2 from server passer le session id
 		return result.response;  */
 		//parse the response
-		let request = "getProfileFromSessionId/"+ssid;
+		let request = "getProfileFromSessionId/"+this.ssid;
 		trace(request);
 		this.profile = await Comm.get(request);
 		console.log(this.profile);
@@ -289,12 +290,15 @@ class ProfileView extends View {
 
 	}
 
+	attach(parent, ssid){
+		this.mvc.controller.initProfile(ssid);
+		super.attach(parent);
+	}
 	// activate UI
-	activate(ssid) {
+	activate() {
 		// passer au modele le ssid
 		super.activate();
 		this.addListeners(); // listen to events
-		this.mvc.model.setSessionId(ssid);
 	}
 
 	// deactivate
@@ -394,9 +398,12 @@ class ProfileController extends Controller {
 		this.mvc.app.mvcTest.view.attach(document.body); // attach view of menu MVC
 		this.mvc.app.mvcTest.view.activate(); 			 // activate user interface of menu MVC
 	}
-	async activated(){
-		// execute le modèle qui recupère le profile en utilisant ce SSID
-		this.mvc.view.displayProfile(await this.mvc.model.getProfileFromSsid("123"));
+	initProfile(ssid){
+		this.mvc.model.setSessionId(ssid);
+		// this.mvc.view.displayProfile( await this.mvc.model.getProfileFromSsid() );
+		let a = await this.mvc.model.getProfileFromSsid();
+		this.mvc.view.displayProfile(a);
+		//
+		console.log("truc");
 	}
-
 }
