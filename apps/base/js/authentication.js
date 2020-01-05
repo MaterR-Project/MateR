@@ -41,37 +41,41 @@ class autenticationView extends View {
     this.stage.style.display = "flex";
     this.stage.style.alignItems = "center";
     this.stage.style.justifyContent = "center";
-    this.stage.style.flexDirection = "column";
 
-    //logo MateR
+		this.mainDiv = document.createElement("div");
+		this.mainDiv.style.display = "flex";
+		this.mainDiv.style.justifyContent = "center";
+		this.mainDiv.style.flexDirection = "column";
+
+		//logo MateR
     this.header = document.createElement("h1");
     this.header.innerHTML = "MateR";
     this.header.style.fontSize = "60px";
-    this.stage.appendChild(this.header);
+    this.mainDiv.appendChild(this.header);
 
-    //division pour le pseudo
+		//division pour le pseudo
 		this.pseudoDiv = document.createElement("div");
+		this.pseudoDiv.style.width = "100%";
 		this.pseudoDiv.style.display = "flex";
     this.pseudoDiv.style.flexDirection = "column";
-		this.pseudoDiv.style.margin = "10px";
 
 		this.pseudoLabel = document.createElement("label");
 		this.pseudoLabel.setAttribute("for","username");
 		this.pseudoLabel.innerHTML = "Username :";
 		this.pseudoDiv.appendChild(this.pseudoLabel);
 
-    this.pseudoInput = document.createElement("input");
-    this.pseudoInput.setAttribute("type","text");
+		this.pseudoInput = document.createElement("input");
+		this.pseudoInput.setAttribute("type","text");
 		this.pseudoInput.setAttribute("name","username");
-    this.pseudoDiv.appendChild(this.pseudoInput);
+		this.pseudoDiv.appendChild(this.pseudoInput);
 
-		this.stage.appendChild(this.pseudoDiv);
+		this.mainDiv.appendChild(this.pseudoDiv);
 
-    //division pour le password
+		//division pour le password
 		this.passwordDiv = document.createElement("div");
+		this.passwordDiv.style.width = "100%";
 		this.passwordDiv.style.display = "flex";
     this.passwordDiv.style.flexDirection = "column";
-		this.passwordDiv.style.margin = "10px";
 
 		this.passwordLabel = document.createElement("label");
 		this.passwordLabel.setAttribute("for","password");
@@ -81,22 +85,25 @@ class autenticationView extends View {
     this.passwordInput = document.createElement("input");
     this.passwordInput.setAttribute("type","password");
 		this.passwordInput.setAttribute("name","password");
-    this.passwordDiv.appendChild(this.passwordInput);
+		this.passwordDiv.appendChild(this.passwordInput);
 
-		this.stage.appendChild(this.passwordDiv);
+		this.mainDiv.appendChild(this.passwordDiv);
 
+		//autentication error
 		this.erreur = document.createElement("p");
-		this.stage.appendChild(this.erreur);
+		this.mainDiv.appendChild(this.erreur);
 
     //button connect
     this.connectBtn = document.createElement("button");
     this.connectBtn.innerHTML = "connect";
-    this.stage.appendChild(this.connectBtn);
+    this.mainDiv.appendChild(this.connectBtn);
 
     //button create account
     this.createAccountBtn = document.createElement("button");
     this.createAccountBtn.innerHTML = "create an account";
-    this.stage.appendChild(this.createAccountBtn);
+    this.mainDiv.appendChild(this.createAccountBtn);
+
+		this.stage.appendChild(this.mainDiv);
 
 	}
 
