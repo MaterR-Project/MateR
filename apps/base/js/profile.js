@@ -375,10 +375,11 @@ class ProfileController extends Controller {
 	}
 	async searchClicked(params){
 		trace("search btn click", params);
-		this.mvc.view.destroy();						// destroy current view
-		this.mvc.app.mvc = this.mvc.app.mvcTest;		// change current mvc to search MVC
-		this.mvc.app.mvcTest.view.attach(document.body);// attach view of search MVC
-		this.mvc.app.mvcTest.view.activate();			// activate user interface of search MVC
+		console.log(await Comm.get("getRegionCountriesFromRegionName/Western/Europ"));
+		//this.mvc.view.destroy();						// destroy current view
+		//this.mvc.app.mvc = this.mvc.app.mvcTest;		// change current mvc to search MVC
+		//this.mvc.app.mvcTest.view.attach(document.body);// attach view of search MVC
+		//this.mvc.app.mvcTest.view.activate();			// activate user interface of search MVC
 	}
 	async logoutClicked(params) {
 		trace("logout btn click", params);
@@ -396,7 +397,8 @@ class ProfileController extends Controller {
 	}
 	async activated(){
 		// execute le modèle qui recupère le profile en utilisant ce SSID
-		this.mvc.view.displayProfile(await this.mvc.model.getProfileFromSsid());
+		//this.mvc.view.displayProfile(await this.mvc.model.getProfileFromSsid());
+		console.log("heu");
 	}
 
 }
