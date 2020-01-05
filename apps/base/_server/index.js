@@ -13,10 +13,17 @@ class Base extends ModuleBase {
 		this.levels = JSON.parse(fs.readFileSync('database/levels.json', 'utf8'));
 		this.locals = JSON.parse(fs.readFileSync('database/locals.json', 'utf8'));
 		this.playstyles = JSON.parse(fs.readFileSync('database/playstyles.json', 'utf8'));
-		this.users = JSON.parse(fs.readFileSync('database/user_dtb.json', 'utf8'));
+		this.users = JSON.parse(fs.readFileSync('database/users.json', 'utf8'));
 		this.vocals = JSON.parse(fs.readFileSync('database/vocals.json', 'utf8'));
 
-		trace(this.users,this.games,this.languages,this.levels,this.locals,this.playstyles,this.vocals);
+		//trace(this.users,this.languages,this.levels,this.locals,this.playstyles,this.vocals);
+		this.gamesNameSet = new Set();
+		this.games.map(game => {this.gamesNameSet.add(game.name)});
+		trace(this.gamesNameSet,"\n\n");
+		this.gamesNameSet.forEach(name => {trace(name,"\n")});
+		trace(this.games[0],"\n",this.games[0].crossplay);
+		trace(this.users.length,"\n",this.users[0]);
+		trace(this.languages,"\n",this.languages.length);
 	}
 
 	/**
