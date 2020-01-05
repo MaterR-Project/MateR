@@ -63,15 +63,10 @@ class Base extends ModuleBase {
 	 */
 	getGamePlatformsFromGameName(req, res, ...param) {
 		let gameName = [...param].join(" ");
-		let platforms = undefined;
+		let platforms = 404; //error case
 		this.games.map(game => {if (game.name == gameName) platforms = game.platforms;});
 		let data = platforms; // list of platform for a game
-		if (data === undefined){
-			this.sendJSON(req, res, 404, {return: data});
-		}
-		else {
-			this.sendJSON(req, res, 200, {return: data}); // answer JSON
-		}
+		this.sendJSON(req, res, 200, {return: data}); // answer JSON
 	}
 
 	/**
@@ -82,15 +77,10 @@ class Base extends ModuleBase {
 	 */
 	getGameCrossplayFromGameName(req, res, ...param) {
 		let gameName = [...param].join(" ");
-		let crossplay = undefined;
+		let crossplay = 404; //error case
 		this.games.map(game => {if (game.name == gameName) crossplay = game.crossplay;});
 		let data = crossplay; // list of platforms for a game
-		if (data === undefined){
-			this.sendJSON(req, res, 404, {return: data});;
-		}
-		else {
-			this.sendJSON(req, res, 200, {return: data}); // answer JSON
-		}
+		this.sendJSON(req, res, 200, {return: data}); // answer JSON
 	}
 
 	/**
@@ -134,15 +124,10 @@ class Base extends ModuleBase {
 	 */
 	getRegionCountriesFromRegionName(req, res, ...param) {
 		let regionName = [...param].join(" ");
-		let countries = undefined;
+		let countries = 404; // error case
 		this.locals.map(local => {if (local.name == regionName) countries = local.countries;});
 		let data = countries; // list of country for a region
-		if (data === undefined){
-			this.sendJSON(req, res, 404, {return: data});;
-		}
-		else {
-			this.sendJSON(req, res, 200, {return: data}); // answer JSON
-		}
+		this.sendJSON(req, res, 200, {return: data}); // answer JSON
 	}
 
 	/**
@@ -166,15 +151,10 @@ class Base extends ModuleBase {
 		let ssId = [...param].join(" ");
 		ssId = parseInt(ssId);
 		id = getIdFromSessionId(ssId);
-		let profile = undefined;
+		let profile = 404; // error case
 		profile = this.users[id];
 		let data = profile; // object profile of user id
-		if (data === undefined){
-			this.sendJSON(req, res, 404, {return: data});
-		}
-		else {
-			this.sendJSON(req, res, 200, {return: data}); // answer JSON
-		}
+		this.sendJSON(req, res, 200, {return: data}); // answer JSON
 	}
 
 	/**
