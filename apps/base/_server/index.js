@@ -46,7 +46,7 @@ class Base extends ModuleBase {
 	 getIdFromSessionId(sessionId) {
  		let id = this.sessionIds.get(sessionId);
  		if (id === undefined) {
- 			id = -1
+ 			id = -1;
  		}
  		return id;
  	}
