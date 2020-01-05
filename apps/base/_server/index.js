@@ -1,15 +1,28 @@
 const ModuleBase = load("com/base"); // import ModuleBase class
 
+const fs = 			require("fs");			// file system
+
 class Base extends ModuleBase {
 
 	constructor(app, settings) {
 		super(app, new Map([["name", "baseapp"], ["io", true]]));
+
+		//Load database
+		this.games = JSON.parse(fs.readFileSync('database/games.json', 'utf8'));
+		this.languages = JSON.parse(fs.readFileSync('database/languages.json', 'utf8'));
+		this.levels = JSON.parse(fs.readFileSync('database/levels.json', 'utf8'));
+		this.locals = JSON.parse(fs.readFileSync('database/locals.json', 'utf8'));
+		this.playstyles = JSON.parse(fs.readFileSync('database/playstyles.json', 'utf8'));
+		this.users = JSON.parse(fs.readFileSync('database/user_dtb.json', 'utf8'));
+		this.vocals = JSON.parse(fs.readFileSync('database/vocals.json', 'utf8'));
+
+		trace(this.users,this.games,this.languages,this.levels,this.locals,this.playstyles,this.vocals);
 	}
 
 	/**
 	 * @method hello : world
-	 * @param {*} req 
-	 * @param {*} res 
+	 * @param {*} req
+	 * @param {*} res
 	 * @param  {...*} params : some arguments
 	 */
 	hello(req, res, ... params) {
@@ -20,8 +33,8 @@ class Base extends ModuleBase {
 
 	/**
 	 * @method data : random data response
-	 * @param {*} req 
-	 * @param {*} res 
+	 * @param {*} req
+	 * @param {*} res
 	 */
 	data(req, res) {
 		let data = [ // some random data
@@ -34,7 +47,7 @@ class Base extends ModuleBase {
 
 	/**
 	 * @method _onIOConnect : new IO client connected
-	 * @param {*} socket 
+	 * @param {*} socket
 	 */
 	_onIOConnect(socket) {
 		super._onIOConnect(socket); // do not remove super call
