@@ -22,7 +22,7 @@ class ProfileModel extends Model {
 		let request = "getProfileFromSessionId/"+ssid;
 		trace(request);
 		this.profile = await Comm.get(request);
-		console.log("my ssid");
+		console.log(this.profile);
 	}
 }
 
