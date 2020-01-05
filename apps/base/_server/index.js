@@ -58,7 +58,7 @@ class Base extends ModuleBase {
 		this.games.map(game => {if (game.name == gameName) platforms = game.platforms;});
 		let data = platforms; // list of platform for a game
 		if (data === undefined){
-			send404(req, res, "Bad Game Name");
+			this.sendJSON(req, res, 404, {return: data});
 		}
 		else {
 			this.sendJSON(req, res, 200, {return: data}); // answer JSON
@@ -77,7 +77,7 @@ class Base extends ModuleBase {
 		this.games.map(game => {if (game.name == gameName) crossplay = game.crossplay;});
 		let data = crossplay; // list of platforms for a game
 		if (data === undefined){
-			send404(req, res, "Bad Game Name");
+			this.sendJSON(req, res, 404, {return: data});;
 		}
 		else {
 			this.sendJSON(req, res, 200, {return: data}); // answer JSON
@@ -129,7 +129,7 @@ class Base extends ModuleBase {
 		this.locals.map(local => {if (local.name == regionName) countries = local.countries;});
 		let data = countries; // list of country for a region
 		if (data === undefined){
-			send404(req, res, "Bad Region Name");
+			this.sendJSON(req, res, 404, {return: data});;
 		}
 		else {
 			this.sendJSON(req, res, 200, {return: data}); // answer JSON
@@ -161,7 +161,7 @@ class Base extends ModuleBase {
 		profile = this.users[id];
 		let data = profile; // object profile of user id
 		if (data === undefined){
-			send404(req, res, "Bad Id");
+			this.sendJSON(req, res, 404, {return: data});
 		}
 		else {
 			this.sendJSON(req, res, 200, {return: data}); // answer JSON
