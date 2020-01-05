@@ -17,13 +17,166 @@ class Base extends ModuleBase {
 		this.vocals = JSON.parse(fs.readFileSync('database/vocals.json', 'utf8'));
 
 		//trace(this.users,this.languages,this.levels,this.locals,this.playstyles,this.vocals);
-		this.gamesNameSet = new Set();
-		this.games.map(game => {this.gamesNameSet.add(game.name)});
-		trace(this.gamesNameSet,"\n\n");
-		this.gamesNameSet.forEach(name => {trace(name,"\n")});
+
+		// Create game names list
+		this.gamesName = new Array();
+		this.games.map(game => {this.gamesName.push(game.name)});
+		trace(this.gamesName,"\n\n");
+
+		// Create region names list
+		this.regions = new Array();
+		this.locals.map(local => {this.regions.push(local.name)});
+		trace(this.regions,"\n\n");
+
+		// Tests
+		this.gamesName.map(name => {trace(name,"\n")});
 		trace(this.games[0],"\n",this.games[0].crossplay);
 		trace(this.users.length,"\n",this.users[0]);
 		trace(this.languages,"\n",this.languages.length);
+	}
+
+	/**
+	 * @method getGameNamesFromDatabase : list of game names
+	 * @param {*} req
+	 * @param {*} res
+	 */
+	getGameNamesFromDatabase(req, res) {
+		// list of game names from games database
+		let data =  this.gamesName;
+		this.sendJSON(req, res, 200, {return: data}); // answer JSON
+	}
+
+	/**
+	 * @method getGamePlatformsFromGameName : list of platform
+	 * @param {*} req
+	 * @param {*} res
+	 * @param  {...*} param : game name
+	 */
+	getGamePlatformsFromGameName(req, res, ...param) {
+		let gameName = [...param].join(" ");
+		let platforms = undefined;
+		this.games.map(game => {if (game.name == gameName) platforms = game.platforms;});
+		let data = platforms; // list of platform for a game
+		if (data === undefined){
+			send404(req, res, "Bad Game Name");
+		}
+		else {
+			this.sendJSON(req, res, 200, {return: data}); // answer JSON
+		}
+	}
+
+	/**
+	 * @method getGameCrossplayFromGameName : id of crossplay
+	 * @param {*} req
+	 * @param {*} res
+	 * @param  {...*} param : game name
+	 */
+	getGameCrossplayFromGameName(req, res, ...param) {
+		let gameName = [...param].join(" ");
+		let crossplay = undefined;
+		this.games.map(game => {if (game.name == gameName) crossplay = game.crossplay;});
+		let data = crossplay; // list of platforms for a game
+		if (data === undefined){
+			send404(req, res, "Bad Game Name");
+		}
+		else {
+			this.sendJSON(req, res, 200, {return: data}); // answer JSON
+		}
+	}
+
+	/**
+	 * @method getLanguagesFromDatabase : list of language
+	 * @param {*} req
+	 * @param {*} res
+	 */
+	getLanguagesFromDatabase(req, res) {
+		// list of language from languages database
+		let data =  this.languages;
+		this.sendJSON(req, res, 200, {return: data}); // answer JSON
+	}
+
+	/**
+	 * @method getLevelsFromDatabase : list of level
+	 * @param {*} req
+	 * @param {*} res
+	 */
+	getLevelsFromDatabase(req, res) {
+		// list of level from levels database
+		let data =  this.levels;
+		this.sendJSON(req, res, 200, {return: data}); // answer JSON
+	}
+
+	/**
+	 * @method getRegionsFromDatabase : list of region
+	 * @param {*} req
+	 * @param {*} res
+	 */
+	getRegionsFromDatabase(req, res) {
+		// list of region from locals database
+		let data =  this.regions;
+		this.sendJSON(req, res, 200, {return: data}); // answer JSON
+	}
+
+	/**
+	 * @method getRegionCountriesFromRegionName : list of country
+	 * @param {*} req
+	 * @param {*} res
+	 * @param  {...*} param : region name
+	 */
+	getRegionCountriesFromRegionName(req, res, ...param) {
+		let regionName = [...param].join(" ");
+		let countries = undefined;
+		this.locals.map(local => {if (local.name == regionName) countries = local.countries;});
+		let data = countries; // list of country for a region
+		if (data === undefined){
+			send404(req, res, "Bad Region Name");
+		}
+		else {
+			this.sendJSON(req, res, 200, {return: data}); // answer JSON
+		}
+	}
+
+	/**
+	 * @method getPlaystylesFromDatabase : list of playstyle
+	 * @param {*} req
+	 * @param {*} res
+	 */
+	getPlaystylesFromDatabase(req, res) {
+		// list of playstyle from playstyles database
+		let data =  this.playstyles;
+		this.sendJSON(req, res, 200, {return: data}); // answer JSON
+	}
+
+	/**
+	 * @method getProfileFromSessionId : object profile
+	 * @param {*} req
+	 * @param {*} res
+	 * @param  {...*} param : ssId name
+	 */
+	getProfileFromSessionId(req, res, ...param) {
+		let ssId = [...param].join(" ");
+		ssId = parseInt(ssId);
+		id = getIdFromSessionId(ssId);
+		let profile = undefined;
+		profile = this.users[id];
+		let data = profile; // object profile of user id
+		if (data === undefined){
+			send404(req, res, "Bad Id");
+		}
+		else {
+			this.sendJSON(req, res, 200, {return: data}); // answer JSON
+		}
+	}
+
+	/**
+	 * @method getVocalsFromDatabase : list of vocal
+	 * @param {*} req
+	 * @param {*} res
+	 */
+	getVocalsFromDatabase(req, res) {
+		// list of vocal from vocals database
+		let data =  this.vocals;
+		this.sendJSON(req, res, 200, {return: data}); // answer JSON
 	}
 
 	/**
