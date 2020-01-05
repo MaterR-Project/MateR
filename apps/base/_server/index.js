@@ -15,6 +15,7 @@ class Base extends ModuleBase {
 		this.playstyles = JSON.parse(fs.readFileSync('database/playstyles.json', 'utf8'));
 		this.users = JSON.parse(fs.readFileSync('database/users.json', 'utf8'));
 		this.vocals = JSON.parse(fs.readFileSync('database/vocals.json', 'utf8'));
+		this.sessionIds = new Map();
 
 		//trace(this.users,this.languages,this.levels,this.locals,this.playstyles,this.vocals);
 
@@ -33,6 +34,14 @@ class Base extends ModuleBase {
 		trace(this.games[0],"\n",this.games[0].crossplay);
 		trace(this.users.length,"\n",this.users[0]);
 		trace(this.languages,"\n",this.languages.length);
+	}
+
+	/**
+	 * @method getIdFromSessionId : id of connect session
+	 * @param {*} sessionId
+	 */
+	getIdFromSessionId(sessionId) {
+		return sessionId.get(sessionId);
 	}
 
 	/**
