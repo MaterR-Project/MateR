@@ -10,12 +10,18 @@ class Base {
 
 	async initialize() {
 
-		this.iospace = "baseapp"; // IO namespace for this app
-		this.io = io.connect("http://localhost/" + this.iospace); // connect socket.io
-		this.io.on("connect", () => this.onIOConnect()); // listen connect event
+		//this.iospace = "baseapp"; // IO namespace for this app
+		//this.io = io.connect("http://localhost/" + this.iospace); // connect socket.io
+		//this.io.on("connect", () => this.onIOConnect()); // listen connect event
+		
+		this.mvcProfile = new MVC("mvcProfile", this, new ProfileModel(), new ProfileView(), new ProfileController()); // init app MVC
+		await this.mvcProfile.initialize();
+		this.mvcTest = new MVC("myMVC", this, new MyModel(), new MyView(), new MyController());
+		await this.mvcTest.initialize(); // run init async tasks
 
-		this.mvc = new MVC("myMVC", this, new MyModel(), new MyView(), new MyController()); // init app MVC
-		await this.mvc.initialize(); // run init async tasks
+		this.mvc = this.mvcProfile;
+		//this.body = document.body
+		//this.body.setAttribute("style", "width: "+ window.screen.width +"; height: " + window.screen.height);
 		this.mvc.view.attach(document.body); // attach view
 		this.mvc.view.activate(); // activate user interface
 
@@ -86,9 +92,9 @@ class MyView extends View {
 		this.stage.appendChild(this.btn);
 
 		// create io test btn
-		this.iobtn = document.createElement("button");
-		this.iobtn.innerHTML = "io test";
-		this.stage.appendChild(this.iobtn);
+		//this.iobtn = document.createElement("button");
+		//this.iobtn.innerHTML = "io test";
+		//this.stage.appendChild(this.iobtn);
 
 		// io random value display
 		this.iovalue = document.createElement("div");
@@ -116,13 +122,13 @@ class MyView extends View {
 		this.getBtnHandler = e => this.btnClick(e);
 		this.btn.addEventListener("click", this.getBtnHandler);
 
-		this.ioBtnHandler = e => this.ioBtnClick(e);
-		this.iobtn.addEventListener("click", this.ioBtnHandler);
+		//this.ioBtnHandler = e => this.ioBtnClick(e);
+		//this.iobtn.addEventListener("click", this.ioBtnHandler);
 	}
 
 	removeListeners() {
 		this.btn.removeEventListener("click", this.getBtnHandler);
-		this.iobtn.removeEventListener("click", this.ioBtnHandler);
+		//this.iobtn.removeEventListener("click", this.ioBtnHandler);
 	}
 
 	btnClick(event) {
