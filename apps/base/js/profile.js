@@ -12,14 +12,14 @@ class ProfileModel extends Model {
 		this.ssid = ssid;
 	}
 
-	async getProfileFromId(id){
+	async getProfileFromSsid(ssid){
 		// gets called by auth to get the profile of the guy who connected
 		/* trace("get data2");
         // keep data in class variable ? refresh rate ?
         let result = await Comm.get("data2"); // calls method data2 from server passer le session id
 		return result.response;  */
 		//parse the response
-		console.log("truc")
+		console.log("my ssid");
 	}
 }
 
@@ -339,10 +339,6 @@ class ProfileView extends View {
 
 	}
 	/* -------------------------------------------------------------------- */
-	
-	editableName(data){
-		this.profileName.contentEditable = "true";
-	}
 
 	update(data) {
 		/*while(this.table.firstChild) this.table.removeChild(this.table.firstChild); // empty table
@@ -360,6 +356,7 @@ class ProfileView extends View {
     displayProfile(data){
 		trace(data);
 		//display the profile
+		
 	}
 }
 
@@ -375,11 +372,10 @@ class ProfileController extends Controller {
 	}
 	async searchClicked(params){
 		trace("search btn click", params);
-		console.log(await Comm.get("getRegionCountriesFromRegionName/Western/Europ"));
-		//this.mvc.view.destroy();						// destroy current view
-		//this.mvc.app.mvc = this.mvc.app.mvcTest;		// change current mvc to search MVC
-		//this.mvc.app.mvcTest.view.attach(document.body);// attach view of search MVC
-		//this.mvc.app.mvcTest.view.activate();			// activate user interface of search MVC
+		this.mvc.view.destroy();						// destroy current view
+		this.mvc.app.mvc = this.mvc.app.mvcTest;		// change current mvc to search MVC
+		this.mvc.app.mvcTest.view.attach(document.body);// attach view of search MVC
+		this.mvc.app.mvcTest.view.activate();			// activate user interface of search MVC
 	}
 	async logoutClicked(params) {
 		trace("logout btn click", params);
@@ -397,8 +393,7 @@ class ProfileController extends Controller {
 	}
 	async activated(){
 		// execute le modèle qui recupère le profile en utilisant ce SSID
-		//this.mvc.view.displayProfile(await this.mvc.model.getProfileFromSsid());
-		console.log("heu");
+		this.mvc.view.displayProfile(await this.mvc.model.getProfileFromSsid());
 	}
 
 }
