@@ -3,7 +3,7 @@
     "name": "Apex Legends",
     "platforms": [
       "Windows",
-      "XB1",
+      "Xbox One",
       "PS4"
     ],
     "crossplay": 0
@@ -14,7 +14,7 @@
       "Windows",
       "MacOS",
       "Linux",
-      "XB360",
+      "Xbox 360",
       "PS3"
     ],
     "crossplay": 0
@@ -30,7 +30,7 @@
     "name": "FIFA 20",
     "platforms": [
       "Windows",
-      "XB1",
+      "Xbox One",
       "PS4",
       "Switch"
     ],
@@ -41,7 +41,7 @@
     "platforms": [
       "Windows",
       "MacOS",
-      "XB1",
+      "Xbox One",
       "PS4",
       "Switch",
       "iOS",
@@ -53,10 +53,10 @@
     "name": "GTA V",
     "platforms": [
       "Windows",
-      "XB1",
+      "Xbox One",
       "PS4",
       "PS3",
-      "XB360"
+      "Xbox 360"
     ],
     "crossplay": 0
   },
@@ -67,7 +67,7 @@
       "MacOS",
       "Linux",
       "PS4",
-      "XB1"
+      "Xbox One"
     ],
     "crossplay": 0
   },
@@ -88,8 +88,8 @@
       "Raspberry Pi",
       "PS3",
       "PS4",
-      "XB360",
-      "XB1",
+      "Xbox 360",
+      "Xbox One",
       "Apple TV",
       "Wii U",
       "Switch",
@@ -106,7 +106,7 @@
     "name": "Overcooked",
     "platforms": [
       "Windows",
-      "XB1",
+      "Xbox One",
       "PS4",
       "Switch"
     ],
@@ -116,7 +116,7 @@
     "name": "Overwatch",
     "platforms": [
       "Windows",
-      "XB1",
+      "Xbox One",
       "PS4",
       "Switch"
     ],
@@ -126,7 +126,7 @@
     "name": "Path of Exile",
     "platforms": [
       "Windows",
-      "XB1",
+      "Xbox One",
       "PS4"
     ],
     "crossplay": 0
@@ -135,7 +135,7 @@
     "name": "PUBG",
     "platforms": [
       "Windows",
-      "XB1",
+      "Xbox One",
       "PS4",
       "Android",
       "iOS"
