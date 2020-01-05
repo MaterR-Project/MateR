@@ -121,7 +121,7 @@ class RegistrationControler extends Controller {
 	}
 
 	async navBtnWasClicked(params) {
-		let test = await Comm.get("getProfileFromSessionId/123");
+		let test = await Comm.get("getProfileFromSessionId/1234");
 		trace(test);
 		trace("go test btn click", params);
 		this.mvc.view.destroy();

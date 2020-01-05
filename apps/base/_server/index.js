@@ -155,7 +155,7 @@ class Base extends ModuleBase {
 		let ssId = [...param].join(" ");
 		let id = this.getIdFromSessionId(ssId); // profile id of session id
 		let profile = 404; // error case
-		profile = this.users[id];
+		if (id != -1) profile = this.users[id];
 		let data = profile; // object profile of user id
 		this.sendJSON(req, res, 200, {return: data}); // answer JSON
 	}
