@@ -41,7 +41,7 @@ class Base extends ModuleBase {
 	 * @param {*} sessionId
 	 */
 	getIdFromSessionId(sessionId) {
-		return sessionId.get(sessionId);
+		return sessionIds.get(sessionId);
 	}
 
 	/**
