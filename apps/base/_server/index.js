@@ -151,9 +151,9 @@ class Base extends ModuleBase {
 	 * @param  {...*} param : ssId name
 	 */
 	getProfileFromSessionId(req, res, ...param) {
+		trace(param)
 		let ssId = [...param].join(" ");
-		ssId = parseInt(ssId);
-		id = getIdFromSessionId(ssId);
+		let id = this.getIdFromSessionId(ssId); // profile id of session id
 		let profile = 404; // error case
 		profile = this.users[id];
 		let data = profile; // object profile of user id
