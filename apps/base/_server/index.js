@@ -17,6 +17,9 @@ class Base extends ModuleBase {
 		this.vocals = JSON.parse(fs.readFileSync('database/vocals.json', 'utf8'));
 		this.sessionIds = new Map();
 
+		//debug
+		this.sessionIds.set("123",0);
+
 		//trace(this.users,this.languages,this.levels,this.locals,this.playstyles,this.vocals);
 
 		// Create game names list
