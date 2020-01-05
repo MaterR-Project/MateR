@@ -1,12 +1,42 @@
 [
-	{"Northern Africa"  : ["Algeria", "Egypt", "Libya", "Mauritania", "Morocco", "Niger", "Tunisia"]},
-	{"Southern Africa"  : ["Angola", "DR. Congo", "Kenya", "Madagascar", "Mozambique", "Namibia", "South Africa"]},
-	{"Northern America" : ["Canada", "USA", "Mexico"]},
-	{"Southern America" : ["Argentina", "Brazil", "Chile", "Columbia", "Ecuador","Peru", "Venezuala"]},
-	{"Northern Asia"    : ["China", "India", "Japan", "Mongolia", "N-Korea", "Russia", "S-Korea"]},
-	{"Southern Asia"    : ["Indonesia", "Laos", "Malaysia", "Philippines", "Singapore", "Vietnam"]},
-	{"Eastern Europe"   : ["Czechia", "Greece", "Poland", "Romania", "Ukraine"]},
-	{"Western Europe"   : ["Andora", "Austria", "Belgium", "France", "Germany", "Irland", "Italy", "Portugal", "Spain", "Switzerland", "UK"]},
-	{"Middle East"      : ["Afghanistan", "Qatar", "Iraq", "Iran", "Saudi Arabia",  "Turkey", "Yemen"]},
-	{"Oceania"          : ["Australia", "New Zealand", "Papua New Guinea"]}
+	{
+		"name": "Northern Africa",
+		"countries": ["Algeria", "Egypt", "Libya", "Mauritania", "Morocco", "Niger", "Tunisia"]
+	},
+	{
+		"name": "Southern Africa",
+		"countries": ["Angola", "DR. Congo", "Kenya", "Madagascar", "Mozambique", "Namibia", "South Africa"]
+	},
+	{
+		"name": "Northern America",
+		"countries": ["Canada", "USA", "Mexico"]
+	},
+	{
+		"name": "Southern America",
+		"countries": ["Argentina", "Brazil", "Chile", "Columbia", "Ecuador","Peru", "Venezuala"]
+	},
+	{
+		"name": "Northern Asia",
+		"countries": ["China", "India", "Japan", "Mongolia", "N-Korea", "Russia", "S-Korea"]
+	},
+	{
+		"name": "Southern Asia",
+		"countries": ["Indonesia", "Laos", "Malaysia", "Philippines", "Singapore", "Vietnam"]
+	},
+	{
+		"name": "Eastern Europe",
+		"countries": ["Czechia", "Greece", "Poland", "Romania", "Ukraine"]
+	},
+	{
+		"name": "Western Europe",
+		"countries": ["Andora", "Austria", "Belgium", "France", "Germany", "Irland", "Italy", "Portugal", "Spain", "Switzerland", "UK"]
+	},
+	{
+		"name": "Middle East",
+		"countries": ["Afghanistan", "Qatar", "Iraq", "Iran", "Saudi Arabia",  "Turkey", "Yemen"]
+	},
+	{
+		"name": "Oceania",
+		"countries": ["Australia", "New Zealand", "Papua New Guinea"]
+	}
 ]

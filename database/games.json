@@ -1,54 +1,95 @@
-{
-  "Apex Legends": {
-    "Platforms": [
+[
+  {
+    "name": "Apex Legends",
+    "platforms": [
       "Windows",
-      "XB1",
+      "Xbox One",
       "PS4"
     ],
-    "CrossPlay": 0
+    "crossplay": 0
   },
-  "Insurgency : Sandstorm": {
-    "Platforms": [
+  {
+    "name": "CS : GO",
+    "platforms": [
+      "Windows",
+      "MacOS",
+      "Linux",
+      "Xbox 360",
+      "PS3"
+    ],
+    "crossplay": 0
+  },
+  {
+    "name": "Escape from Tarkov",
+    "platforms": [
+      "Windows"
+    ],
+    "crossplay": 0
+  },
+  {
+    "name": "FIFA 20",
+    "platforms": [
+      "Windows",
+      "Xbox One",
+      "PS4",
+      "Switch"
+    ],
+    "crossplay": 0
+  },
+  {
+    "name": "Fortnite",
+    "platforms": [
+      "Windows",
+      "MacOS",
+      "Xbox One",
+      "PS4",
+      "Switch",
+      "iOS",
+      "Android"
+    ],
+    "crossplay": 1
+  },
+  {
+    "name": "GTA V",
+    "platforms": [
+      "Windows",
+      "Xbox One",
+      "PS4",
+      "PS3",
+      "Xbox 360"
+    ],
+    "crossplay": 0
+  },
+  {
+    "name": "Insurgency : Sandstorm",
+    "platforms": [
       "Windows",
       "MacOS",
       "Linux",
       "PS4",
-      "XB1"
+      "Xbox One"
     ],
-    "CrossPlay": 0
+    "crossplay": 0
   },
-  "Overcooked": {
-    "Platforms": [
-      "Windows",
-      "XB1",
-      "PS4",
-      "Switch"
-    ],
-    "CrossPlay": 0
-  },
-  "Escape from Tarkov": {
-    "Platforms": [
-      "Windows"
-    ],
-    "CrossPlay": 0
-  },
-  "League of Legend": {
-    "Platforms": [
+  {
+    "name": "League of Legend",
+    "platforms": [
       "Windows",
       "MacOS"
     ],
-    "CrossPlay": 0
+    "crossplay": 0
   },
-  "Minecraft": {
-    "Platforms": [
+  {
+    "name": "Minecraft",
+    "platforms": [
       "Windows",
       "Linux",
       "MacOS",
       "Raspberry Pi",
       "PS3",
       "PS4",
-      "XB360",
-      "XB1",
+      "Xbox 360",
+      "Xbox One",
       "Apple TV",
       "Wii U",
       "Switch",
@@ -59,81 +100,54 @@
       "Windows Phone",
       "Amazon Kindle Fire"
     ],
-    "CrossPlay": 0
+    "crossplay": 0
   },
-  "Fortnite": {
-    "Platforms": [
+  {
+    "name": "Overcooked",
+    "platforms": [
       "Windows",
-      "MacOS",
-      "XB1",
-      "PS4",
-      "Switch",
-      "iOS",
-      "Android"
-    ],
-    "CrossPlay": 1
-  },
-  "FIFA 20": {
-    "Platforms": [
-      "Windows",
-      "XB1",
+      "Xbox One",
       "PS4",
       "Switch"
     ],
-    "CrossPlay": 0
+    "crossplay": 0
   },
-  "CS : GO": {
-    "Platforms": [
+  {
+    "name": "Overwatch",
+    "platforms": [
       "Windows",
-      "MacOS",
-      "Linux",
-      "XB360",
-      "PS3"
+      "Xbox One",
+      "PS4",
+      "Switch"
     ],
-    "CrossPlay": 0
+    "crossplay": 0
   },
-  "Path of Exile": {
-    "Platforms": [
+  {
+    "name": "Path of Exile",
+    "platforms": [
       "Windows",
-      "XB1",
+      "Xbox One",
       "PS4"
     ],
-    "CrossPlay": 0
+    "crossplay": 0
   },
-  "GTA V": {
-    "Platforms": [
+  {
+    "name": "PUBG",
+    "platforms": [
       "Windows",
-      "XB1",
-      "PS4",
-      "PS3",
-      "XB360"
-    ],
-    "CrossPlay": 0
-  },
-  "PUBG": {
-    "Platforms": [
-      "Windows",
-      "XB1",
+      "Xbox One",
       "PS4",
       "Android",
       "iOS"
     ],
-    "CrossPlay": 0
+    "crossplay": 0
   },
-  "World of Warcraft": {
-    "Platforms": [
+  {
+    "name": "World of Warcraft",
+    "platforms": [
       "Windows",
       "MacOS"
     ],
-    "CrossPlay": 1
-  },
-  "Overwatch": {
-    "Platforms": [
-      "Windows",
-      "XB1",
-      "PS4",
-      "Switch"
-    ],
-    "CrossPlay": 0
+    "crossplay": 1
   }
-}
+]

@@ -1,9 +1,29 @@
 const ModuleBase = load("com/base"); // import ModuleBase class
 
+const fs = 			require("fs");			// file system
+
 class Base extends ModuleBase {
 
 	constructor(app, settings) {
 		super(app, new Map([["name", "baseapp"], ["io", true]]));
+
+		//Load database
+		this.games = JSON.parse(fs.readFileSync('database/games.json', 'utf8'));
+		this.languages = JSON.parse(fs.readFileSync('database/languages.json', 'utf8'));
+		this.levels = JSON.parse(fs.readFileSync('database/levels.json', 'utf8'));
+		this.locals = JSON.parse(fs.readFileSync('database/locals.json', 'utf8'));
+		this.playstyles = JSON.parse(fs.readFileSync('database/playstyles.json', 'utf8'));
+		this.users = JSON.parse(fs.readFileSync('database/users.json', 'utf8'));
+		this.vocals = JSON.parse(fs.readFileSync('database/vocals.json', 'utf8'));
+
+		//trace(this.users,this.languages,this.levels,this.locals,this.playstyles,this.vocals);
+		this.gamesNameSet = new Set();
+		this.games.map(game => {this.gamesNameSet.add(game.name)});
+		trace(this.gamesNameSet,"\n\n");
+		this.gamesNameSet.forEach(name => {trace(name,"\n")});
+		trace(this.games[0],"\n",this.games[0].crossplay);
+		trace(this.users.length,"\n",this.users[0]);
+		trace(this.languages,"\n",this.languages.length);
 	}
 
 	/**
