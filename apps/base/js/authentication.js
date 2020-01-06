@@ -59,6 +59,10 @@ class AutenticationView extends View {
 		this.pseudoDiv.style.display = "flex";
     this.pseudoDiv.style.flexDirection = "column";
 
+		this.iconProfile = document.createElement("span");
+		this.iconProfile.setAttribute("class","icon-Profile");
+		this.pseudoDiv.appendChild(this.iconProfile);
+
 		this.pseudoLabel = document.createElement("label");
 		this.pseudoLabel.setAttribute("for","username");
 		this.pseudoLabel.innerHTML = "Username :";
