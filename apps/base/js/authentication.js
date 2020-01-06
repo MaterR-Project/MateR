@@ -1,5 +1,5 @@
 
-class autenticationModel extends Model {
+class AutenticationModel extends Model {
 
 	constructor() {
 		super();
@@ -15,7 +15,7 @@ class autenticationModel extends Model {
 
 	}
 
-	async getSessionId(pseudo, password) {
+	async login(pseudo, password) {
 		trace("get session id");
 		let result = await Comm.get("login/"+pseudo+"/"+password);
 		trace(result);
@@ -28,7 +28,7 @@ class autenticationModel extends Model {
 
 }
 
-class autenticationView extends View {
+class AutenticationView extends View {
 
 	constructor() {
 		super();
@@ -149,7 +149,7 @@ class autenticationView extends View {
 
 }
 
-class autenticationController extends Controller {
+class AutenticationController extends Controller {
 
 	constructor() {
 		super();
@@ -165,13 +165,13 @@ class autenticationController extends Controller {
 		trace("btn click", pseudo, password);
 		if (this.verifyPassword(password)) {
 			let cryptPassword = sha512(password);
-			let response = await this.mvc.model.getSessionId(pseudo,cryptPassword)
+			let response = await this.mvc.model.login(pseudo,cryptPassword)
 			if (this.mvc.model.sessionId == undefined) {
 				this.mvc.view.updateWrongPsw(response.return);
 			}else{
 				this.mvc.view.destroy();
-		    this.mvc.app.testMVC.view.attach(document.body);
-		    this.mvc.app.testMVC.view.activate();
+		    this.mvc.app.profileMVC.view.attach(document.body,this.mvc.model.sessionId);
+		    this.mvc.app.profileMVC.view.activate();
 			}
 		}
   }

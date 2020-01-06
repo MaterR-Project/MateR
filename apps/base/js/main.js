@@ -17,7 +17,7 @@ class Base {
 		this.testMVC = new MVC("myMVC", this, new MyModel(), new MyView(), new MyController()); // init app MVC
 		await this.testMVC.initialize(); // run init async tasks
 
-		this.autenticationMVC = new MVC("autenticationMVC", this, new autenticationModel(), new autenticationView(), new autenticationController()); // init app MVC
+		this.autenticationMVC = new MVC("autenticationMVC", this, new AutenticationModel(), new AutenticationView(), new AutenticationController()); // init app MVC
 		await this.autenticationMVC.initialize(); // run init async tasks
 
 		this.autenticationMVC.view.attach(document.body); // attach view
