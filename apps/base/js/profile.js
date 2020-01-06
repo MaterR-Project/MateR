@@ -363,6 +363,7 @@ class ProfileView extends View {
 	}
 
 	attach(parent, ssid){
+		trace("SSID : ", ssid);
 		this.mvc.controller.initProfile(ssid);
 		super.attach(parent);
 	}
