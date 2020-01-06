@@ -10,22 +10,6 @@ class Base {
 
 	async initialize() {
 
-<<<<<<< HEAD
-		//this.iospace = "baseapp"; // IO namespace for this app
-		//this.io = io.connect("http://localhost/" + this.iospace); // connect socket.io
-		//this.io.on("connect", () => this.onIOConnect()); // listen connect event
-		
-		this.mvcProfile = new MVC("mvcProfile", this, new ProfileModel(), new ProfileView(), new ProfileController()); // init app MVC
-		await this.mvcProfile.initialize();
-		this.mvcTest = new MVC("myMVC", this, new MyModel(), new MyView(), new MyController());
-		await this.mvcTest.initialize(); // run init async tasks
-
-		this.mvc = this.mvcProfile;
-		//this.body = document.body
-		//this.body.setAttribute("style", "width: "+ window.screen.width +"; height: " + window.screen.height);
-		this.mvc.view.attach(document.body); // attach view
-		this.mvc.view.activate(); // activate user interface
-=======
 		this.iospace = "baseapp"; // IO namespace for this app
 		this.io = io.connect("http://localhost/" + this.iospace); // connect socket.io
 		this.io.on("connect", () => this.onIOConnect()); // listen connect event
@@ -38,7 +22,6 @@ class Base {
 
 		this.autenticationMVC.view.attach(document.body); // attach view
 		this.autenticationMVC.view.activate(); // activate user interface
->>>>>>> origin/master
 
 	}
 
