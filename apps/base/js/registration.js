@@ -8,23 +8,70 @@ class RegistrationModel extends Model {
 		super.initialize(mvc);
 
 		// load Regions
-		let result = await Comm.get("getRegionsFromDatabase"); // call server hello method with argument "everyone"
-		this.regions = result.response.return;
+		let regionsResult = await Comm.get("getRegionsFromDatabase"); // call server method to get regions
+		this.regions = regionsResult.response.return;
 
+		// load Languages
+		let languagesResult = await Comm.get("getLanguagesFromDatabase"); // call server method to get languages
+		this.languages = languagesResult.response.return;
+
+		// load Game Names
+		let gameNamesReturn = await Comm.get("getGameNamesFromDatabase"); // call server method to get games names
+		this.gameNames = gameNamesReturn.response.return;
+
+		// load Playstyles
+		let playstylesReturn = await Comm.get("getPlaystylesFromDatabase"); // call server method to get playstyles
+		this.playstyles = playstylesReturn.response.return;
+
+		// load Levels
+		let levelsReturn = await Comm.get("getLevelsFromDatabase"); // call server method to get levels
+		this.levels = levelsReturn.response.return;
+
+		// load Vocals
+		let vocalsReturn = await Comm.get("getVocalsFromDatabase"); // call server method to get vocals
+		this.vocals = vocalsReturn.response.return;
 
 
 	}
 
 	loadRegions(){
-		trace(this.regions)
 		return this.regions;
 	}
 
+	loadLanguages(){
+		trace(this.languges)
+		return this.languages;
+	}
+
+	loadGameNames(){
+		trace(this.gameNames)
+		return this.gameNames;
+	}
+
+	loadPlaystyles(){
+		trace(this.playstyles)
+		return this.playstyles;
+	}
+
+	loadLevels(){
+		trace(this.levels)
+		return this.levels;
+	}
+
+	loadVocals(){
+		trace(this.vocals)
+		return this.vocals;
+	}
+
 	async loadCountries(pos){
-		trace(pos)
-		trace(this.regions[pos]);
 		let arg = this.regions[pos].split(" ").join("/");
-		let result = await Comm.get("getRegionCountriesFromRegionName/"+arg); // call server hello method with argument "everyone"
+		let result = await Comm.get("getRegionCountriesFromRegionName/"+arg); // call server method to get country list
+		return result.response.return;
+	}
+
+	async loadGamePlatforms(gameName){
+		let arg = gameName.split(" ").join("/");
+		let result = await Comm.get("getGamePlatformsFromGameName/"+arg); // call server method to get platform list
 		return result.response.return;
 	}
 
@@ -61,7 +108,7 @@ class RegistrationView extends View {
 		// MateR Title
 		this.materLogo = document.createElement("h1");
 		this.materLogo.innerHTML = "MateR";
-		this.materLogo.style.marginTop = "3%"
+		this.materLogo.style.margin = "10px"
 		this.materLogo.style.fontSize = "60px";
 		this.mainDiv.appendChild(this.materLogo);
 
@@ -96,7 +143,7 @@ class RegistrationView extends View {
 		this.mailDiv.style.marginBottom = "3%";
 		this.mailLabel = document.createElement("span");
 		this.mailLabel.style.margin = "2%";
-		this.mailLabel.innerHTML = "Mail :";
+		this.mailLabel.innerHTML = "E-Mail* :";
 		this.mailInput = document.createElement("input");
 		this.mailDiv.appendChild(this.mailLabel);
 		this.mailDiv.appendChild(this.mailInput);
@@ -112,7 +159,7 @@ class RegistrationView extends View {
 		//this.usernameDiv.style.justifyContent ="space-between";
 		this.usernameLabel = document.createElement("span");
 		this.usernameLabel.style.margin = "2%";
-		this.usernameLabel.innerHTML = "Username :";
+		this.usernameLabel.innerHTML = "Username* :";
 		this.usernameInput = document.createElement("input");
 		this.usernameDiv.appendChild(this.usernameLabel);
 		this.usernameDiv.appendChild(this.usernameInput);
@@ -127,7 +174,7 @@ class RegistrationView extends View {
 		//this.passwordDiv.style.justifyContent ="space-between";
 		this.passwordLabel = document.createElement("span");
 		this.passwordLabel.style.margin = "2%";
-		this.passwordLabel.innerHTML = "Password :";
+		this.passwordLabel.innerHTML = "Password* :";
 		this.passwordInput = document.createElement("input");
 		this.passwordInput.type ="password";
 		this.passwordDiv.appendChild(this.passwordLabel);
@@ -143,7 +190,7 @@ class RegistrationView extends View {
 		//this.confirmPasswordDiv.style.justifyContent ="space-between";
 		this.confirmPasswordLabel = document.createElement("span");
 		this.confirmPasswordLabel.style.margin = "2%";
-		this.confirmPasswordLabel.innerHTML = "Confirm password :";
+		this.confirmPasswordLabel.innerHTML = "Confirm Password* :";
 		this.confirmPasswordInput = document.createElement("input");
 		this.confirmPasswordInput.type ="password";
 		this.confirmPasswordDiv.appendChild(this.confirmPasswordLabel);
@@ -184,13 +231,13 @@ class RegistrationView extends View {
 		this.comboGender = document.createElement("select");
 		// add undefined male and female options
 		this.undefinedGender = document.createElement("option");
-		this.undefinedGender.value = "0";
+		this.undefinedGender.value = "-1";
 		this.undefinedGender.appendChild (document.createTextNode("Gamer 8-)"));
 		this.maleGender = document.createElement("option");
-		this.maleGender.value = "1";
+		this.maleGender.value = "0";
 		this.maleGender.appendChild (document.createTextNode("Male"));
 		this.femaleGender = document.createElement("option");
-		this.femaleGender.value = "2";
+		this.femaleGender.value = "1";
 		this.femaleGender.appendChild (document.createTextNode("Female"));
 		this.comboGender.appendChild(this.undefinedGender);
 		this.comboGender.appendChild(this.maleGender);
@@ -235,7 +282,7 @@ class RegistrationView extends View {
 		//this.regDiv.style.justifyContent = "space-between";
 		this.regionsLabel = document.createElement("span");
 		this.regionsLabel.style.margin = "2%";
-		this.regionsLabel.innerHTML = "Region :";
+		this.regionsLabel.innerHTML = "Region* :";
 		this.comboRegions = document.createElement("select");
 		this.comboRegions.setAttribute("id", "regions");
 		this.regionsDiv.appendChild(this.regionsLabel);
@@ -252,7 +299,7 @@ class RegistrationView extends View {
 		// Country section
 		this.countDiv = document.createElement("div");
 		//this.countDiv.style.visibility = "hidden";
-		this.countDiv.style.display = "flex";
+		this.countDiv.style.display = "none";
 		this.countDiv.setAttribute("id", "countries");
 		//this.countDiv.style.height = "15%";
 		this.countDiv.style.flexDirection = "column";
@@ -277,8 +324,9 @@ class RegistrationView extends View {
 		//this.langDiv.style.justifyContent = "space-between";
 		this.langLabel = document.createElement("span");
 		this.langLabel.style.margin = "2%";
-		this.langLabel.innerHTML = "Languages :";
+		this.langLabel.innerHTML = "Languages* :";
 		this.comboLanguages = document.createElement("select");
+		this.comboLanguages.setAttribute("multiple", "multiple");
 		this.langDiv.appendChild(this.langLabel);
 		this.langDiv.appendChild(this.comboLanguages);
 		this.profileData.appendChild(this.langDiv);
@@ -292,23 +340,73 @@ class RegistrationView extends View {
 		this.gamesDiv.style.marginBottom = "3%";
 		//this.gamesDiv.style.justifyContent = "space-between";
 		this.gamesLabel = document.createElement("span");
+		this.gamesLabel.style.display = "flex";
+		//this.gamesLabel.style.justifyContent = "space-between";
+		//this.gamesDiv.style.height = "15%";
+		//this.gamesLabel.style.flexDirection = "row";
 		this.gamesLabel.style.margin = "2%";
-		this.gamesLabel.innerHTML = "Games :";
-		this.comboGames = document.createElement("select");
-		this.comboGames.setAttribute("multiple", "multiple");
+		this.gamesLabel.innerHTML = "Games* :";
+		this.gamesAddField = document.createElement("div");
+		this.gamesAddField.style.marginBottom = "2%";
 
-		var currentYear = new Date().getFullYear()
-		var option = "";
-		for (var i = 1 ; i < 6; i++) {
-			var option = document.createElement("option");
-			option.text = i;
-			trace(i);
-			option.value = i;
-			//if (i == currentYear) option.setAttribute("selected", "");
-			this.comboGames.appendChild(option);
-		}
+		this.firstGameDiv = document.createElement("div");
+		this.firstGameDiv.style.display = "flex";
+		this.firstGameDiv.style.flexDirection = "column";
+		this.firstGameDiv.style.marginBottom = "3px";
+
+		this.firstGameName = document.createElement("span");
+		this.firstGameName.innerHTML = "Name* :";
+		this.firstGameName.style.fontSize = "small";
+		this.firstComboGames = document.createElement("select");
+		this.firstComboGames.setAttribute("name", "games");
+
+		this.firstGamePlatform = document.createElement("span");
+		this.firstGamePlatform.innerHTML = "Platform* :";
+		this.firstGamePlatform.style.marginTop = "6px";
+		this.firstGamePlatform.style.fontSize = "small";
+		this.firstGamePlatform.style.display = "none";
+		this.firstComboPlatforms = document.createElement("select");
+		this.firstComboPlatforms.setAttribute("name", "platforms");
+		this.firstComboPlatforms.style.display = "none";
+
+		this.firstGamePlaystyles = document.createElement("span");
+		this.firstGamePlaystyles.innerHTML = "Playstyles* :";
+		this.firstGamePlaystyles.style.marginTop = "6px";
+		this.firstGamePlaystyles.style.fontSize = "small";
+		this.firstGamePlaystyles.style.display = "none";
+		this.firstComboPlaystyles = document.createElement("select");
+		this.firstComboPlaystyles.setAttribute("name", "playstyles");
+		this.firstComboPlaystyles.setAttribute("multiple", "multiple");
+		this.firstComboPlaystyles.style.display = "none";
+
+		this.firstGameLevel = document.createElement("span");
+		this.firstGameLevel.innerHTML = "My Level* :";
+		this.firstGameLevel.style.marginTop = "6px";
+		this.firstGameLevel.style.fontSize = "small";
+		this.firstGameLevel.style.display = "none";
+		this.firstComboLevels = document.createElement("select");
+		this.firstComboLevels.setAttribute("name", "levels");
+		this.firstComboLevels.style.display = "none";
+
+		this.firstHr = document.createElement("hr");
+
+		this.firstGameDiv.appendChild(this.firstGameName);
+		this.firstGameDiv.appendChild(this.firstComboGames);
+		this.firstGameDiv.appendChild(this.firstGamePlatform);
+		this.firstGameDiv.appendChild(this.firstComboPlatforms);
+		this.firstGameDiv.appendChild(this.firstGamePlaystyles);
+		this.firstGameDiv.appendChild(this.firstComboPlaystyles);
+		this.firstGameDiv.appendChild(this.firstGameLevel);
+		this.firstGameDiv.appendChild(this.firstComboLevels);
+		this.firstGameDiv.appendChild(this.firstHr);
+		this.gamesAddField.appendChild(this.firstGameDiv);
+
+		this.addGameButton = document.createElement("button");
+		this.addGameButton.innerHTML = "New Game Entry";
+
 		this.gamesDiv.appendChild(this.gamesLabel);
-		this.gamesDiv.appendChild(this.comboGames);
+		this.gamesDiv.appendChild(this.gamesAddField);
+		this.gamesDiv.appendChild(this.addGameButton);
 		this.profileData.appendChild(this.gamesDiv);
 
 		// vocals section
@@ -323,45 +421,19 @@ class RegistrationView extends View {
 		this.vocalsLabel.style.margin = "2%";
 		this.vocalsLabel.innerHTML = "Vocals :";
 		this.comboVocals = document.createElement("select");
+		this.comboVocals.setAttribute("multiple", "multiple");
 		this.vocalsDiv.appendChild(this.vocalsLabel);
 		this.vocalsDiv.appendChild(this.comboVocals);
 		this.profileData.appendChild(this.vocalsDiv);
 
   	this.mainDiv.appendChild(this.profileData);
 
-		// Account data fields
-		this.text = document.createElement("p");
-		this.text.innerHTML = "Lorem ipsum dolor sit amet,\n consectetur adipisci Sed"
-		+" varius,\n enim congue sollicitudin aliquet, tellus mi volutpat justo, eu"
-		+" condimentum nunc erat a lorem. Fusce posuere diam quis sapien sodales, in"
-		+"dapibus \nlectus blandit. In rhoncus faucro t est, inteales mollis nibh."
-		+" condimentum nunc erat a lorem. Fusce posuere diam quis sapien sodales, in"
-		+"dapibus \nlectus blandit. In rhoncus faucro t est, inteales mollis nibh."
-		+" condimentum nunc erat a lorem. Fusce posuere diam quis sapien sodales, in"
-		+"dapibus \nlectus blandit. In rhoncus faucro t est, inteales mollis nibh."
-		+" condimentum nunc erat a lorem. Fusce posuere diam quis sapien sodales, in"
-		+"dapibus \nlectus blandit. In rhoncus faucro t est, inteales mollis nibh."
-		+" condimentum nunc erat a lorem. Fusce posuere diam quis sapien sodales, in"
-		+"dapibus \nlectus blandit. In rhoncus faucro t est, inteales mollis nibh."
-		+" condimentum nunc erat a lorem. Fusce posuere diam quis sapien sodales, in"
-		+"dapibus \nlectus blandit. In rhoncus faucro t est, inteales mollis nibh."
-		+" condimentum nunc erat a lorem. Fusce posuere diam quis sapien sodales, in"
-		+"dapibus \nlectus blandit. In rhoncus faucro t est, inteales mollis nibh."
-		+" condimentum nunc erat a lorem. Fusce posuere diam quis sapien sodales, in"
-		+"dapibus \nlectus blandit. In rhoncus faucro t est, inteales mollis nibh."
-		+" condimentum nunc erat a lorem. Fusce posuere diam quis sapien sodales, in"
-		+"dapibus \nlectus blandit. In rhoncus faucro t est, inteales mollis nibh."
-		+" condimentum nunc erat a lorem. Fusce posuere diam quis sapien sodales, in"
-		+"dapibus \nlectus blandit. In rhoncus faucro t est, inteales mollis nibh.";
-		this.text.style.overflow = "auto";
-		//this.mainDiv.appendChild(this.text);
-
 		// create account button
 		this.navButton = document.createElement("button");
 		this.navButton.innerHTML = "Create Account";
 		this.navButton.style.fontSize = "15px";
-		this.navButton.style.marginTop = "10%"
-		this.navButton.style.marginBottom = "10%"
+		this.navButton.style.marginTop = "15px"
+		this.navButton.style.marginBottom = "15px"
 		this.mainDiv.appendChild(this.navButton);
 	}
 
@@ -381,26 +453,77 @@ class RegistrationView extends View {
 		this.navBtnHandler = e => this.navBtnClick(e);
 		this.navButton.addEventListener("click", this.navBtnHandler);
 
+		this.addGameButtonHandler = e => this.addGameButtonClick(e);
+		this.addGameButton.addEventListener("click", this.addGameButtonHandler);
+
+		this.gamesAddFieldHandle = e => {
+			//trace(parent);
+			trace(e,"\n\n BONJOUR !!!!!!!!!!!!!!!!!!");
+
+			trace (e.target.value);
+			//if (e.target.name == "games") this.gameComboChoice(e.path[1].childNodes, e.target.value);
+			//if (e.target.name == "platforms") this.platformComboChoice(e.path[1].childNodes[2]);
+			//if (e.target.name == "playstyles") this.playstyleComboChoice(e.path[1].childNodes[3]);
+		}
+		[...this.gamesAddField.childNodes].map((child, index) => {
+			trace("le child :\n",child);
+			//child.addEventListener("change", this.gamesAddFieldHandle);
+			child.addEventListener("change", e => {
+				trace(child.parentElement);
+				trace(this.gamesAddField.childNodes[index]);
+				//trace(child.parentNode.childNode[0])
+				if (e.target.name == "games") this.gameComboChoice(this.gamesAddField.childNodes[index].childNodes, e.target.value);
+			});
+		});
+
+
+
+		// Handle Country combo on region choice
 		this.regionHandler = e => {
-			[...this.comboCountries.childNodes].map(child => {this.comboCountries.removeChild(child)});
-			//while (this.comboCountries.firstChild) {
-		  //  this.comboCountries.removeChild(this.comboCountries.firstChild);
-		  //}
-			this.regionsComboChoice(this.comboRegions.selectedIndex)
+			trace(e);
+			// Display combo country
+			this.countDiv.style.display = "flex";
+			this.regionsComboChoice(this.comboRegions.selectedIndex);
 		};
 		this.comboRegions.addEventListener("change", this.regionHandler);
-
-		//document.getElementById("regions").onchange = function(){
-		//  document.getElementById("countries").style.visibility = (this.comboRegions.selectedIndex == 1) ? "visible" : "hidden";
-		//}
 	}
 
 	removeListeners() {
 		this.navButton.removeEventListener("click", this.navBtnHandler);
+
+		this.addGameButton.removeEventListener("click", this.addGameButtonHandler);
+
+		[...this.gamesAddField.childNodes].map(child => {
+			trace("le suppr :\n",child);
+			child.removeEventListener("change", this.gamesAddFieldHandle);
+		});
+
+		this.comboRegions.removeEventListener("change", this.regionHandler);
+	}
+
+	refreshListeners(){
+		this.removeListeners();
+		this.addListeners();
 	}
 
 	navBtnClick(event) {
 		this.mvc.controller.navBtnWasClicked("go test parameters"); // dispatch
+	}
+
+	addGameButtonClick(event){
+		this.mvc.controller.addGameButtonWasClicked();
+	}
+
+	gameComboChoice(gameAddFieldArray, gameName){
+		this.mvc.controller.gameComboWasChoosed(gameAddFieldArray, gameName);
+	}
+
+	platformComboChoice(playstyleCombo){
+		this.mvc.controller.platformComboWasChoosed(playstyleCombo);
+	}
+
+	playstyleComboChoice(levelCombo){
+		this.mvc.controller.playstyleComboWasChoosed(levelCombo);
 	}
 
 	regionsComboChoice(pos){
@@ -408,13 +531,92 @@ class RegistrationView extends View {
 	}
 
 	updateComboWithList(combo, data) {
+		// Remove all children of countries combobox
+		trace("la combo !!!!!\n\n", combo);
+		[...combo.childNodes].map(child => {combo.removeChild(child)});
+
+		//
+		if(combo == this.comboCountries){
+			let optionEmpty = document.createElement("option");
+			optionEmpty.value = -1;
+			optionEmpty.text = "Undefined";
+			combo.appendChild(optionEmpty);
+		}
 		data.map(element => {
 			let option = document.createElement("option");
 			option.text = element;
-			option.value = data.indexOf(element);
+			option.value = element;// data.indexOf(element);
 			combo.appendChild(option);
 		});
-		combo.selectedIndex = -1;
+		if(combo == this.comboCountries){
+			combo.selectedIndex = 0;
+		}
+		else{
+			combo.selectedIndex = -1;
+		}
+	}
+
+	addNewGameField(data){
+		let newGameDiv = document.createElement("div");
+		newGameDiv.style.display = "flex";
+		newGameDiv.style.flexDirection = "column";
+		newGameDiv.style.marginBottom = "3px";
+
+		let newGameName = document.createElement("span");
+		newGameName.innerHTML = "Name :";
+		newGameName.style.fontSize = "small";
+		let newComboGames = document.createElement("select");
+		newComboGames.setAttribute("name", "games");
+
+		let newGamePlatform = document.createElement("span");
+		newGamePlatform.innerHTML = "Platform :";
+		newGamePlatform.style.marginTop = "6px";
+		newGamePlatform.style.fontSize = "small";
+		newGamePlatform.style.display = "none";
+		let newComboPlatforms = document.createElement("select");
+		newComboPlatforms.setAttribute("name", "platforms");
+		newComboPlatforms.style.display = "none";
+
+		let newGamePlaystyles = document.createElement("span");
+		newGamePlaystyles.innerHTML = "Playstyles :";
+		newGamePlaystyles.style.marginTop = "6px";
+		newGamePlaystyles.style.fontSize = "small";
+		newGamePlaystyles.style.display = "none";
+		let newComboPlaystyles = document.createElement("select");
+		newComboPlaystyles.setAttribute("name", "playstyles");
+		newComboPlaystyles.setAttribute("multiple", "multiple");
+		newComboPlaystyles.style.display = "none";
+
+		let newGameLevel = document.createElement("span");
+		newGameLevel.innerHTML = "My Level :";
+		newGameLevel.style.marginTop = "6px";
+		newGameLevel.style.fontSize = "small";
+		newGameLevel.style.display = "none";
+		let newComboLevels = document.createElement("select");
+		newComboLevels.setAttribute("name", "levels");
+		newComboLevels.style.display = "none";
+
+		let newHr = document.createElement("hr");
+
+		this.updateComboWithList(newComboGames, data);
+
+		newGameDiv.appendChild(newGameName);
+		newGameDiv.appendChild(newComboGames);
+		newGameDiv.appendChild(newGamePlatform);
+		newGameDiv.appendChild(newComboPlatforms);
+		newGameDiv.appendChild(newGamePlaystyles);
+		newGameDiv.appendChild(newComboPlaystyles);
+		newGameDiv.appendChild(newGameLevel);
+		newGameDiv.appendChild(newComboLevels);
+		newGameDiv.appendChild(newHr);
+		this.gamesAddField.appendChild(newGameDiv);
+
+		// refresh Listeners
+		this.refreshListeners();
+	}
+
+	displayAllCombosOfGameField(gameAddFieldArray){
+		gameAddFieldArray.forEach(combo => {combo.style.display = "";})
 	}
 
 }
@@ -430,15 +632,37 @@ class RegistrationControler extends Controller {
 
 		// initialize selects with database values
 		this.mvc.view.updateComboWithList(this.mvc.view.comboRegions, this.mvc.model.loadRegions());
-		//this.mvc.view.updateComboWithList(this.mvc.view.comboCountries, this.mvc.model.loadCountries());
-		//this.mvc.view.updateLanguagesCombo(this.mvc.model.loadLanguages());
-		//this.mvc.view.updateGamesCombo(this.mvc.model.loadGames());
-		//this.mvc.view.updateVocalsCombo(this.mvc.model.loadVocals());
+		this.mvc.view.updateComboWithList(this.mvc.view.comboLanguages, this.mvc.model.loadLanguages());
+		this.mvc.view.updateComboWithList(this.mvc.view.firstComboGames, this.mvc.model.loadGameNames());
+		this.mvc.view.updateComboWithList(this.mvc.view.comboVocals, this.mvc.model.loadVocals());
 
 	}
 
 	async regionsComboWasChoosed(pos){
 		this.mvc.view.updateComboWithList(this.mvc.view.comboCountries, await this.mvc.model.loadCountries(pos));
+	}
+
+	addGameButtonWasClicked(){
+		this.mvc.view.addNewGameField(this.mvc.model.loadGameNames());
+	}
+
+	async gameComboWasChoosed(gameAddFieldArray, gameName){
+		trace(gameAddFieldArray,"unfeddfjhdfhdjh")
+		this.mvc.view.updateComboWithList(gameAddFieldArray[3], await this.mvc.model.loadGamePlatforms(gameName));
+		this.mvc.view.updateComboWithList(gameAddFieldArray[5], this.mvc.model.loadPlaystyles());
+		this.mvc.view.updateComboWithList(gameAddFieldArray[7], this.mvc.model.loadLevels());
+		this.mvc.view.displayAllCombosOfGameField(gameAddFieldArray);
+		//platformsCombo.style.display = "";
+	}
+
+	platformComboWasChoosed(playstyleCombo){
+		this.mvc.view.updateComboWithList(playstyleCombo, this.mvc.model.loadPlaystyles());
+		playstyleCombo.style.display = "";
+	}
+
+	playstyleComboWasChoosed(levelCombo){
+		this.mvc.view.updateComboWithList(levelCombo, this.mvc.model.loadLevels());
+		levelCombo.style.display = "";
 	}
 
 	async navBtnWasClicked(params) {
