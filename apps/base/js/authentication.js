@@ -163,7 +163,8 @@ class autenticationController extends Controller {
   async connectBtnWasClicked(pseudo, password) {
 		trace("btn click", pseudo, password);
 		if (this.verifyPassword(password)) {
-			let response = await this.mvc.model.getSessionId(pseudo,password)
+			let cryptPassword = sha512(password);
+			let response = await this.mvc.model.getSessionId(pseudo,cryptPassword)
 			if (this.mvc.model.sessionId === undefined) {
 				this.mvc.view.updateWrongPsw(response.message);
 			}else{
