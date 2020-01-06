@@ -20,7 +20,7 @@ class autenticationModel extends Model {
 		let result = await Comm.get("login/"+pseudo+"/"+password);
 		trace(result);
 		if (result.status == 200) {
-			this.sessionId = result.response.message
+			this.sessionId = result.response.return;
 		}
 		trace(this.sessionId);
 		return result.response;
@@ -165,8 +165,8 @@ class autenticationController extends Controller {
 		if (this.verifyPassword(password)) {
 			let cryptPassword = sha512(password);
 			let response = await this.mvc.model.getSessionId(pseudo,cryptPassword)
-			if (this.mvc.model.sessionId === undefined) {
-				this.mvc.view.updateWrongPsw(response.message);
+			if (this.mvc.model.sessionId == undefined) {
+				this.mvc.view.updateWrongPsw(response.return);
 			}else{
 				this.mvc.view.destroy();
 		    this.mvc.app.testMVC.view.attach(document.body);

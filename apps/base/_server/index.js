@@ -1,6 +1,6 @@
 const ModuleBase = load("com/base"); // import ModuleBase class
 
-const fs = 			require("fs");			// file system
+const fs = require("fs"); // file system
 
 class Base extends ModuleBase {
 
@@ -16,9 +16,6 @@ class Base extends ModuleBase {
 		this.users = JSON.parse(fs.readFileSync('database/users.json', 'utf8'));
 		this.vocals = JSON.parse(fs.readFileSync('database/vocals.json', 'utf8'));
 		this.sessionIds = new Map();
-
-		//debug
-		this.sessionIds.set("123",0);
 
 		//trace(this.users,this.languages,this.levels,this.locals,this.playstyles,this.vocals);
 
@@ -176,6 +173,24 @@ class Base extends ModuleBase {
 	}
 
 	/**
+	 * @method login : connect a user
+	 * @param {*} req
+	 * @param {*} res
+	 * @param {*} username
+	 * @param {*} password
+	 */
+	login(req, res, username, password){
+		let profil = this.users.find( profil => profil.username == username && profil.password == password);
+		if (profil != undefined) {
+			let sessionId = this._createSessionId();
+			this.sessionIds.set(sessionId, profil.id);
+			this.sendJSON(req, res, 200, {return: sessionId});
+		}else{
+			this.sendJSON(req, res, 401, {return: "wrong login or password"});
+		}
+	}
+
+	/**
 	 * @method hello : world
 	 * @param {*} req
 	 * @param {*} res
@@ -216,16 +231,14 @@ class Base extends ModuleBase {
 	}
 
 	/**
-	 * @method data2 : random data response v2
-	 * @param {*} req
-	 * @param {*} res
+	 * @method createSessionId : create a session id
 	 */
-	login(req, res, pseudo, password) {
-		if (pseudo === "toto" && password === "1234") {
-			this.sendJSON(req, res, 200, {message: 458});
-		} else {
-			this.sendJSON(req, res, 401, {message: "wrong identifiant or password"});
+	_createSessionId() {
+		let sessionId = "" + Math.random();
+		while (this.sessionIds.get(sessionId) != undefined) {
+			sessionId = "" + Math.random();
 		}
+		return sessionId;
 	}
 
 	/**
