@@ -10,6 +10,7 @@ class Base {
 
 	async initialize() {
 
+<<<<<<< HEAD
 		//this.iospace = "baseapp"; // IO namespace for this app
 		//this.io = io.connect("http://localhost/" + this.iospace); // connect socket.io
 		//this.io.on("connect", () => this.onIOConnect()); // listen connect event
@@ -24,6 +25,20 @@ class Base {
 		//this.body.setAttribute("style", "width: "+ window.screen.width +"; height: " + window.screen.height);
 		this.mvc.view.attach(document.body); // attach view
 		this.mvc.view.activate(); // activate user interface
+=======
+		this.iospace = "baseapp"; // IO namespace for this app
+		this.io = io.connect("http://localhost/" + this.iospace); // connect socket.io
+		this.io.on("connect", () => this.onIOConnect()); // listen connect event
+
+		this.testMVC = new MVC("myMVC", this, new MyModel(), new MyView(), new MyController()); // init app MVC
+		await this.testMVC.initialize(); // run init async tasks
+
+		this.autenticationMVC = new MVC("autenticationMVC", this, new autenticationModel(), new autenticationView(), new autenticationController()); // init app MVC
+		await this.autenticationMVC.initialize(); // run init async tasks
+
+		this.autenticationMVC.view.attach(document.body); // attach view
+		this.autenticationMVC.view.activate(); // activate user interface
+>>>>>>> origin/master
 
 	}
 
@@ -48,11 +63,11 @@ class Base {
 
 	/**
 	 * @method onDummyData : dummy data received from io server
-	 * @param {Object} data 
+	 * @param {Object} data
 	 */
 	onDummyData(data) {
 		trace("IO data", data);
-		this.mvc.controller.ioDummy(data); // send it to controller
+		this.testMVC.controller.ioDummy(data); // send it to controller
 	}
 }
 

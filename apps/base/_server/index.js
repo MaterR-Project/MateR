@@ -1,6 +1,6 @@
 const ModuleBase = load("com/base"); // import ModuleBase class
 
-const fs = 			require("fs");			// file system
+const fs = require("fs"); // file system
 
 class Base extends ModuleBase {
 
@@ -16,9 +16,6 @@ class Base extends ModuleBase {
 		this.users = JSON.parse(fs.readFileSync('database/users.json', 'utf8'));
 		this.vocals = JSON.parse(fs.readFileSync('database/vocals.json', 'utf8'));
 		this.sessionIds = new Map();
-
-		//debug
-		this.sessionIds.set("123",0);
 
 		//trace(this.users,this.languages,this.levels,this.locals,this.playstyles,this.vocals);
 
@@ -43,9 +40,13 @@ class Base extends ModuleBase {
 	 * @method getIdFromSessionId : id of connect session
 	 * @param {*} sessionId
 	 */
-	getIdFromSessionId(sessionId) {
-		return this.sessionIds.get(sessionId);
-	}
+	 getIdFromSessionId(sessionId) {
+ 		let id = this.sessionIds.get(sessionId);
+ 		if (id === undefined) {
+ 			id = -1;
+ 		}
+ 		return id;
+ 	}
 
 	/**
 	 * @method getGameNamesFromDatabase : list of game names
@@ -155,7 +156,7 @@ class Base extends ModuleBase {
 		let ssId = [...param].join(" ");
 		let id = this.getIdFromSessionId(ssId); // profile id of session id
 		let profile = 404; // error case
-		profile = this.users[id];
+		if (id != -1) profile = this.users[id];
 		let data = profile; // object profile of user id
 		this.sendJSON(req, res, 200, {return: data}); // answer JSON
 	}
@@ -169,6 +170,24 @@ class Base extends ModuleBase {
 		// list of vocal from vocals database
 		let data =  this.vocals;
 		this.sendJSON(req, res, 200, {return: data}); // answer JSON
+	}
+
+	/**
+	 * @method login : connect a user
+	 * @param {*} req
+	 * @param {*} res
+	 * @param {*} username
+	 * @param {*} password
+	 */
+	login(req, res, username, password){
+		let profil = this.users.find( profil => profil.username == username && profil.password == password);
+		if (profil != undefined) {
+			let sessionId = this._createSessionId();
+			this.sessionIds.set(sessionId, profil.id);
+			this.sendJSON(req, res, 200, {return: sessionId});
+		}else{
+			this.sendJSON(req, res, 401, {return: "wrong login or password"});
+		}
 	}
 
 	/**
@@ -195,6 +214,17 @@ class Base extends ModuleBase {
 			{id: 2, name: "data2", value: Math.random()}
 		];
 		this.sendJSON(req, res, 200, data); // answer JSON
+	}
+
+	/**
+	 * @method createSessionId : create a session id
+	 */
+	_createSessionId() {
+		let sessionId = "" + Math.random();
+		while (this.sessionIds.get(sessionId) != undefined) {
+			sessionId = "" + Math.random();
+		}
+		return sessionId;
 	}
 
 	/**
