@@ -160,6 +160,7 @@ class autenticationController extends Controller {
 
 	}
 
+	// TODO with profile.js
   async connectBtnWasClicked(pseudo, password) {
 		trace("btn click", pseudo, password);
 		if (this.verifyPassword(password)) {
@@ -175,6 +176,7 @@ class autenticationController extends Controller {
 		}
   }
 
+	// TODO with registration.js
   async createAccountBtnWasClicked() {
     this.mvc.view.destroy();
     this.mvc.app.testMVC.view.attach(document.body);
