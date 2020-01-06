@@ -43,9 +43,13 @@ class Base extends ModuleBase {
 	 * @method getIdFromSessionId : id of connect session
 	 * @param {*} sessionId
 	 */
-	getIdFromSessionId(sessionId) {
-		return this.sessionIds.get(sessionId);
-	}
+	 getIdFromSessionId(sessionId) {
+ 		let id = this.sessionIds.get(sessionId);
+ 		if (id === undefined) {
+ 			id = -1;
+ 		}
+ 		return id;
+ 	}
 
 	/**
 	 * @method getGameNamesFromDatabase : list of game names
@@ -155,7 +159,7 @@ class Base extends ModuleBase {
 		let ssId = [...param].join(" ");
 		let id = this.getIdFromSessionId(ssId); // profile id of session id
 		let profile = 404; // error case
-		profile = this.users[id];
+		if (id != -1) profile = this.users[id];
 		let data = profile; // object profile of user id
 		this.sendJSON(req, res, 200, {return: data}); // answer JSON
 	}
