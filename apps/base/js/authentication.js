@@ -85,12 +85,15 @@ class autenticationView extends View {
     this.passwordInput = document.createElement("input");
     this.passwordInput.setAttribute("type","password");
 		this.passwordInput.setAttribute("name","password");
+		this.passwordInput.setAttribute("minlength","8");
+		this.passwordInput.setAttribute("maxlength","32");
 		this.passwordDiv.appendChild(this.passwordInput);
 
 		this.mainDiv.appendChild(this.passwordDiv);
 
 		//autentication error
 		this.erreur = document.createElement("p");
+		this.erreur.style.color = "red";
 		this.mainDiv.appendChild(this.erreur);
 
     //button connect
@@ -159,13 +162,15 @@ class autenticationController extends Controller {
 
   async connectBtnWasClicked(pseudo, password) {
 		trace("btn click", pseudo, password);
-		let response = await this.mvc.model.getSessionId(pseudo,password)
-		if (this.mvc.model.sessionId === undefined) {
-			this.mvc.view.updateWrongPsw(response.message);
-		}else{
-			this.mvc.view.destroy();
-	    this.mvc.app.testMVC.view.attach(document.body);
-	    this.mvc.app.testMVC.view.activate();
+		if (this.verifyPassword(password)) {
+			let response = await this.mvc.model.getSessionId(pseudo,password)
+			if (this.mvc.model.sessionId === undefined) {
+				this.mvc.view.updateWrongPsw(response.message);
+			}else{
+				this.mvc.view.destroy();
+		    this.mvc.app.testMVC.view.attach(document.body);
+		    this.mvc.app.testMVC.view.activate();
+			}
 		}
   }
 
@@ -175,5 +180,11 @@ class autenticationController extends Controller {
     this.mvc.app.testMVC.view.activate();
   }
 
+	verifyPassword(password){
+		if (password.length < 8 || password.length > 32) {
+			return false;
+		}
+		return true
+	}
 
 }
