@@ -191,6 +191,23 @@ class Base extends ModuleBase {
 	}
 
 	/**
+	 * @method search : faire une recherche
+	 * @param {*} req
+	 * @param {*} res
+	 * @param  {...*} params : some arguments
+	 */
+	search(req, res, ...params){
+		let serchParam = new Map(
+			["", undefined]
+		);
+		params.map(word => {
+
+		});
+		trace(answer); // say it
+		this.sendJSON(req, res, 200, {message: answer}); // answer JSON
+	}
+
+	/**
 	 * @method hello : world
 	 * @param {*} req
 	 * @param {*} res

@@ -153,7 +153,7 @@ class autenticationController extends Controller {
 
 	initialize(mvc) {
 		super.initialize(mvc);
-
+		trace(["truc",2,{"bidule":"chouette"}]);
 	}
 
 	// TODO with profile.js
@@ -185,5 +185,4 @@ class autenticationController extends Controller {
 		}
 		return true
 	}
-
 }

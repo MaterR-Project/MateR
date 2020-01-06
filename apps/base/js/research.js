@@ -80,10 +80,15 @@ class ResearchView extends View {
 	}
 
 	addListeners() {
-
+		this.getGameSelectorHandler = e => this.selectChose(e);
+		this.btn.addEventListener("click", this.getGameSelectorHandler);
 	}
 
 	removeListeners() {
+
+	}
+
+	getGameSelectorHandler(event){
 
 	}
 
