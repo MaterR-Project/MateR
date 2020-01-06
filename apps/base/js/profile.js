@@ -12,21 +12,88 @@ class ProfileModel extends Model {
 		this.ssid = ssid;
 		console.log(this.ssid);
 	}
+	async getLanguages(){
+		let request = "getLanguagesFromDatabase";
+		this.languages = await Comm.get(request);
+		return this.languages.response.return;
+	}
 	async getRegions (){
 		let request = "getRegionsFromDatabase";
 		this.database = await Comm.get(request);
-		return this.database.response.return;
+		this.list = this.database.response.return
+		return this.list;
+	}
+	async getVocals(){
+		let request = "getVocalsFromDatabase";
+		this.vocals = await Comm.get(request);
+		return this.vocals.response.return;
+	}
+	async getGames(){
+		let request = "getGameNamesFromDatabase";
+		this.games = await Comm.get(request);
+		return this.games.response.return;
 	}
 	async getProfileFromSsid(){
-		// gets called by auth to get the profile of the guy who connected
-		/* trace("get data2");
-        // keep data in class variable ? refresh rate ?
-        let result = await Comm.get("data2"); // calls method data2 from server passer le session id
-		return result.response;  */
-		//parse the response
 		let request = "getProfileFromSessionId/"+this.ssid;
 		this.profile = await Comm.get(request);
 		return this.profile.response.return;
+	}
+	async getGamePlatform(name){
+		let request = "getGamePlatformsFromGameName/" + name;
+		this.platformForGame = await Comm.get(request);
+		return this.profile.response.return;
+	}
+	async getRegionCountriesFromRegionName(reg){
+		let request = "getRegionCountriesFromRegionName/" + reg;
+		this.countries = await Comm.get(request);
+		return this.countries.response.return;
+	}
+
+	async getFormatedProfile(){
+		this.rawProfile = await this.getProfileFromSsid();
+		trace(this.rawProfile);
+		this.formatedProfile = [];
+		this.formatedProfile.push(this.rawProfile.bio);
+		//games
+		this.gamesList = await this.getGames();
+		let profileGames = []
+		this.rawProfile.games.map(e =>{
+			let currentGame = []
+			this.pos = this.gamesList.indexOf(e.name);
+			let platformPos =
+			currentGame.push(this.pos);
+		})
+
+		this.formatedProfile.push(currentGame);
+		//vocals
+		this.vocalList = await this.getVocals();
+		let profileVoc = [];
+		this.rawProfile.vocals.map(e => {
+			this.pos = this.vocalList.indexOf(e);
+			profileVoc.push(this.pos);
+		})
+		this.formatedProfile.push(profileVoc);
+		//languages
+		this.langList = await this.getLanguages();
+		let profileLang = [];
+		this.rawProfile.languages.map(e => {
+			this.pos = this.langList.indexOf(e);
+			profileLang.push(this.pos);
+		})
+		this.formatedProfile.push(profileLang);
+		//region
+		this.regList = await this.getRegions();
+		this.pos = this.regList.indexOf(this.rawProfile.region);
+		this.formatedProfile.push(this.pos);
+		//country
+		this.countList = await this.getRegionCountriesFromRegionName(this.rawProfile.region);
+		this.pos = this.countList.indexOf(this.rawProfile.country);
+		this.formatedProfile.push(this.pos);
+		//birth year
+		this.formatedProfile.push(this.rawProfile.year)
+		//gender
+		this.formatedProfile.push(this.rawProfile.gender);
+		trace(this.formatedProfile);
 	}
 }
 
@@ -170,6 +237,8 @@ class ProfileView extends View {
 			this.reg = document.createElement("h4");
 			this.reg.innerHTML = "Region :";
 			this.comboReg = document.createElement("select");
+			console.log("set id")
+			this.comboReg.id = "regionCombo";
 			this.regDiv.appendChild(this.reg);
 			this.regDiv.appendChild(this.comboReg);
 			this.profileData.appendChild(this.regDiv);
@@ -364,14 +433,18 @@ class ProfileView extends View {
 		});*/
 		console.log("useless data");
 	}
-    displayProfile(data){
+    displayProfile(data, regions){
 		//display the profile
+		console.log("in display");
 		this.bioText.innerHTML = data.bio;
+		this.comboReg.value = regions.indexOf(data.region);
+
 	}
 	createRgeionEntries(data){
+		this.regionsList = data;
 		let inc = 0;
 		let combo = this.comboReg;
-		data.forEach(function(element){
+		data.map(element => {
 			let entry = document.createElement("option");
 			entry.value = inc;
 			entry.text = element;
@@ -414,7 +487,8 @@ class ProfileController extends Controller {
 	}
 	async initProfile(ssid){
 		this.mvc.model.setSessionId("123");
-		this.mvc.view.displayProfile(await this.mvc.model.getProfileFromSsid());
+		//this.mvc.view.displayProfile(await this.mvc.model.getProfileFromSsid(), await this.mvc.model.getRegions());
+		this.mvc.view.displayProfile(await this.mvc.model.getFormatedProfile());
 	}
 	async grabRegions(){
 		this.mvc.view.createRgeionEntries(await this.mvc.model.getRegions());
