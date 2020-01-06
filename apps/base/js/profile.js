@@ -12,7 +12,11 @@ class ProfileModel extends Model {
 		this.ssid = ssid;
 		console.log(this.ssid);
 	}
-
+	async getRegions (){
+		let request = "getRegionsFromDatabase";
+		this.database = await Comm.get(request);
+		return this.database.response.return;
+	}
 	async getProfileFromSsid(){
 		// gets called by auth to get the profile of the guy who connected
 		/* trace("get data2");
@@ -21,9 +25,8 @@ class ProfileModel extends Model {
 		return result.response;  */
 		//parse the response
 		let request = "getProfileFromSessionId/"+this.ssid;
-		trace(request);
 		this.profile = await Comm.get(request);
-		console.log(this.profile);
+		return this.profile.response.return;
 	}
 }
 
@@ -297,6 +300,7 @@ class ProfileView extends View {
 	// activate UI
 	activate() {
 		// passer au modele le ssid
+		this.mvc.controller.grabRegions();
 		super.activate();
 		this.addListeners(); // listen to events
 	}
@@ -361,9 +365,19 @@ class ProfileView extends View {
 		console.log("useless data");
 	}
     displayProfile(data){
-		trace(data);
 		//display the profile
-
+		this.bioText.innerHTML = data.bio;
+	}
+	createRgeionEntries(data){
+		let inc = 0;
+		let combo = this.comboReg;
+		data.forEach(function(element){
+			let entry = document.createElement("option");
+			entry.value = inc;
+			entry.text = element;
+			combo.appendChild(entry);
+			inc++;
+		})
 	}
 }
 
@@ -398,12 +412,11 @@ class ProfileController extends Controller {
 		this.mvc.app.mvcTest.view.attach(document.body); // attach view of menu MVC
 		this.mvc.app.mvcTest.view.activate(); 			 // activate user interface of menu MVC
 	}
-	initProfile(ssid){
-		this.mvc.model.setSessionId(ssid);
-		// this.mvc.view.displayProfile( await this.mvc.model.getProfileFromSsid() );
-		let a = await this.mvc.model.getProfileFromSsid();
-		this.mvc.view.displayProfile(a);
-		//
-		console.log("truc");
+	async initProfile(ssid){
+		this.mvc.model.setSessionId("123");
+		this.mvc.view.displayProfile(await this.mvc.model.getProfileFromSsid());
+	}
+	async grabRegions(){
+		this.mvc.view.createRgeionEntries(await this.mvc.model.getRegions());
 	}
 }
