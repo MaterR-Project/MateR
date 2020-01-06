@@ -363,7 +363,6 @@ class ProfileView extends View {
 	}
 
 	attach(parent, ssid){
-		trace("SSID : ", ssid);
 		this.mvc.controller.initProfile(ssid);
 		super.attach(parent);
 	}
@@ -487,8 +486,7 @@ class ProfileController extends Controller {
 		this.mvc.app.mvcTest.view.activate(); 			 // activate user interface of menu MVC
 	}
 	async initProfile(ssid){
-		this.mvc.model.setSessionId("123");
-		//this.mvc.view.displayProfile(await this.mvc.model.getProfileFromSsid(), await this.mvc.model.getRegions());
+		this.mvc.model.setSessionId(ssid);
 		this.mvc.view.displayProfile(await this.mvc.model.getFormatedProfile());
 	}
 	async grabRegions(){
