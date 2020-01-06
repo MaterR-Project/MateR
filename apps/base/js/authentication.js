@@ -11,10 +11,6 @@ class autenticationModel extends Model {
 		this.sessionId = undefined;
 	}
 
-	async updateWrongPsw(){
-
-	}
-
 	async getSessionId(pseudo, password) {
 		trace("get session id");
 		let result = await Comm.get("login/"+pseudo+"/"+password);

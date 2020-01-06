@@ -20,8 +20,11 @@ class Base {
 		this.autenticationMVC = new MVC("autenticationMVC", this, new autenticationModel(), new autenticationView(), new autenticationController()); // init app MVC
 		await this.autenticationMVC.initialize(); // run init async tasks
 
-		this.autenticationMVC.view.attach(document.body); // attach view
-		this.autenticationMVC.view.activate(); // activate user interface
+		this.researchMVC = new MVC("researchMVC", this, new ResearchModel(), new ResearchView(), new ResearchController()); // init app MVC
+		await this.researchMVC.initialize(); // run init async tasks
+
+		this.researchMVC.view.attach(document.body); // attach view
+		this.researchMVC.view.activate(); // activate user interface
 
 	}
 
