@@ -217,20 +217,6 @@ class Base extends ModuleBase {
 	}
 
 	/**
-	 * @method data2 : random data response v2
-	 * @param {*} req
-	 * @param {*} res
-	 */
-	data2(req, res) {
-		let data = [ // some random data
-			{id: 0, name: "machin", value: Math.random()},
-			{id: 1, name: "bidule", value: Math.random()},
-			{id: 2, name: "truc", value: Math.random()}
-		];
-		this.sendJSON(req, res, 200, data); // answer JSON
-	}
-
-	/**
 	 * @method createSessionId : create a session id
 	 */
 	_createSessionId() {

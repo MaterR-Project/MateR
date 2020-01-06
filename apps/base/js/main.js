@@ -72,13 +72,6 @@ class MyModel extends Model {
 		return result.response; // return it to controller
 	}
 
-	async data2() {
-		trace("get data2");
-		// keep data in class variable ? refresh rate ?
-		let result = await Comm.get("data2"); // wait data from server
-		return result.response; // return it to controller
-	}
-
 }
 
 class MyView extends View {
@@ -95,11 +88,6 @@ class MyView extends View {
 		this.btn = document.createElement("button");
 		this.btn.innerHTML = "get test";
 		this.stage.appendChild(this.btn);
-
-		// create get test btn2
-		this.btn2 = document.createElement("button");
-		this.btn2.innerHTML = "get test2";
-		this.stage.appendChild(this.btn2);
 
 		// create io test btn
 		this.iobtn = document.createElement("button");
@@ -132,25 +120,17 @@ class MyView extends View {
 		this.getBtnHandler = e => this.btnClick(e);
 		this.btn.addEventListener("click", this.getBtnHandler);
 
-		this.getBtn2Handler = e => this.btn2Click(e);
-		this.btn2.addEventListener("click", this.getBtn2Handler);
-
 		this.ioBtnHandler = e => this.ioBtnClick(e);
 		this.iobtn.addEventListener("click", this.ioBtnHandler);
 	}
 
 	removeListeners() {
 		this.btn.removeEventListener("click", this.getBtnHandler);
-		this.btn.removeEventListener("click", this.getBtn2Handler);
 		this.iobtn.removeEventListener("click", this.ioBtnHandler);
 	}
 
 	btnClick(event) {
 		this.mvc.controller.btnWasClicked("more parameters"); // dispatch
-	}
-
-	btn2Click(event) {
-		this.mvc.controller.btn2WasClicked("more parameters"); // dispatch
 	}
 
 	ioBtnClick(event) {
@@ -190,11 +170,6 @@ class MyController extends Controller {
 	async btnWasClicked(params) {
 		trace("btn click", params);
 		this.mvc.view.update(await this.mvc.model.data()); // wait async request > response from server and update view table values
-	}
-
-	async btn2WasClicked(params) {
-		trace("btn click", params);
-		this.mvc.view.update(await this.mvc.model.data2()); // wait async request > response from server and update view table values
 	}
 
 	async ioBtnWasClicked(params) {
