@@ -161,10 +161,10 @@ class Base extends ModuleBase {
 		this.sendJSON(req, res, 200, {return: data}); // answer JSON
 	}
 	/**
-	 * @method getProfileFromSessionId : object profile
+	 * @method getProfileFromId : object profile
 	 * @param {*} req
 	 * @param {*} res
-	 * @param  {...*} param : ssId name
+	 * @param  {...*} param : Id name
 	 */
 
 	getProfileFromId(req, res, ...param) {
