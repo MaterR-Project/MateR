@@ -13,7 +13,14 @@ class TchatModel extends Model {
         return this.convList.response.return;
     }
     async pushMessage(content){
-        
+        let request = "sendMessage/";
+        let data = {message : content, src : this.mvc.view.src, dest : this.mvc.view.dest};
+        await Comm.post(request, data);
+    }
+    async getName(id){
+        let request = "getNameFromId/" + id;
+        let result = await Comm.get(request);
+        return result.response.return;
     }
 }
 
@@ -38,13 +45,15 @@ class TchatView extends View {
         this.stage.appendChild(this.mainDiv);
         // header section above discussio
         this.headDiv = document.createElement("div");
+        this.mainDiv.style.backgroundColor ="black";
+        this.mainDiv.style.color = "white";
         this.mainDiv.appendChild(this.headDiv);
         this.headDiv.style.display = "flex";
         this.headDiv.style.justifyContent = "space-between";
         this.headDiv.style.aligneItems = "center";
         this.headDiv.style.width ="100%";
         this.headDiv.style.height = "15%";
-        this.headDiv.style.borderBottom ="thick solid #000000";
+        this.headDiv.style.borderBottom ="thick solid #303030";
         this.menuButton = document.createElement("button");
         this.menuButton.innerHTML = "Menu";
 		this.menuButton.style.fontSize = "15px";
@@ -68,7 +77,7 @@ class TchatView extends View {
         this.inputDiv.style.display = "flex";
         this.inputDiv.style.justifyContent = "space-between";
         this.inputDiv.style.height = "8%";
-        this.inputDiv.style.borderTop ="thick solid #000000";
+        this.inputDiv.style.borderTop ="thick solid #303030";
         this.textInput = document.createElement("textarea");
         this.textInput.style.overflow = "true";
         this.textInput.setAttribute("placeholder", "Type your message here !");
@@ -108,10 +117,14 @@ class TchatView extends View {
         this.menuButton.addEventListener("click", this.menuHandler);
         this.sendHandler = e => this.sendClick(e);
         this.sendBtn.addEventListener("click", this.sendHandler);
+        this.keyHandler = e => this.keyPressed(e);
+        document.addEventListener("keydown", this.keyHandler);
 	}
 
 	removeListeners() {
         this.menuButton.removeEventListener("click", this.menuHandler);
+        this.sendBtn.removeEventListener("click", this.sendHandler);
+        document.removeEventListener("keydown", this.keyHandler)
 	}
     // event triggers
     menuClick() {
@@ -120,8 +133,17 @@ class TchatView extends View {
     sendClick(){
         let content = this.textInput.value;
         // call controller func to send this string to the dest;
-        if(content !="")
+        if(content !=""){
+            this.addMessage(content, this.src, "sending...");
             this.mvc.controller.sendMessage(content);
+            this.textInput.value = "";
+        }
+    }
+    keyPressed(event){
+        if(event.which === 13){
+            // start tchatting with this user
+            this.sendClick();
+        }
     }
     displayConv(conv){
         conv.map(e =>{
@@ -129,15 +151,16 @@ class TchatView extends View {
             this.convDiv.appendChild(messageDiv);
             if(this.src == e.Id){
                 messageDiv.style.float = "right";   // sent by us
-                messageDiv.style.backgroundColor = "#cdf8a0";
+                messageDiv.style.backgroundColor = "#598500";
             } else if (this.dest == e.Id){
                 messageDiv.style.float = "left";    // sent by other
                 messageDiv.style.backgroundColor = "#292929";
             }
             messageDiv.style.margin = "5px";
-            messageDiv.style.border = "medium solid #000000";
+            messageDiv.style.border = "medium solid #303030";
             messageDiv.style.width = "50%";
             let messageContent = document.createElement("span");
+            messageContent.style.width = "100%";
             messageDiv.appendChild(messageContent);
             messageContent.style.fontSize = "15px";
             messageContent.innerHTML = e.Message;
@@ -159,6 +182,46 @@ class TchatView extends View {
         })
         // scroll to the bottom of the conversation aka newest messages
         this.convDiv.scrollTo(0, this.convDiv.scrollHeight);
+    }
+    addMessage(content, src, state){
+        trace("adding message : ", content, "from user : ", src);
+        let messageDiv = document.createElement("div");
+        this.convDiv.appendChild(messageDiv);
+        if(this.src == src){ 
+            messageDiv.style.float = "right";   // sent by us
+            messageDiv.style.backgroundColor = "#598500";
+        } else if (this.dest == src){
+            messageDiv.style.float = "left";    // sent by other
+            messageDiv.style.backgroundColor = "#292929";
+        }
+        messageDiv.style.margin = "5px";
+        messageDiv.style.border = "medium solid #303030";
+        messageDiv.style.width = "50%";
+        let messageContent = document.createElement("div");
+        messageDiv.appendChild(messageContent);
+        messageContent.style.fontSize = "15px";
+        messageContent.innerHTML = content;
+        let messageHeader = document.createElement("div");
+        messageContent.style.width = "100%";
+        messageContent.style.overflowWrap = "break-word";
+        messageDiv.appendChild(messageHeader);
+        messageHeader.style.display = "flex";
+        messageHeader.style.fontSize = "12px";
+        messageHeader.style.flexDirection = "row";
+        messageHeader.style.justifyContent = "space-between";
+        messageHeader.style.color = "#b5b5b5";
+        let statusDiv = document.createElement("div");
+        messageHeader.appendChild(statusDiv);
+        messageHeader.innerHTML = state;
+        let timeStamp = document.createElement("div");
+        messageHeader.appendChild(timeStamp);
+        var time = new Date();
+        timeStamp.innerHTML = time.getHours()+":"+ time.getMinutes();
+        // scroll to the bottom of the conversation aka newest messages
+        this.convDiv.scrollTo(0, this.convDiv.scrollHeight);
+    }
+    setName(name){
+        this.profileDiv.innerHTML = name;
     }
 }
 
@@ -190,9 +253,9 @@ class TchatController extends Controller {
             trace("asking for the conv : ", myId, "_", targetId);
             this.mvc.view.displayConv(await this.mvc.model.getConv(myId, targetId));
         }
+        this.mvc.view.setName(await this.mvc.model.getName(this.mvc.view.dest));
     }
     async sendMessage (content){
-        trace("view triggeed sending a message : ", content);
         await this.mvc.model.pushMessage(content);
     }
 }
