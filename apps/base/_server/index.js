@@ -1,6 +1,7 @@
 const ModuleBase = load("com/base"); // import ModuleBase class
 
 const fs = require("fs"); // file system
+const Busboy = require("busboy"); // busboy
 
 class Base extends ModuleBase {
 
@@ -151,6 +152,7 @@ class Base extends ModuleBase {
 	 * @param {*} res
 	 * @param  {...*} param : ssId name
 	 */
+	
 	getProfileFromSessionId(req, res, ...param) {
 		trace(param)
 		let ssId = [...param].join(" ");
@@ -159,6 +161,19 @@ class Base extends ModuleBase {
 		if (id != -1) profile = this.users[id];
 		let data = profile; // object profile of user id
 		this.sendJSON(req, res, 200, {return: data}); // answer JSON
+	}
+	/**
+	 * @method getNameFrom$Id : object profile
+	 * @param {*} req
+	 * @param {*} res
+	 * @param  {...*} param : id
+	 */
+	getNameFromId(req, res, ...param){
+		let id = [...param].join(" ");
+		let name = 404; // error
+		if(id != -1) name = this.users[id].username;
+		let data = name;
+		this.sendJSON(req, res, 200, {return : data}); //send JSON
 	}
 	/**
 	 * @method getProfileFromId : object profile
@@ -204,6 +219,15 @@ class Base extends ModuleBase {
 		//get the newest one
 		var mostRecent = list[list.length - 1];
 		return mostRecent;
+	}
+
+	sendMessage(req, res){
+		var busboy = new Busboy({headers: req.headers});
+		busboy.on('field', (fieldname, val) => {
+			trace(fieldname, " - ", val);
+			//check if src can send to dest
+		});
+		req.pipe(busboy);
 	}
 	/**
 	 * @method getConvFrom : object profile
