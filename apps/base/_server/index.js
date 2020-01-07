@@ -164,8 +164,9 @@ class Base extends ModuleBase {
 	 * @method getProfileFromId : object profile
 	 * @param {*} req
 	 * @param {*} res
-	 * @param  {...*} param : id name
+	 * @param  {...*} param : Id name
 	 */
+
 	getProfileFromId(req, res, ...param) {
 		trace(param)
 		let id = [...param].join(" ");
