@@ -10,7 +10,10 @@ class TchatModel extends Model {
     async getConv(id1, id2){
         let request = "getConvFromId/" + id1 + "/" + id2;
         this.convList = await Comm.get(request);
-        trace(this.convList);
+        return this.convList.response.return;
+    }
+    async pushMessage(content){
+        
     }
 }
 
@@ -55,6 +58,7 @@ class TchatView extends View {
         this.headDiv.appendChild(this.profileDiv);
         // conversation history
         this.convDiv = document.createElement("div");
+        this.convDiv.style.overflow = "auto";
         this.convDiv.style.height = "70%";
         this.convDiv.style.width = "100%";
         this.mainDiv.appendChild(this.convDiv);
@@ -79,8 +83,10 @@ class TchatView extends View {
     attach(parent, id){
         //this.targetId = id; // get the id of the person you want to speak with
         let targetId = 1;
+        this.dest = targetId;
         //this.myId = this.mvc.profileMVC.controller.id; // get my own id from the profile mvc
         let myId = 0;
+        this.src = myId;
         this.mvc.controller.fetchConv(myId, targetId); // init the controller to start getting the conv bewteen us
         super.attach(parent);
     }
@@ -114,9 +120,46 @@ class TchatView extends View {
     sendClick(){
         let content = this.textInput.value;
         // call controller func to send this string to the dest;
-        trace(content);
+        if(content !="")
+            this.mvc.controller.sendMessage(content);
     }
-
+    displayConv(conv){
+        conv.map(e =>{
+            let messageDiv = document.createElement("div");
+            this.convDiv.appendChild(messageDiv);
+            if(this.src == e.Id){
+                messageDiv.style.float = "right";   // sent by us
+                messageDiv.style.backgroundColor = "#cdf8a0";
+            } else if (this.dest == e.Id){
+                messageDiv.style.float = "left";    // sent by other
+                messageDiv.style.backgroundColor = "#292929";
+            }
+            messageDiv.style.margin = "5px";
+            messageDiv.style.border = "medium solid #000000";
+            messageDiv.style.width = "50%";
+            let messageContent = document.createElement("span");
+            messageDiv.appendChild(messageContent);
+            messageContent.style.fontSize = "15px";
+            messageContent.innerHTML = e.Message;
+            let messageHeader = document.createElement("div");
+            messageDiv.appendChild(messageHeader);
+            messageHeader.style.display = "flex";
+            messageHeader.style.fontSize = "12px";
+            messageHeader.style.flexDirection = "row";
+            messageHeader.style.justifyContent = "space-between";
+            messageHeader.style.color = "#b5b5b5";
+            let statusDiv = document.createElement("div");
+            messageHeader.appendChild(statusDiv);
+            if(e.State == "seen" && this.src == e.Id){
+                statusDiv.innerHTML = e.State;
+            }
+            let timeStamp = document.createElement("div");
+            messageHeader.appendChild(timeStamp);
+            timeStamp.innerHTML = e.Time;
+        })
+        // scroll to the bottom of the conversation aka newest messages
+        this.convDiv.scrollTo(0, this.convDiv.scrollHeight);
+    }
 }
 
 class TchatController extends Controller {
@@ -138,13 +181,18 @@ class TchatController extends Controller {
 		this.mvc.app.testMVC.view.attach(document.body);     // attach view of menu MVC
 		this.mvc.app.testMVC.view.activate(); 			     // activate user interface of menu MVC
     }
+
     async fetchConv(myId, targetId){
         if(myId > targetId){
             trace("asking for the conv : ", targetId, "_", myId);
-            await this.mvc.model.getConv(targetId, myId);
+            this.mvc.view.displayConv(await this.mvc.model.getConv(targetId, myId));
         }else{
             trace("asking for the conv : ", myId, "_", targetId);
-            await this.mvc.model.getConv(myId, targetId);
+            this.mvc.view.displayConv(await this.mvc.model.getConv(myId, targetId));
         }
+    }
+    async sendMessage (content){
+        trace("view triggeed sending a message : ", content);
+        await this.mvc.model.pushMessage(content);
     }
 }
