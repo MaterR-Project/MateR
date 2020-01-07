@@ -39,27 +39,27 @@ class RegistrationModel extends Model {
 	}
 
 	loadLanguages(){
-		trace(this.languges)
+		//trace(this.languges)
 		return this.languages;
 	}
 
 	loadGameNames(){
-		trace(this.gameNames)
+		//trace(this.gameNames)
 		return this.gameNames;
 	}
 
 	loadPlaystyles(){
-		trace(this.playstyles)
+		//trace(this.playstyles)
 		return this.playstyles;
 	}
 
 	loadLevels(){
-		trace(this.levels)
+		//trace(this.levels)
 		return this.levels;
 	}
 
 	loadVocals(){
-		trace(this.vocals)
+		//trace(this.vocals)
 		return this.vocals;
 	}
 
@@ -119,7 +119,7 @@ class RegistrationView extends View {
 		this.profileData.style.fontSize = "20px";
 		this.profileData.style.overflow = "auto";
 		//this.profileData.style.marginBottom = "15%";
-		//this.profileData.style.height = "75%";
+		this.profileData.style.width = "75%";
 		// set the scroll box height depending on device resolution
 		//this.profileData.style.width = "70%";
 		if (sizeWidth > 1200) {
@@ -231,13 +231,13 @@ class RegistrationView extends View {
 		this.comboGender = document.createElement("select");
 		// add undefined male and female options
 		this.undefinedGender = document.createElement("option");
-		this.undefinedGender.value = "-1";
+		this.undefinedGender.value = "Gamer";
 		this.undefinedGender.appendChild (document.createTextNode("Gamer 8-)"));
 		this.maleGender = document.createElement("option");
-		this.maleGender.value = "0";
+		this.maleGender.value = "Male";
 		this.maleGender.appendChild (document.createTextNode("Male"));
 		this.femaleGender = document.createElement("option");
-		this.femaleGender.value = "1";
+		this.femaleGender.value = "Female";
 		this.femaleGender.appendChild (document.createTextNode("Female"));
 		this.comboGender.appendChild(this.undefinedGender);
 		this.comboGender.appendChild(this.maleGender);
@@ -429,12 +429,19 @@ class RegistrationView extends View {
   	this.mainDiv.appendChild(this.profileData);
 
 		// create account button
-		this.navButton = document.createElement("button");
-		this.navButton.innerHTML = "Create Account";
-		this.navButton.style.fontSize = "15px";
-		this.navButton.style.marginTop = "15px"
-		this.navButton.style.marginBottom = "15px"
-		this.mainDiv.appendChild(this.navButton);
+		this.createAccountButton = document.createElement("button");
+		this.createAccountButton.innerHTML = "Create Account";
+		//this.createAccountButton.style.height
+		this.createAccountButton.style.width = "60%";
+		this.createAccountButton.style.fontSize = "25px";
+		this.createAccountButton.style.marginTop = "15px";
+		this.createAccountButton.style.marginBottom = "15px";
+		this.mainDiv.appendChild(this.createAccountButton);
+
+		this.loginButton = document.createElement("button");
+		this.loginButton.innerHTML = "Already got Account !";
+		this.loginButton.style.marginBottom = "15px";
+		this.mainDiv.appendChild(this.loginButton);
 	}
 
 	// activate UI
@@ -450,37 +457,27 @@ class RegistrationView extends View {
 	}
 
 	addListeners() {
-		this.navBtnHandler = e => this.navBtnClick(e);
-		this.navButton.addEventListener("click", this.navBtnHandler);
+		this.createAccountButtonHandler = e => this.createAccountButtonClick(e);
+		this.createAccountButton.addEventListener("click", this.createAccountButtonHandler);
 
 		this.addGameButtonHandler = e => this.addGameButtonClick(e);
 		this.addGameButton.addEventListener("click", this.addGameButtonHandler);
 
 		this.gamesAddFieldHandle = e => {
-			//trace(parent);
-			trace(e,"\n\n BONJOUR !!!!!!!!!!!!!!!!!!");
-
-			trace (e.target.value);
-			//if (e.target.name == "games") this.gameComboChoice(e.path[1].childNodes, e.target.value);
-			//if (e.target.name == "platforms") this.platformComboChoice(e.path[1].childNodes[2]);
-			//if (e.target.name == "playstyles") this.playstyleComboChoice(e.path[1].childNodes[3]);
+			[...this.gamesAddField.childNodes].map((child, index) => {
+				if (child == e.srcElement.parentNode) this.index = index;
+			});
+			if (e.target.name == "games") this.gameComboChoice(this.gamesAddField.childNodes[this.index].childNodes, e.target.value);
 		}
 		[...this.gamesAddField.childNodes].map((child, index) => {
-			trace("le child :\n",child);
-			//child.addEventListener("change", this.gamesAddFieldHandle);
-			child.addEventListener("change", e => {
-				trace(child.parentElement);
-				trace(this.gamesAddField.childNodes[index]);
-				//trace(child.parentNode.childNode[0])
-				if (e.target.name == "games") this.gameComboChoice(this.gamesAddField.childNodes[index].childNodes, e.target.value);
-			});
+			this.index = index;
+			child.addEventListener("change", this.gamesAddFieldHandle);
 		});
 
 
 
 		// Handle Country combo on region choice
 		this.regionHandler = e => {
-			trace(e);
 			// Display combo country
 			this.countDiv.style.display = "flex";
 			this.regionsComboChoice(this.comboRegions.selectedIndex);
@@ -489,12 +486,11 @@ class RegistrationView extends View {
 	}
 
 	removeListeners() {
-		this.navButton.removeEventListener("click", this.navBtnHandler);
+		this.createAccountButton.removeEventListener("click", this.createAccountButtonHandler);
 
 		this.addGameButton.removeEventListener("click", this.addGameButtonHandler);
 
 		[...this.gamesAddField.childNodes].map(child => {
-			trace("le suppr :\n",child);
 			child.removeEventListener("change", this.gamesAddFieldHandle);
 		});
 
@@ -506,11 +502,11 @@ class RegistrationView extends View {
 		this.addListeners();
 	}
 
-	navBtnClick(event) {
-		this.mvc.controller.navBtnWasClicked("go test parameters"); // dispatch
+	createAccountButtonClick() {
+		this.mvc.controller.createAccountButtonWasClicked();
 	}
 
-	addGameButtonClick(event){
+	addGameButtonClick(){
 		this.mvc.controller.addGameButtonWasClicked();
 	}
 
@@ -532,7 +528,6 @@ class RegistrationView extends View {
 
 	updateComboWithList(combo, data) {
 		// Remove all children of countries combobox
-		trace("la combo !!!!!\n\n", combo);
 		[...combo.childNodes].map(child => {combo.removeChild(child)});
 
 		//
@@ -647,7 +642,7 @@ class RegistrationControler extends Controller {
 	}
 
 	async gameComboWasChoosed(gameAddFieldArray, gameName){
-		trace(gameAddFieldArray,"unfeddfjhdfhdjh")
+		//trace(gameAddFieldArray,"unfeddfjhdfhdjh")
 		this.mvc.view.updateComboWithList(gameAddFieldArray[3], await this.mvc.model.loadGamePlatforms(gameName));
 		this.mvc.view.updateComboWithList(gameAddFieldArray[5], this.mvc.model.loadPlaystyles());
 		this.mvc.view.updateComboWithList(gameAddFieldArray[7], this.mvc.model.loadLevels());
@@ -665,14 +660,17 @@ class RegistrationControler extends Controller {
 		levelCombo.style.display = "";
 	}
 
-	async navBtnWasClicked(params) {
-		let test = await Comm.get("getProfileFromSessionId/1234");
-		trace(test);
-		trace("go test btn click", params);
+	createAccountButtonWasClicked() {
 		this.mvc.view.destroy();
 		this.mvc.app.mvcTest.view.attach(document.body); // attach view
 		this.mvc.app.mvcTest.view.activate(); // activate user interface
 		this.mvc.app.mvc = this.mvc.app.mvcTest;
+	}
+
+	loginButtonWasClicked(){
+		this.mvc.view.destroy();
+		this.mvc.app.mvcAuthentication.view.attach(document.body); // attach view
+		this.mvc.app.mvcAuthentication.view.activate(); // activate auth interface
 	}
 
 }
