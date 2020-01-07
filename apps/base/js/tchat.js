@@ -6,8 +6,12 @@ class TchatModel extends Model {
 
 	async initialize(mvc) {
 		super.initialize(mvc);
-
-	}
+    }
+    async getConv(id1, id2){
+        let request = "getConvFromId/" + id1 + "/" + id2;
+        this.convList = await Comm.get(request);
+        trace(this.convList);
+    }
 }
 
 class TchatView extends View {
@@ -61,10 +65,10 @@ class TchatView extends View {
         this.inputDiv.style.justifyContent = "space-between";
         this.inputDiv.style.height = "8%";
         this.inputDiv.style.borderTop ="thick solid #000000";
-        this.textInput = document.createElement("INPUT");
+        this.textInput = document.createElement("textarea");
         this.textInput.style.overflow = "true";
         this.textInput.setAttribute("placeholder", "Type your message here !");
-        this.textInput.setAttribute("type", "text");
+        this.textInput.setAttribute("maxlength", "2000");
         this.textInput.style.width = "85%";
         this.inputDiv.appendChild(this.textInput);
         this.sendBtn = document.createElement("button");
@@ -72,7 +76,14 @@ class TchatView extends View {
         this.inputDiv.appendChild(this.sendBtn);
         this.sendBtn.innerHTML = "Send";
 	}
-
+    attach(parent, id){
+        //this.targetId = id; // get the id of the person you want to speak with
+        let targetId = 1;
+        //this.myId = this.mvc.profileMVC.controller.id; // get my own id from the profile mvc
+        let myId = 0;
+        this.mvc.controller.fetchConv(myId, targetId); // init the controller to start getting the conv bewteen us
+        super.attach(parent);
+    }
 	// activate UI
 	activate() {
 		super.activate();
@@ -89,6 +100,8 @@ class TchatView extends View {
         // menu button lsitener
         this.menuHandler = e => this.menuClick(e);
         this.menuButton.addEventListener("click", this.menuHandler);
+        this.sendHandler = e => this.sendClick(e);
+        this.sendBtn.addEventListener("click", this.sendHandler);
 	}
 
 	removeListeners() {
@@ -97,6 +110,11 @@ class TchatView extends View {
     // event triggers
     menuClick() {
 		this.mvc.controller.menuClicked();		// link to the menu part of the controller
+    }
+    sendClick(){
+        let content = this.textInput.value;
+        // call controller func to send this string to the dest;
+        trace(content);
     }
 
 }
@@ -119,5 +137,14 @@ class TchatController extends Controller {
 		this.mvc.app.mvc = this.mvc.app.testMVC;		     // change current MVC to the target MVC : menu
 		this.mvc.app.testMVC.view.attach(document.body);     // attach view of menu MVC
 		this.mvc.app.testMVC.view.activate(); 			     // activate user interface of menu MVC
+    }
+    async fetchConv(myId, targetId){
+        if(myId > targetId){
+            trace("asking for the conv : ", targetId, "_", myId);
+            await this.mvc.model.getConv(targetId, myId);
+        }else{
+            trace("asking for the conv : ", myId, "_", targetId);
+            await this.mvc.model.getConv(myId, targetId);
+        }
     }
 }
