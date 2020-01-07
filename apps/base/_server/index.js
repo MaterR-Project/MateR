@@ -160,6 +160,21 @@ class Base extends ModuleBase {
 		let data = profile; // object profile of user id
 		this.sendJSON(req, res, 200, {return: data}); // answer JSON
 	}
+	/**
+	 * @method getProfileFromSessionId : object profile
+	 * @param {*} req
+	 * @param {*} res
+	 * @param  {...*} param : ssId name
+	 */
+
+	getProfileFromId(req, res, ...param) {
+		trace(param)
+		let id = [...param].join(" ");
+		let profile = 404; // error case
+		if (id != -1) profile = this.users[id];
+		let data = profile; // object profile of user id
+		this.sendJSON(req, res, 200, {return: data}); // answer JSON
+	}
 
 	/**
 	 * @method getVocalsFromDatabase : list of vocal
