@@ -9,9 +9,21 @@ class ResultModel extends Model {
 
 	}
 
-	async data() {
-
-	}
+	async getProfile(ssid) {
+        this.profileList = [];
+        this.ssidList = [ssid];
+        /*this.ssidList.map(async e =>{
+            let request = "getProfileFromSessionId/" + e;
+            let result = await Comm.get(request);
+            this.profileList.push(result.response.return);
+        })*/
+        for(var i = 0; i < this.ssidList.length; i++){
+            let request = "getProfileFromSessionId/" + this.ssidList[i];
+            let result = await Comm.get(request);
+            this.profileList.push(result.response.return);
+        }
+        return this.profileList;
+    }
 
 }
 
@@ -81,8 +93,7 @@ class ResultView extends View {
         this.curDiv.style.overflow = "auto";
         this.curDiv.style.width = "100%";
         this.curDiv.style.height = "90%";
-        this.curDiv.style.margin = "8%";
-        this.curDiv.innerHTML = "2Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
+        //this.curDiv.innerHTML = "2Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
         this.profileDiv.appendChild(this.curDiv);
         //right btn
         this.rightBtn = document.createElement("a");
@@ -99,7 +110,8 @@ class ResultView extends View {
 
 	// activate UI
 	activate() {
-		super.activate();
+        super.activate();
+        this.mvc.controller.fetchProfile(this.mvc.app.authenticationMVC.model.sessionId);
 		this.addListeners(); // listen to events
 	}
 
@@ -160,7 +172,6 @@ class ResultView extends View {
         var touchobj = e.changedTouches[0]
         this.dist = touchobj.pageX - this.startX // get total dist traveled by finger while in contact with surface
         this.elapsedTime = new Date().getTime() - this.startTime // get time elapsed
-        trace("", this.dist, this.elapsedTime);
         // check that elapsed time is within specified, horizontal dist traveled >= threshold, and vertical dist traveled <= 100
         if(this.elapsedTime <= this.allowedTime){       // adequate time
             if(this.dist >= this.threshold && Math.abs(touchobj.pageY - this.startY) <= 100){    // adequate dist right
@@ -169,7 +180,6 @@ class ResultView extends View {
                 this.handleswipe(1);
             }
         }
-        //e.preventDefault()
     }
     
     handleswipe(isrightswipe){
@@ -180,8 +190,6 @@ class ResultView extends View {
         }
     }
 
-
- 
     // figures out if a double tap happened and calls the double tap
     async taped(){
         var now = new Date().getTime();
@@ -254,6 +262,154 @@ class ResultView extends View {
         trace("swipe right");
         this.mvc.controller.rightClicked();
     }
+    //build profiles
+    displayProfiles(profilesList){
+        profilesList.map(e =>{
+            // set name
+            this.nameDiv.innerHTML = e.username;
+            // add bio
+            let bio = document.createElement("div");
+            bio.style.display = "flex";
+            bio.style.width = "100%";
+            bio.style.justifyContent = "space-between";
+            bio.style.alignItems = "center";
+            let bioHead = document.createElement("h4");
+            bioHead.innerHTML= "Bio :"
+            bio.appendChild(bioHead);
+            let bioContent = document.createElement("div");
+            bioContent.overflow = "true";
+            bioContent.style.width = "65%";
+            bioContent.innerHTML = e.bio;
+            bio.appendChild(bioContent);
+            this.curDiv.appendChild(bio);
+            // add age
+            let age = document.createElement("div");
+            age.style.display = "flex";
+            age.style.justifyContent = "space-between";
+            age.style.alignItems = "center";
+            let ageHead = document.createElement("h4");
+            ageHead.innerHTML= "Age :"
+            age.appendChild(ageHead);
+            let ageContent = document.createElement("div");
+            ageContent.style.width = "65%";
+            let year = new Date().getFullYear();
+            if(e.year != "undefined"){
+                ageContent.innerHTML = year - parseInt(e.year);
+            }else{
+                ageContent.innerHTML = "undefined";
+            }
+            age.appendChild(ageContent);
+            this.curDiv.appendChild(age);
+            // add gender
+            let gender = document.createElement("div");
+            gender.style.display = "flex";
+            gender.style.justifyContent = "space-between";
+            gender.style.alignItems = "center";
+            let genderHead = document.createElement("h4");
+            genderHead.innerHTML= "Gender :"
+            gender.appendChild(genderHead);
+            let genderContent = document.createElement("div");
+            genderContent.style.width = "65%";
+            let genderString;
+            genderContent.innerHTML = e.gender;
+            gender.appendChild(genderContent);
+            this.curDiv.appendChild(gender); 
+            // add Country
+            let country = document.createElement("div");
+            country.style.display = "flex";
+            country.style.justifyContent = "space-between";
+            country.style.alignItems = "center";
+            let countryHead = document.createElement("h4");
+            countryHead.innerHTML= "Country :"
+            country.appendChild(countryHead);
+            let countryContent = document.createElement("div");
+            countryContent.style.width = "65%";
+            countryContent.innerHTML = e.country;
+            country.appendChild(countryContent);
+            this.curDiv.appendChild(country);  
+            //  add region
+            let region = document.createElement("div");
+            region.style.display = "flex";
+            region.style.justifyContent = "space-between";
+            region.style.alignItems = "center";
+            let regionHead = document.createElement("h4");
+            regionHead.innerHTML= "Region :"
+            region.appendChild(regionHead);
+            let regionContent = document.createElement("div");
+            regionContent.style.width = "65%";
+            regionContent.innerHTML = e.region;
+            region.appendChild(regionContent);
+            this.curDiv.appendChild(region);
+            // add languages
+            let languages = document.createElement("div");
+            languages.style.display = "flex";
+            languages.style.justifyContent = "space-between";
+            languages.style.alignItems = "center";
+            let languagesHead = document.createElement("h4");
+            languagesHead.innerHTML= "Languages :"
+            languages.appendChild(languagesHead);
+            let languagesContent = document.createElement("div");
+            languagesContent.style.width = "65%";
+            let languagesStr = "";
+            e.languages.map(f =>{
+                languagesStr = languagesStr.concat(f);
+                languagesStr = languagesStr.concat(", ");
+            })
+            languagesStr = languagesStr.substring(0, languagesStr.length - 2);
+            languagesContent.innerHTML = languagesStr;
+            languages.appendChild(languagesContent);
+            this.curDiv.appendChild(languages);  
+            // add games
+            let games = document.createElement("div");
+            games.style.display = "flex";
+            games.style.justifyContent = "flex-end";
+            games.style.alignItems = "flex-start";
+            games.style.flexDirection = "column"
+            let gamesHead = document.createElement("h4");
+            gamesHead.innerHTML= "Games :"
+            games.appendChild(gamesHead);
+            let gamesContent = document.createElement("div");
+            gamesContent.style.display = "flex";
+            gamesContent.style.justifyContent = "flex-end";
+            gamesContent.style.width = "65%";
+            let gamesStr = "";
+            e.games.map(f =>{
+                gamesStr = gamesStr.concat(f.name);
+                gamesStr = gamesStr.concat(" : <br/>&emsp; - ");
+                gamesStr = gamesStr.concat(f.platform); 
+                gamesStr = gamesStr.concat("<br/>&emsp; - ");
+                gamesStr = gamesStr.concat(f.level); 
+                f.playstyles.map(p =>{
+                    gamesStr = gamesStr.concat("<br/>&emsp;&emsp;- ");
+                    gamesStr = gamesStr.concat(p);
+                })      
+                gamesStr = gamesStr.concat("<br/><br/>")
+            })
+            gamesContent.innerHTML = gamesStr;
+            games.appendChild(gamesContent);
+            this.curDiv.appendChild(games); 
+            // add vocals
+            let vocals = document.createElement("div");
+            vocals.style.display = "flex";
+            vocals.style.justifyContent = "space-between";
+            vocals.style.alignItems = "center";
+            let vocalsHead = document.createElement("h4");
+            vocalsHead.innerHTML= "Vocals :"
+            vocals.appendChild(vocalsHead);
+            let vocalsContent = document.createElement("div");
+            vocalsContent.style.width = "65%";
+            let vocalsStr = "";
+            e.vocals.map(f =>{
+                vocalsStr = vocalsStr.concat(f);
+                vocalsStr = vocalsStr.concat(", ");
+            })
+            vocalsStr = vocalsStr.substring(0, vocalsStr.length - 2);
+            vocalsContent.innerHTML = vocalsStr;
+            vocals.appendChild(vocalsContent);
+            this.curDiv.appendChild(vocals); 
+        })
+    }
+
 }
 
 class ResultController extends Controller {
@@ -293,5 +449,8 @@ class ResultController extends Controller {
         trace("engaging conversation with : ", id);
         // todo : pop
         this.mvc.view.moveLeft();
+    }
+    async fetchProfile(ssid){
+        this.mvc.view.displayProfiles(await this.mvc.model.getProfile(ssid));
     }
 }

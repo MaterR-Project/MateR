@@ -170,8 +170,8 @@ class AutenticationController extends Controller {
 				this.mvc.view.updateWrongPsw(response.return);
 			}else{
 				this.mvc.view.destroy();
-		    this.mvc.app.profileMVC.view.attach(document.body,this.mvc.model.sessionId);
-		    this.mvc.app.profileMVC.view.activate();
+		    this.mvc.app.resultMVC.view.attach(document.body,this.mvc.model.sessionId);
+		    this.mvc.app.resultMVC.view.activate();
 			}
 		}
   }
