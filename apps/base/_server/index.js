@@ -187,6 +187,38 @@ class Base extends ModuleBase {
 		this.sendJSON(req, res, 200, {return: data}); // answer JSON
 	}
 
+	sendLatestConv(id1, id2){
+		var fs = require("fs");
+		var regex = new RegExp(id1 + "_" +id2);
+		var dir = fs.readdirSync("database/tchats");
+		var list = [];
+		// match directory content for tag1_tag2
+		dir.forEach( i => {
+			if(regex.test(i)) // push it !
+				list.push(i);
+		})
+		// make sure the list is sorted by creation date
+		list.sort(function(a, b){
+			return fs.statSync("database/tchats/" + a).mtime.getTime() - fs.statSync("database/tchats/" + b).mtime.getTime();
+		})
+		//get the newest one
+		var mostRecent = list[list.length - 1];
+		return mostRecent;
+	}
+	/**
+	 * @method getConvFrom : object profile
+	 * @param {*} req
+	 * @param {*} res
+	 * @param  {...*} param : Ids of the conv to get
+	 */
+	getConvFromId(req, res, ...param){
+		let conv = 404;
+		if(param[0] != -1 && param[1] != -1) conv = this.sendLatestConv(param[0], param[1]);
+		conv = JSON.parse(fs.readFileSync('database/tchats/' + conv, 'utf8'));
+		let data = conv;
+		this.sendJSON(req, res, 200, {return: data});
+	}
+
 	/**
 	 * @method login : connect a user
 	 * @param {*} req
