@@ -160,6 +160,7 @@ class RegistrationView extends View {
 		this.mailLabel.innerHTML = "E-Mail* :";
 		this.mailInput = document.createElement("input");
 		this.mailInput.setAttribute("name", "mail");
+		this.mailInput.setAttribute("required", "");
 		this.mailDiv.appendChild(this.mailLabel);
 		this.mailDiv.appendChild(this.mailInput);
 		this.form.appendChild(this.mailDiv);
@@ -178,6 +179,7 @@ class RegistrationView extends View {
 		this.usernameLabel.innerHTML = "Username* :";
 		this.usernameInput = document.createElement("input");
 		this.usernameInput.setAttribute("name", "username");
+		this.usernameInput.setAttribute("required", "");
 		this.usernameDiv.appendChild(this.usernameLabel);
 		this.usernameDiv.appendChild(this.usernameInput);
 		this.form.appendChild(this.usernameDiv);
@@ -195,6 +197,7 @@ class RegistrationView extends View {
 		this.passwordLabel.innerHTML = "Password* :";
 		this.passwordInput = document.createElement("input");
 		this.passwordInput.setAttribute("name", "password");
+		this.passwordInput.setAttribute("required", "");
 		this.passwordInput.type ="password";
 		this.passwordDiv.appendChild(this.passwordLabel);
 		this.passwordDiv.appendChild(this.passwordInput);
@@ -213,6 +216,7 @@ class RegistrationView extends View {
 		this.confirmPasswordLabel.innerHTML = "Confirm Password* :";
 		this.confirmPasswordInput = document.createElement("input");
 		this.confirmPasswordInput.setAttribute("name", "confirmPassword");
+		this.confirmPasswordInput.setAttribute("required", "");
 		this.confirmPasswordInput.type ="password";
 		this.confirmPasswordDiv.appendChild(this.confirmPasswordLabel);
 		this.confirmPasswordDiv.appendChild(this.confirmPasswordInput);
@@ -314,6 +318,7 @@ class RegistrationView extends View {
 		this.comboRegions = document.createElement("select");
 		this.comboRegions.setAttribute("name", "region");
 		this.comboRegions.setAttribute("id", "regions");
+		this.comboRegions.setAttribute("required", "");
 		this.regionsDiv.appendChild(this.regionsLabel);
 		this.regionsDiv.appendChild(this.comboRegions);
 		this.form.appendChild(this.regionsDiv);
@@ -360,6 +365,7 @@ class RegistrationView extends View {
 		this.comboLanguages = document.createElement("select");
 		this.comboLanguages.setAttribute("name", "languages");
 		this.comboLanguages.setAttribute("multiple", "multiple");
+		this.comboLanguages.setAttribute("required", "");
 		this.langDiv.appendChild(this.langLabel);
 		this.langDiv.appendChild(this.comboLanguages);
 		this.form.appendChild(this.langDiv);
@@ -391,6 +397,7 @@ class RegistrationView extends View {
 		this.firstGameName.style.fontSize = "small";
 		this.firstComboGames = document.createElement("select");
 		this.firstComboGames.setAttribute("name", "game");
+		this.firstComboGames.setAttribute("required", "");
 
 		this.firstGamePlatform = document.createElement("span");
 		this.firstGamePlatform.style.width = "100%";
@@ -400,6 +407,7 @@ class RegistrationView extends View {
 		this.firstGamePlatform.style.display = "none";
 		this.firstComboPlatforms = document.createElement("select");
 		this.firstComboPlatforms.setAttribute("name", "platform");
+		this.firstComboPlatforms.setAttribute("required", "");
 		this.firstComboPlatforms.style.display = "none";
 
 		this.firstGamePlaystyles = document.createElement("span");
@@ -411,6 +419,7 @@ class RegistrationView extends View {
 		this.firstComboPlaystyles = document.createElement("select");
 		this.firstComboPlaystyles.setAttribute("name", "playstyles");
 		this.firstComboPlaystyles.setAttribute("multiple", "multiple");
+		this.firstComboPlaystyles.setAttribute("required", "");
 		this.firstComboPlaystyles.style.display = "none";
 
 		this.firstGameLevel = document.createElement("span");
@@ -421,6 +430,7 @@ class RegistrationView extends View {
 		this.firstGameLevel.style.display = "none";
 		this.firstComboLevels = document.createElement("select");
 		this.firstComboLevels.setAttribute("name", "level");
+		this.firstComboLevels.setAttribute("required", "");
 		this.firstComboLevels.style.display = "none";
 
 		this.firstHr = document.createElement("hr");
@@ -463,6 +473,11 @@ class RegistrationView extends View {
 		this.vocalsDiv.appendChild(this.vocalsLabel);
 		this.vocalsDiv.appendChild(this.comboVocals);
 		this.form.appendChild(this.vocalsDiv);
+
+		// Error message
+		this.displayError = document.createElement("span");
+		this.displayError.style.display = "none";
+		this.form.appendChild(this.displayError);
 
 		// create account button
 		this.createAccountButton = document.createElement("button");
@@ -598,12 +613,20 @@ class RegistrationView extends View {
 			optionEmpty.text = "Undefined";
 			combo.appendChild(optionEmpty);
 		}
-		data.map(element => {
-			let option = document.createElement("option");
-			option.text = element;
-			option.value = element;// data.indexOf(element);
-			combo.appendChild(option);
-		});
+		if (combo.getAttribute("name") == "game" && combo != this.firstComboGames){
+			let optionEmpty = document.createElement("option");
+			optionEmpty.value = -1;
+			optionEmpty.text = "Undefined";
+			combo.appendChild(optionEmpty);
+		}
+		if (data != 404){
+			data.map(element => {
+				let option = document.createElement("option");
+				option.text = element;
+				option.value = element;// data.indexOf(element);
+				combo.appendChild(option);
+			});
+		}
 		if(combo == this.comboCountries){
 			combo.selectedIndex = 0;
 		}
@@ -679,6 +702,11 @@ class RegistrationView extends View {
 		gameAddFieldArray.forEach(combo => {combo.style.display = "";})
 	}
 
+	fillErrorDisplay(message){
+		this.displayError.style.display = "";
+		this.displayError.innerHTML = message;
+	}
+
 }
 
 class RegistrationControler extends Controller {
@@ -729,16 +757,28 @@ class RegistrationControler extends Controller {
 		//trace(FD.getAll("vocals"));
 		//let result = await Comm.post("register/", {vocals: "Discord"});
 		let result = await Comm.post("register/", FD);
-		trace(result.response);
 		if(result.response.return == 500){
-			trace(erreur);
+			trace("error: "+result.response.message);
+			this.mvc.view.fillErrorDisplay(result.response.message);
+		}
+		else {
+			trace(result.response);
+			this.mvc.view.fillErrorDisplay(result.response.message);
+			// Go to profile
+			/*
+			this.mvc.view.destroy();
+			this.mvc.app.mvcProfile.view.attach(document.body); // attach view
+			this.mvc.app.mvcProfile.view.activate(); // activate profile interface
+			*/
 		}
 	}
 
 	loginButtonWasClicked(){
+		/*
 		this.mvc.view.destroy();
 		this.mvc.app.mvcAuthentication.view.attach(document.body); // attach view
 		this.mvc.app.mvcAuthentication.view.activate(); // activate auth interface
+		*/
 	}
 
 }
