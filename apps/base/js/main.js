@@ -17,11 +17,11 @@ class Base {
 		this.testMVC = new MVC("myMVC", this, new MyModel(), new MyView(), new MyController()); // init app MVC
 		await this.testMVC.initialize(); // run init async tasks
 
-		this.autenticationMVC = new MVC("autenticationMVC", this, new AutenticationModel(), new AutenticationView(), new AutenticationController()); // init app MVC
-		await this.autenticationMVC.initialize(); // run init async tasks
+		this.tchatMVC = new MVC("tchatMVC", this, new TchatModel(), new TchatView(), new TchatController()); // init app MVC
+		await this.tchatMVC.initialize(); // run init async tasks
 
-		this.autenticationMVC.view.attach(document.body); // attach view
-		this.autenticationMVC.view.activate(); // activate user interface
+		this.tchatMVC.view.attach(document.body); // attach view
+		this.tchatMVC.view.activate(); // activate user interface
 
 	}
 
