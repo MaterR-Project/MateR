@@ -71,7 +71,25 @@ class MenuView extends View {
         // conversation summury div
         this.convDiv = document.createElement("div");
         this.mainDiv.appendChild(this.convDiv);
+        this.headerDiv = document.createElement("div");
+        this.convDiv.appendChild(this.headerDiv);
+
+        this.headerDiv.style.display = "flex";
+        this.headerDiv.style.justifyContent = "space-around";
+        this.headerDiv.style.alignItems = "center";
+        this.headerDiv.style.height = "20%";
+        this.headerDiv.style.border = "solid #999999";
+        this.searchIcon = document.createElement("i");
+        this.searchIcon.innerHTML = "?";
+        this.headerDiv.appendChild(this.searchIcon);
+        this.searchText = document.createElement("h2");
+        this.headerDiv.appendChild(this.searchText);
+        this.searchText.innerHTML = "My discussions";
+        
         this.convDiv.style.overflow = "auto";
+        this.convDiv.style.display = "flex";
+        this.convDiv.style.flexDirection = "column";
+        this.convDiv.style.justifyContent = "center";
         this.convDiv.style.marginBottom = "15px"
 
     }
@@ -108,6 +126,8 @@ class MenuView extends View {
             this.convDiv.appendChild(shortDiv);
             shortDiv.style.marginLeft = "10px";
             shortDiv.style.marginBottom = "15px";
+            shortDiv.style.display = "flex";
+            shortDiv.style.flexDirection = "column";
             shortDiv.style.width ="66%";
             shortDiv.style.border = "thin solid #999999"
             // notif
@@ -115,13 +135,18 @@ class MenuView extends View {
             shortDiv.appendChild(notifSpan);    // display # of notifications, defaults to 0
             notifSpan.style.display = "none";
             // user name
-            let userNameDiv = document.createElement("div");
+            let userNameDiv = document.createElement("span");
+            userNameDiv.style.fontSize = "15px";
+            userNameDiv.style.fontWeight = "bold";
+            userNameDiv.style.margin = "5px";
             shortDiv.appendChild(userNameDiv);
             let name = await this.mvc.controller.goName(e.message.Id);
             userNameDiv.innerHTML = name;
             // body
-            let messageBody = document.createElement("div");
-            messageBody.style.float = "right";
+            let messageBody = document.createElement("span");
+            messageBody.style.margin = "5px";
+            messageBody.style.display = "flex";
+            messageBody.style.alignSelf = "flex-end";
             shortDiv.appendChild(messageBody);
             messageBody.style.overflow = "ellipsis";
             if(e.message.Id == this.mvc.app.profileMVC.model.id){
