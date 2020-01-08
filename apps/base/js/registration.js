@@ -108,7 +108,7 @@ class RegistrationView extends View {
 		// MateR Title
 		this.materLogo = document.createElement("h1");
 		this.materLogo.innerHTML = "MateR";
-		this.materLogo.style.margin = "10px"
+		this.materLogo.style.margin = "10px";
 		this.materLogo.style.fontSize = "60px";
 		this.mainDiv.appendChild(this.materLogo);
 
