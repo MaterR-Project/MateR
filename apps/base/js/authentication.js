@@ -11,10 +11,6 @@ class AutenticationModel extends Model {
 		this.sessionId = undefined;
 	}
 
-	async updateWrongPsw(){
-
-	}
-
 	async login(pseudo, password) {
 		trace("get session id");
 		let result = await Comm.get("login/"+pseudo+"/"+password);
@@ -61,9 +57,10 @@ class AutenticationView extends View {
     this.pseudoDiv.style.flexDirection = "column";
 		this.pseudoDiv.style.marginBottom = "10px";
 
-		this.pseudoLabel = document.createElement("label");
+		//this.pseudoLabel = document.createElement("label");
+		this.pseudoLabel = this.mvc.app.getElementIcon("icon-Profile", "auto");
 		this.pseudoLabel.setAttribute("for","username");
-		this.pseudoLabel.innerHTML = "Username :";
+		this.pseudoLabel.innerHTML = " Username :";
 		this.pseudoDiv.appendChild(this.pseudoLabel);
 
 		this.pseudoInput = document.createElement("input");
@@ -79,9 +76,10 @@ class AutenticationView extends View {
 		this.passwordDiv.style.display = "flex";
     this.passwordDiv.style.flexDirection = "column";
 
-		this.passwordLabel = document.createElement("label");
+		//this.passwordLabel = document.createElement("label");
+		this.passwordLabel = this.mvc.app.getElementIcon("icon-Password", "auto");
 		this.passwordLabel.setAttribute("for","password");
-		this.passwordLabel.innerHTML = "Password (8 characters minimum) :";
+		this.passwordLabel.innerHTML = " Password (8 - 32 characters) :";
 		this.passwordDiv.appendChild(this.passwordLabel);
 
     this.passwordInput = document.createElement("input");
@@ -126,7 +124,9 @@ class AutenticationView extends View {
 	}
 
 	addListeners() {
-    this.connectBtnHandler = e => this.connectClick(e);
+    this.connectBtnHandler = e => {
+			this.connectClick(e);
+		}
     this.connectBtn.addEventListener("click", this.connectBtnHandler);
 
     this.createAccountBtnHandler = e => this.createAccountClick(e);
@@ -147,7 +147,7 @@ class AutenticationView extends View {
   }
 
 	updateWrongPsw(message){
-		this.erreur.innerHTML = message
+		this.erreur.innerHTML = message;
 	}
 
 }
@@ -172,15 +172,20 @@ class AutenticationController extends Controller {
 			if (this.mvc.model.sessionId == undefined) {
 				this.mvc.view.updateWrongPsw(response.return);
 			}else{
+				this.mvc.view.deactivate();
 				this.mvc.view.destroy();
 		    this.mvc.app.profileMVC.view.attach(document.body);
 				this.mvc.app.initSocket(this.mvc.app.profileMVC.model.id);
 		    this.mvc.app.profileMVC.view.activate();
 			}
 		}
+		else{
+			this.mvc.view.updateWrongPsw("Incorrect Password Size");
+		}
   }
 
 	async createAccountBtnWasClicked() {
+		this.mvc.view.deactivate();
     this.mvc.view.destroy();
     this.mvc.app.registrationMVC.view.attach(document.body);
     this.mvc.app.registrationMVC.view.activate();

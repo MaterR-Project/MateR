@@ -52,14 +52,19 @@ class ProfileView extends View {
 		this.topBtnDiv.style.justifyContent = "space-between"
 		this.topBtnDiv.style.width ="100%";
 		// create search btn to open the conversation slide tab
-		this.menuButton = document.createElement("button");
-		this.menuButton.innerHTML = "Menu";
-		this.menuButton.style.fontSize = "15px";
+		this.menuButton = document.createElement("span");
+		this.menuButton.setAttribute("class", "icon-Menu");
+		//this.menuButton.style.fontSize = "auto";
+		//this.menuButton.innerHTML = "Menu";
+		this.menuButton.style.fontSize = "45px";
+		this.menuButton.style.marginLeft="10px";
 		this.topBtnDiv.appendChild(this.menuButton);
 		// create disconnect btn
-		this.logoutButton = document.createElement("button");
-		this.logoutButton.innerHTML = "Disconnect";
-		this.logoutButton.style.fontSize = "15px";
+		this.logoutButton = document.createElement("span");
+		this.logoutButton.setAttribute("class", "icon-disconnect");
+		//this.logoutButton.innerHTML = "Disconnect";
+		this.logoutButton.style.fontSize = "45px";
+		this.logoutButton.style.marginRight="10px";
 		this.topBtnDiv.appendChild(this.logoutButton);
 
 		// header
@@ -220,13 +225,19 @@ class ProfileView extends View {
 		this.footer = document.createElement("div");
 		this.footer.setAttribute("class", "footer");
 			//button for change profil infos
-			this.changeBtn = document.createElement("button");
-			this.changeBtn.innerHTML = "Apply Changes";
+			this.changeBtn = document.createElement("span");
+			this.changeBtn.setAttribute("class", "icon-checkmark-no-changes");
+			this.changeBtn.style.fontSize = "45px";
+			this.changeBtn.style.marginLeft="10px";
+			//this.changeBtn.innerHTML = "Apply Changes";
 			this.footer.appendChild(this.changeBtn);
 
 			//button for search
-			this.searchBtn = document.createElement("button");
-			this.searchBtn.innerHTML = "Search";
+			this.searchBtn = document.createElement("span");
+			this.searchBtn.setAttribute("class", "icon-Search");
+			this.searchBtn.style.fontSize = "45px";
+			this.searchBtn.style.marginRight="10px";
+			//this.searchBtn.innerHTML = "Search";
 			this.footer.appendChild(this.searchBtn);
 
 		this.mainDiv.appendChild(this.footer);
@@ -236,7 +247,7 @@ class ProfileView extends View {
 	attach(parent){
 		super.attach(parent);
 		trace("init profile");
-		this.mvc.controller.initProfil();
+		this.mvc.controller.initProfile();
 	}
 
 	// activate UI
@@ -292,18 +303,76 @@ class ProfileView extends View {
 	}
 	/* -------------------------------------------------------------------- */
 
-	updateProfil(data) {
+	updateProfile(data) {
 		console.log(data);
+		let languagesDisplay = "";
+		let vocalsDisplay = "";
+		data.languages.forEach(e => languagesDisplay += e+", ");
+		data.vocals.forEach(e => vocalsDisplay += e+", ");
+
 		this.profileName.innerHTML = data.username;
+		this.mail.innerHTML = data.mail;
 		this.bio.innerHTML = data.bio;
 		this.games.innerHTML = data.games;
 		this.vocals.innerHTML = data.vocals;
 		this.languages.innerHTML = data.languages;
+		this.gender.innerHTML = data.gender;
+		this.age.innerHTML = new Date().getFullYear() - data.year;
 		this.region.innerHTML = data.region;
 		this.country.innerHTML = data.country;
-		this.age.innerHTML = new Date().getFullYear() - data.year;
-		this.gender.innerHTML = data.gender;
-		this.mail.innerHTML = data.mail;
+		this.languages.innerHTML = languagesDisplay.slice(0, -2);
+		this.games.innerHTML = data.games;
+		this.vocals.innerHTML = vocalsDisplay.slice(0, -2);
+	}
+
+	addGameToDisplay(game){
+		// game div
+		let gameDiv = document.createElement("div");
+			gameDiv.setAttribute("class","game");
+
+			// game title
+			let gameName = document.createElement("span");
+				gameName.innerHTML = game.name;
+			gameDiv.appendChild(gameName);
+
+			//game property
+			let gameProperty = document.createElement("div");
+
+				// platform
+				let platform = document.createElement("div");
+					platform.setAttribute("class","property");
+					let labelPlatform = document.createElement("span");
+						labelPlatform.innerHTML = "platform : "
+					platform.appendChild(labelPlatform);
+					let namePlatform = document.createElement("span");
+						namePlatform.innerHTML = game.platform;
+					platform.appendChild(namePlatform);
+				gameProperty.appendChild(platform);
+
+				// level of play
+				let level = document.createElement("div");
+					level.setAttribute("class","property");
+					let labelLevel = document.createElement("span");
+						labelLevel.innerHTML = "level : "
+					level.appendChild(labelLevel);
+					let nameLevel = document.createElement("span");
+						nameLevel.innerHTML = game.level;
+					level.appendChild(nameLevel);
+				gameProperty.appendChild(level);
+
+				// playstyle
+				let playstyle = document.createElement("div");
+					playstyle.setAttribute("class","property");
+					let labelPlaystyle = document.createElement("span");
+						labelPlaystyle.innerHTML = "play style : "
+					playstyle.appendChild(labelPlaystyle);
+					let playStyleNames = document.createElement("span");
+						playStyleNames.innerHTML = game.playstyles.join(', ')
+					playstyle.appendChild(playStyleNames);
+				gameProperty.appendChild(playstyle);
+
+			gameDiv.appendChild(gameProperty);
+		this.games.appendChild(gameDiv);
 	}
 
 }
@@ -318,27 +387,33 @@ class ProfileController extends Controller {
 		super.initialize(mvc);
 
 	}
-	async searchClicked(params){
+
+	searchClicked(params){
 		trace("search btn click", params);
+		this.mvc.view.deactivate();
 		this.mvc.view.destroy();						// destroy current view
 		this.mvc.app.mvcTest.view.attach(document.body);// attach view of search MVC
 		this.mvc.app.mvcTest.view.activate();			// activate user interface of search MVC
 	}
-	async logoutClicked(params) {
+
+	logoutClicked(params) {
 		trace("logout btn click", params);
+		this.mvc.view.deactivate();
 		this.mvc.view.destroy(); 						 // destroy current view
 		this.mvc.app.authenticationMVC.view.attach(document.body); // attach view of authenticate MVC
 		this.mvc.app.authenticationMVC.view.activate(); 			 // activate user interface of authenticate MVC
 	}
-	async menuClicked(params) {
+
+	menuClicked(params) {
 		trace("menu btn click", params);
+		this.mvc.view.deactivate();
 		this.mvc.view.destroy(); 						 // destroy current view
 		this.mvc.app.mvcTest.view.attach(document.body); // attach view of menu MVC
 		this.mvc.app.mvcTest.view.activate(); 			 // activate user interface of menu MVC
 	}
 
-	async initProfil(){
-		this.mvc.view.updateProfil(await this.mvc.model.getProfile());
+	async initProfile(){
+		this.mvc.view.updateProfile(await this.mvc.model.getProfile());
 	}
 
 }
