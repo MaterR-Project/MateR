@@ -5,7 +5,7 @@
     "username": "Admin",
     "password": "fd7b2397b174c3efda972c5bbf5db5f0dff674ec1a0a1e1931b62a3d2cfc17c1f7bb908a33af32a8e393133e2b770c4cb3f7edc71cb4ebdc23ebe03cae835ed7",
     "bio": "Je contrôle cet univers dans toutes ses dimensions",
-    "gender": 0,
+    "gender": "Gamer",
     "year": 0,
     "region": "Oceania",
     "country": "New Zealand",
@@ -33,7 +33,7 @@
     "username": "Caribou",
     "password": "4a88083494cefa07879a2c46d6cce30ed07587f205595e6d150056466c5f167288e38650b0ccf67a57773f356bac917e60c30f6fc1a845af8142308888e93ab8",
     "bio": "Vive le Québec libre !",
-    "gender": 0,
+    "gender": "Gamer",
     "year": 1986,
     "region": "Northern America",
     "country": "Canada",
@@ -52,7 +52,8 @@
       }
     ],
     "vocals": [
-      "Discord"
+      "Discord",
+      "Skype"
     ]
   },
   {

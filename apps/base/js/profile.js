@@ -69,8 +69,8 @@ class ProfileView extends View {
 		this.mainDiv.appendChild(this.nameDiv);
 
 		this.profileName = document.createElement("h1");
-        this.profileName.innerHTML = "My Name";
-        this.profileName.style.marginTop = "3%"
+  	this.profileName.innerHTML = "My Name";
+  	this.profileName.style.marginTop = "3%"
 		this.profileName.style.fontSize = "35px";
 		this.profileName.contentEditable = "true";
 		this.nameDiv.appendChild(this.profileName);
@@ -82,55 +82,56 @@ class ProfileView extends View {
 		this.profileData.setAttribute("class","profil");
 
 		// fill profile data with fields :
+
+			// Mail
+			this.mailDiv = document.createElement("div");
+			this.mailLabel = document.createElement("h4");
+			this.mailLabel.setAttribute("class","profil-label");
+			this.mailLabel.innerHTML = "E-mail : ";
+			this.mailDiv.appendChild(this.mailLabel);
+			this.mail = document.createElement("div");
+			this.mail.setAttribute("class","profil-element");
+			this.mailDiv.appendChild(this.mail);
+			this.profileData.appendChild(this.mailDiv);
+
 			// bio
 			this.bioDiv = document.createElement("div");
 			this.bioLabel = document.createElement("h4");
 			this.bioLabel.setAttribute("class","profil-label");
-			this.bioLabel.innerHTML = "bio : ";
+			this.bioLabel.innerHTML = "Bio : ";
 			this.bioDiv.appendChild(this.bioLabel);
 			this.bio = document.createElement("div");
 			this.bio.setAttribute("class","profil-element");
 			this.bioDiv.appendChild(this.bio);
 			this.profileData.appendChild(this.bioDiv);
 
-			//games
-			this.gamesDiv = document.createElement("div");
-			this.gamesLabel = document.createElement("h4");
-			this.gamesLabel.setAttribute("class","profil-label");
-			this.gamesLabel.innerHTML = "games : ";
-			this.gamesDiv.appendChild(this.gamesLabel);
-			this.games = document.createElement("div");
-			this.games.setAttribute("class","profil-element");
-			this.gamesDiv.appendChild(this.games);
-			this.profileData.appendChild(this.gamesDiv);
+			// Gender
+			this.genderDiv = document.createElement("div");
+			this.genderLabel = document.createElement("h4");
+			this.genderLabel.setAttribute("class","profil-label");
+			this.genderLabel.innerHTML = "Gender : ";
+			this.genderDiv.appendChild(this.genderLabel);
+			this.gender = document.createElement("div");
+			this.gender.setAttribute("class","profil-element");
+			this.genderDiv.appendChild(this.gender);
+			this.profileData.appendChild(this.genderDiv);
 
-			// vocals
-			this.vocalsDiv = document.createElement("div");
-			this.vocalsLabel = document.createElement("h4");
-			this.vocalsLabel.setAttribute("class","profil-label");
-			this.vocalsLabel.innerHTML = "vocals : ";
-			this.vocalsDiv.appendChild(this.vocalsLabel);
-			this.vocals = document.createElement("div");
-			this.vocals.setAttribute("class","profil-element");
-			this.vocalsDiv.appendChild(this.vocals);
-			this.profileData.appendChild(this.vocalsDiv);
-
-			// Lang
-			this.languagesDiv = document.createElement("div");
-			this.languagesLabel = document.createElement("h4");
-			this.languagesLabel.setAttribute("class","profil-label");
-			this.languagesLabel.innerHTML = "languages : ";
-			this.languagesDiv.appendChild(this.languagesLabel);
-			this.languages = document.createElement("div");
-			this.languages.setAttribute("class","profil-element");
-			this.languagesDiv.appendChild(this.languages);
-			this.profileData.appendChild(this.languagesDiv);
+			// Year (brith year)
+			this.ageDiv = document.createElement("div");
+			this.ageLabel = document.createElement("h4");
+			this.ageLabel.setAttribute("class","profil-label");
+			this.ageLabel.innerHTML = "Age : ";
+			this.ageDiv.appendChild(this.ageLabel);
+			this.age = document.createElement("div");
+			this.age.setAttribute("class","profil-element");
+			this.ageDiv.appendChild(this.age);
+			this.profileData.appendChild(this.ageDiv);
 
 			// Reg
 			this.regionDiv = document.createElement("div");
 			this.regionLabel = document.createElement("h4");
 			this.regionLabel.setAttribute("class","profil-label");
-			this.regionLabel.innerHTML = "region : ";
+			this.regionLabel.innerHTML = "Region : ";
 			this.regionDiv.appendChild(this.regionLabel);
 			this.region = document.createElement("div");
 			this.region.setAttribute("class","profil-element");
@@ -141,51 +142,51 @@ class ProfileView extends View {
 			this.countryDiv = document.createElement("div");
 			this.countryLabel = document.createElement("h4");
 			this.countryLabel.setAttribute("class","profil-label");
-			this.countryLabel.innerHTML = "country : ";
+			this.countryLabel.innerHTML = "Country : ";
 			this.countryDiv.appendChild(this.countryLabel);
 			this.country = document.createElement("div");
 			this.country.setAttribute("class","profil-element");
 			this.countryDiv.appendChild(this.country);
 			this.profileData.appendChild(this.countryDiv);
 
-			// Year (brith year)
-			this.ageDiv = document.createElement("div");
-			this.ageLabel = document.createElement("h4");
-			this.ageLabel.setAttribute("class","profil-label");
-			this.ageLabel.innerHTML = "age : ";
-			this.ageDiv.appendChild(this.ageLabel);
-			this.age = document.createElement("div");
-			this.age.setAttribute("class","profil-element");
-			this.ageDiv.appendChild(this.age);
-			this.profileData.appendChild(this.ageDiv);
+			// Lang
+			this.languagesDiv = document.createElement("div");
+			this.languagesLabel = document.createElement("h4");
+			this.languagesLabel.setAttribute("class","profil-label");
+			this.languagesLabel.innerHTML = "Languages : ";
+			this.languagesDiv.appendChild(this.languagesLabel);
+			this.languages = document.createElement("div");
+			this.languages.setAttribute("class","profil-element");
+			this.languagesDiv.appendChild(this.languages);
+			this.profileData.appendChild(this.languagesDiv);
 
-			// Gender
-			this.genderDiv = document.createElement("div");
-			this.genderLabel = document.createElement("h4");
-			this.genderLabel.setAttribute("class","profil-label");
-			this.genderLabel.innerHTML = "gender : ";
-			this.genderDiv.appendChild(this.genderLabel);
-			this.gender = document.createElement("div");
-			this.gender.setAttribute("class","profil-element");
-			this.genderDiv.appendChild(this.gender);
-			this.profileData.appendChild(this.genderDiv);
+			//games
+			this.gamesDiv = document.createElement("div");
+			this.gamesLabel = document.createElement("h4");
+			this.gamesLabel.setAttribute("class","profil-label");
+			this.gamesLabel.innerHTML = "Games : ";
+			this.gamesDiv.appendChild(this.gamesLabel);
+			this.games = document.createElement("div");
+			this.games.setAttribute("class","profil-element");
+			this.gamesDiv.appendChild(this.games);
+			this.profileData.appendChild(this.gamesDiv);
 
-			// Mail
-			this.mailDiv = document.createElement("div");
-			this.mailLabel = document.createElement("h4");
-			this.mailLabel.setAttribute("class","profil-label");
-			this.mailLabel.innerHTML = "mail : ";
-			this.mailDiv.appendChild(this.mailLabel);
-			this.mail = document.createElement("div");
-			this.mail.setAttribute("class","profil-element");
-			this.mailDiv.appendChild(this.mail);
-			this.profileData.appendChild(this.mailDiv);
+			// vocals
+			this.vocalsDiv = document.createElement("div");
+			this.vocalsLabel = document.createElement("h4");
+			this.vocalsLabel.setAttribute("class","profil-label");
+			this.vocalsLabel.innerHTML = "Vocals : ";
+			this.vocalsDiv.appendChild(this.vocalsLabel);
+			this.vocals = document.createElement("div");
+			this.vocals.setAttribute("class","profil-element");
+			this.vocalsDiv.appendChild(this.vocals);
+			this.profileData.appendChild(this.vocalsDiv);
 
 			// old password
 			this.oldPswDiv = document.createElement("div");
 			this.oldPswLabel = document.createElement("h4");
 			this.oldPswLabel.setAttribute("class","profil-label");
-			this.oldPswLabel.innerHTML = "Input your old password :";
+			this.oldPswLabel.innerHTML = "Old Password :";
 			this.oldPswDiv.appendChild(this.oldPswLabel);
 			this.oldPsw = document.createElement("input");
 			this.oldPsw.setAttribute("type","password");
@@ -197,7 +198,7 @@ class ProfileView extends View {
 			this.newPswDiv = document.createElement("div");
 			this.newPswLabel = document.createElement("h4");
 			this.newPswLabel.setAttribute("class","profil-label");
-			this.newPswLabel.innerHTML = "Input your new password :";
+			this.newPswLabel.innerHTML = "New Password :";
 			this.newPswDiv.appendChild(this.newPswLabel);
 			this.newPsw = document.createElement("input");
 			this.newPsw.setAttribute("type","password");
@@ -209,7 +210,7 @@ class ProfileView extends View {
 			this.confPswDiv = document.createElement("div");
 			this.confPswLabel = document.createElement("h4");
 			this.confPswLabel.setAttribute("class","profil-label");
-			this.confPswLabel.innerHTML = "Confirm your new password :";
+			this.confPswLabel.innerHTML = "Confirm New Password :";
 			this.confPswDiv.appendChild(this.confPswLabel);
 			this.confPsw = document.createElement("input");
 			this.confPsw.setAttribute("type","password");
@@ -238,7 +239,7 @@ class ProfileView extends View {
 	attach(parent){
 		super.attach(parent);
 		trace("init profile");
-		this.mvc.controller.initProfil();
+		this.mvc.controller.initProfile();
 	}
 
 	// activate UI
@@ -296,17 +297,21 @@ class ProfileView extends View {
 
 	updateProfil(data) {
 		console.log(data);
-		this.profileName.innerHTML = data.username;
-		this.bio.innerHTML = data.bio;
-		this.games.innerHTML = data.games;
+		let languagesDisplay = "";
+		let vocalsDisplay = "";
+		data.languages.forEach(e => languagesDisplay += e+", ");
+		data.vocals.forEach(e => vocalsDisplay += e+", ");
 
-		this.vocals.innerHTML = data.vocals;
-		this.languages.innerHTML = data.languages;
+		this.profileName.innerHTML = data.username;
+		this.mail.innerHTML = data.mail;
+		this.bio.innerHTML = data.bio;
+		this.gender.innerHTML = data.gender;
+		this.age.innerHTML = new Date().getFullYear() - data.year;
 		this.region.innerHTML = data.region;
 		this.country.innerHTML = data.country;
-		this.age.innerHTML = new Date().getFullYear() - data.year;
-		this.gender.innerHTML = data.gender;
-		this.mail.innerHTML = data.mail;
+		this.languages.innerHTML = languagesDisplay.slice(0, -2);
+		this.games.innerHTML = data.games;
+		this.vocals.innerHTML = vocalsDisplay.slice(0, -2);
 	}
 
 }
@@ -324,14 +329,12 @@ class ProfileController extends Controller {
 	async searchClicked(params){
 		trace("search btn click", params);
 		this.mvc.view.destroy();						// destroy current view
-		this.mvc.app.mvc = this.mvc.app.mvcTest;		// change current mvc to search MVC
 		this.mvc.app.mvcTest.view.attach(document.body);// attach view of search MVC
 		this.mvc.app.mvcTest.view.activate();			// activate user interface of search MVC
 	}
 	async logoutClicked(params) {
 		trace("logout btn click", params);
 		this.mvc.view.destroy(); 						 // destroy current view
-		//this.mvc.app.mvc = this.mvc.app.mvcTest;		 // change current MVC to the target MVC : authenticate
 		this.mvc.app.authenticationMVC.view.attach(document.body); // attach view of authenticate MVC
 		this.mvc.app.authenticationMVC.view.activate(); 			 // activate user interface of authenticate MVC
 	}
@@ -343,7 +346,7 @@ class ProfileController extends Controller {
 		this.mvc.app.menuMVC.view.activate(); 			 // activate user interface of menu MVC
 	}
 
-	async initProfil(){
+	async initProfile(){
 		this.mvc.view.updateProfil(await this.mvc.model.getProfile());
 	}
 

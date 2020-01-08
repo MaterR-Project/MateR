@@ -61,9 +61,10 @@ class AutenticationView extends View {
     this.pseudoDiv.style.flexDirection = "column";
 		this.pseudoDiv.style.marginBottom = "10px";
 
-		this.pseudoLabel = document.createElement("label");
+		//this.pseudoLabel = document.createElement("label");
+		this.pseudoLabel = this.mvc.app.getElementIcon("icon-Profile", "auto");
 		this.pseudoLabel.setAttribute("for","username");
-		this.pseudoLabel.innerHTML = "Username :";
+		this.pseudoLabel.innerHTML = " Username :";
 		this.pseudoDiv.appendChild(this.pseudoLabel);
 
 		this.pseudoInput = document.createElement("input");
@@ -79,9 +80,10 @@ class AutenticationView extends View {
 		this.passwordDiv.style.display = "flex";
     this.passwordDiv.style.flexDirection = "column";
 
-		this.passwordLabel = document.createElement("label");
+		//this.passwordLabel = document.createElement("label");
+		this.passwordLabel = this.mvc.app.getElementIcon("icon-Password", "auto");
 		this.passwordLabel.setAttribute("for","password");
-		this.passwordLabel.innerHTML = "Password (8 characters minimum) :";
+		this.passwordLabel.innerHTML = " Password (8 characters minimum) :";
 		this.passwordDiv.appendChild(this.passwordLabel);
 
     this.passwordInput = document.createElement("input");
