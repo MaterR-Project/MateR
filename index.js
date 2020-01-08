@@ -46,7 +46,7 @@ class Server {
 			});
 		});
 
-		this._io.on('deconnection', socket => {
+		this._io.on('disconnect', () => {
   		trace('a user deconnected');
 		});
 
