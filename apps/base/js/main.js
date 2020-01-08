@@ -24,10 +24,10 @@ class Base {
 		/**
 		 * @method initSocket : connect socket
 		 */
-		initSocket(sessionId) {
+		initSocket(id) {
 			trace("init socket");
 			this.io = io();
-			this.io.emit('authentication', sessionId);
+			this.io.emit('authentication', id);
 			this.io.on('message', msg => {
 				this.conversationMVC.model.updateConversation();	// TODO remplacer par fonction qui gere les message recu
 			});
