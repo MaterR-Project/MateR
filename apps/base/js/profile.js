@@ -333,8 +333,8 @@ class ProfileController extends Controller {
 		trace("logout btn click", params);
 		this.mvc.view.destroy(); 						 // destroy current view
 		this.mvc.app.mvc = this.mvc.app.mvcTest;		 // change current MVC to the target MVC : authenticate
-		this.mvc.app.mvcTest.view.attach(document.body); // attach view of authenticate MVC
-		this.mvc.app.mvcTest.view.activate(); 			 // activate user interface of authenticate MVC
+		this.mvc.app.authenticationMVC.view.attach(document.body); // attach view of authenticate MVC
+		this.mvc.app.authenticationMVC.view.activate(); 			 // activate user interface of authenticate MVC
 	}
 	async menuClicked(params) {
 		trace("menu btn click", params);
