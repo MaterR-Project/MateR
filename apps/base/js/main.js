@@ -22,8 +22,11 @@ class Base {
 		this.autenticationMVC = new MVC("autenticationMVC", this, new AutenticationModel(), new AutenticationView(), new AutenticationController()); // init app MVC
 		await this.autenticationMVC.initialize(); // run init async tasks
 
-		this.autenticationMVC.view.attach(document.body); // attach view
-		this.autenticationMVC.view.activate(); // activate user interface
+		this.profileMVC = new MVC("profileMVC", this, new ProfileModel(), new ProfileView(), new ProfileController());
+		await this.profileMVC.initialize();
+
+		this.autenticationMVC.view.attach(document.body);
+		this.autenticationMVC.view.activate();
 
 	}
 
@@ -107,9 +110,9 @@ class MyView extends View {
 		this.stage.appendChild(this.btn);
 
 		// create io test btn
-		this.iobtn = document.createElement("button");
-		this.iobtn.innerHTML = "io test";
-		this.stage.appendChild(this.iobtn);
+		//this.iobtn = document.createElement("button");
+		//this.iobtn.innerHTML = "io test";
+		//this.stage.appendChild(this.iobtn);
 
 		// io random value display
 		this.iovalue = document.createElement("div");
@@ -137,13 +140,13 @@ class MyView extends View {
 		this.getBtnHandler = e => this.btnClick(e);
 		this.btn.addEventListener("click", this.getBtnHandler);
 
-		this.ioBtnHandler = e => this.ioBtnClick(e);
-		this.iobtn.addEventListener("click", this.ioBtnHandler);
+		//this.ioBtnHandler = e => this.ioBtnClick(e);
+		//this.iobtn.addEventListener("click", this.ioBtnHandler);
 	}
 
 	removeListeners() {
 		this.btn.removeEventListener("click", this.getBtnHandler);
-		this.iobtn.removeEventListener("click", this.ioBtnHandler);
+		//this.iobtn.removeEventListener("click", this.ioBtnHandler);
 	}
 
 	btnClick(event) {

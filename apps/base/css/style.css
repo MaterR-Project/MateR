@@ -28,3 +28,38 @@ body {
 	font-family: helvetica;
 	font-size: 10pt;
 }
+
+.profil {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	overflow-x: auto;
+	font-size: 20px;
+	margin-bottom: 15%;
+	width: 100%;
+	max-width: 500px;
+	height: 100%;
+}
+
+.profil div {
+	display: flex;
+	justify-content: space-between;
+}
+
+@media all and (max-width: 500px) {
+	.profil div {
+		flex-direction: column;
+	}
+
+	.profil-element {
+		
+	}
+}
+
+.profil-label {
+	margin: 10px;
+}
+
+.profil-element  {
+	margin: 10px;
+}
