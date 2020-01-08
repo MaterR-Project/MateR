@@ -478,6 +478,7 @@ class RegistrationView extends View {
 		// Error message
 		this.displayError = document.createElement("span");
 		this.displayError.style.display = "none";
+		this.displayError.style.color = "red";
 		this.form.appendChild(this.displayError);
 
 		// create account button
@@ -787,7 +788,11 @@ class RegistrationControler extends Controller {
 		else {
 			trace(result.response);
 			this.mvc.view.fillErrorDisplay(result.response.message);
-			// TO DO Go to profile
+			// Go to authentication
+			this.mvc.view.destroy();
+			this.mvc.app.authenticationMVC.view.updateWrongPsw(result.response.message);
+			this.mvc.app.authenticationMVC.view.attach(document.body); // attach view
+			this.mvc.app.authenticationMVC.view.activate(); // activate auth interface
 			/*
 			this.mvc.view.destroy();
 			this.mvc.app.profileMVC.view.attach(document.body); // attach view
