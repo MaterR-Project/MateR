@@ -53,6 +53,10 @@ body {
 }
 
 @media all and (max-width: 500px) {
+	.profil {
+		width: 100%;
+	}
+
 	.profil div {
 		flex-direction: column;
 	}
