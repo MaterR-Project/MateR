@@ -50,6 +50,7 @@ class AutenticationView extends View {
 		//logo MateR
     this.header = document.createElement("h1");
     this.header.innerHTML = "MateR";
+		this.header.style.margin = "10px";
     this.header.style.fontSize = "60px";
     this.mainDiv.appendChild(this.header);
 
