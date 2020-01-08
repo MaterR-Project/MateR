@@ -39,6 +39,18 @@ class Base {
 			});
 		}
 
+		/**
+		 * @method getElementIcon : return element for required icon
+		 * @param {string} iconName
+     * @param {string} size
+		 */
+		getElementIcon(iconName, size){
+			let iconSpan = document.createElement("span");
+			iconSpan.setAttribute("class", iconName);
+			iconSpan.style.fontSize = size;
+			return iconSpan;
+		}
+
 	/**
 	 * @method onIOConnect : socket is connected
 	 */

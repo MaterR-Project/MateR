@@ -278,10 +278,15 @@ class Base extends ModuleBase {
 	 * @param {*} password
 	 */
 	login(req, res, username, password){
-		let profil = this.users.find( profil => profil.username == username && profil.password == password);
+		trace(username, password);
+		let profil = this.users.find(profil => profil.username == username);
+		trace("profil", profil);
+		trace('map', this.sessionIds);
+		trace('users', this.users);
 		if (profil != undefined) {
 			let sessionId = this._createSessionId();
 			this.sessionIds.set(sessionId, profil.id);
+			trace(sessionId);
 			this.sendJSON(req, res, 200, {return: sessionId});
 		}else{
 			this.sendJSON(req, res, 401, {return: "Wrong Login or Password"});

@@ -46,6 +46,10 @@ class Server {
 			});
 		});
 
+		this._io.on('disconnect', () => {
+  		trace('a user deconnected');
+		});
+
 		this._app = new App(this, new Map()); // load app
 
 		this._routes = Object.getOwnPropertyNames(Object.getPrototypeOf(this._app)) // get class methods
