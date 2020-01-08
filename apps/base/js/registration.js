@@ -540,8 +540,6 @@ class RegistrationView extends View {
 			child.addEventListener("change", this.gamesAddFieldHandle);
 		});
 
-
-
 		// Handle Country combo on region choice
 		this.regionHandler = e => {
 			// Display combo country
@@ -573,8 +571,6 @@ class RegistrationView extends View {
 
 	createAccountButtonClick(){
 		const FD = new FormData(this.form);
-		//trace(FD.getAll("vocals"));
-		trace(this.form)
 		this.mvc.controller.createAccountButtonWasClicked(FD);
 	}
 
@@ -756,7 +752,15 @@ class RegistrationControler extends Controller {
 	async createAccountButtonWasClicked(FD){
 		//trace(FD.getAll("vocals"));
 		//let result = await Comm.post("register/", {vocals: "Discord"});
-		let result = await Comm.post("register/", FD);
+		//let result = await Comm.post("register/", FD);
+		//let result = await fetch("/register", FD);
+		//const form = new FormData(document.getElementById('login-form'));
+		let result = await fetch('register/', {
+		  method: 'POST',
+		  body: FD
+		});
+		result["response"] = await result["json"]();
+
 		if(result.response.return == 500){
 			trace("error: "+result.response.message);
 			this.mvc.view.fillErrorDisplay(result.response.message);

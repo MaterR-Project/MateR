@@ -1,6 +1,7 @@
 const ModuleBase = load("com/base"); // import ModuleBase class
 
 const fs = 			require("fs");			// file system
+const Busboy = require("busboy");
 
 class Base extends ModuleBase {
 
@@ -199,6 +200,40 @@ class Base extends ModuleBase {
 			{id: 2, name: "data2", value: Math.random()}
 		];
 		this.sendJSON(req, res, 200, data); // answer JSON
+	}
+
+	async register(req, res) {
+
+		let truc = await this._getDataFromRequest(req);
+
+		trace(truc);
+		//trace(res);
+		this.sendJSON(req, res, 200, {return: 200, message: "OK BG!"});
+		//this.sendJSON(req, res, 200, {return: "answer"});
+		// list of game names from games database
+		//trace
+		//let data =  this.gamesName;
+		//this.sendJSON(req, res, 200, {return: data}); // answer JSON
+	}
+
+	async _getDataFromRequest(req){
+
+    let busboy = new Busboy({ headers: req.headers });
+		let result, prom = new Promise(resolve => result = resolve);
+		let form = new Array();
+    busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated) {
+			form.push([fieldname, val])
+      trace(fieldname);
+			trace(typeof val);
+    });
+    busboy.on('finish', function() {
+			result(form);
+			//trace(form);
+      console.log('Done parsing form!');
+    });
+    req.pipe(busboy);
+
+		return prom;
 	}
 
 	/**
