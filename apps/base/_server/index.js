@@ -202,38 +202,132 @@ class Base extends ModuleBase {
 		this.sendJSON(req, res, 200, data); // answer JSON
 	}
 
+	/**
+	 * @method register : handle creation account
+	 * @param {*} req
+	 * @param {*} res
+	 */
 	async register(req, res) {
 
-		let truc = await this._getDataFromRequest(req);
+		let data = await this._getDataFromRequest(req);
 
-		trace(truc);
-		//trace(res);
-		this.sendJSON(req, res, 200, {return: 200, message: "OK BG!"});
-		//this.sendJSON(req, res, 200, {return: "answer"});
-		// list of game names from games database
-		//trace
-		//let data =  this.gamesName;
-		//this.sendJSON(req, res, 200, {return: data}); // answer JSON
+		trace(data);
+		let newProfile = {};
+		let errorMessage = "";
+		let games = [];
+		let currentGame = {};
+
+		if (data.length < 11) error = 1;
+
+		data.forEach(elem => {
+
+			if(elem[0] == "username"){
+				if (this._isUsernameTaken(elem[1])) {
+					errorMessage = "Username Already Taken";
+				}
+				else{
+					newProfile[elem[0]] = elem[1];
+				}
+			}
+			else if(elem[0] == "languages"){
+				if(newProfile.hasOwnProperty("languages")){
+					newProfile.languages.push(elem[1]);
+				}
+				else{
+					newProfile[elem[0]] = [elem[1]];
+				}
+			}
+			else if (elem[0] == "game"){
+				if(newProfile.hasOwnProperty("games")){
+					let notAdd = true;
+					newProfile.games.forEach(e => {
+						if (e.name == currentGame.name && e.platform == currentGame.platform){
+							notAdd = false;
+						}
+					})
+					if (notAdd) newProfile.games.push(currentGame);
+				}
+				else{
+					newProfile.games = [];
+				}
+				currentGame = {name: elem[1]};
+
+			}
+			else if (elem[0] == "platform" || elem[0] == "level"){
+				currentGame[elem[0]] = elem[1];
+			}
+			else if (elem[0] == "playstyles") {
+				if(currentGame.hasOwnProperty("playstyles")){
+					currentGame.playstyles.push(elem[1]);
+				}
+				else{
+					currentGame[elem[0]] = [elem[1]];
+				}
+			}
+			else if(elem[0] == "vocals"){
+				if(newProfile.hasOwnProperty("vocals")){
+					newProfile.vocals.push(elem[1]);
+				}
+				else{
+					newProfile[elem[0]] = [elem[1]];
+				}
+			}
+			else{
+				newProfile[elem[0]] = elem[1];
+			}
+		});
+
+		let notAdd = true;
+		newProfile.games.forEach(e => {
+			if (e.name == currentGame.name && e.platform == currentGame.platform){
+				notAdd = false;
+			}
+		})
+		if (notAdd) newProfile.games.push(currentGame);
+
+
+		if(errorMessage != ""){
+			this.sendJSON(req, res, 200, {return: 200, message: errorMessage});
+		}
+		else{
+			this.sendJSON(req, res, 200, {return: 200, message: "C'est Ok !"});
+			newProfile.id = this.users.length;
+			newProfile.tchats = [];
+			trace(newProfile);
+			this.users.push(newProfile);
+			//TODO UPDATE JSON
+		}
 	}
 
+	/**
+	 * @method _getDataFromRequest : get the post data from request
+	 * @param {*} req
+	 */
 	async _getDataFromRequest(req){
-
     let busboy = new Busboy({ headers: req.headers });
 		let result, prom = new Promise(resolve => result = resolve);
 		let form = new Array();
     busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated) {
-			form.push([fieldname, val])
-      trace(fieldname);
-			trace(typeof val);
+			form.push([fieldname, val]);
     });
     busboy.on('finish', function() {
 			result(form);
-			//trace(form);
-      console.log('Done parsing form!');
+      trace('Done parsing form!');
     });
     req.pipe(busboy);
-
 		return prom;
+	}
+
+	/**
+	 * @method _isUsernameTaken : say if given username is taken
+	 * @param {*} username
+	 */
+	_isUsernameTaken(username){
+		let taken = false;
+		this.users.map(profil => {
+			if (profil.username == username) taken = true;
+		});
+		return taken;
 	}
 
 	/**

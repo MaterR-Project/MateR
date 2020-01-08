@@ -215,7 +215,6 @@ class RegistrationView extends View {
 		this.confirmPasswordLabel.style.margin = "2%";
 		this.confirmPasswordLabel.innerHTML = "Confirm Password* :";
 		this.confirmPasswordInput = document.createElement("input");
-		this.confirmPasswordInput.setAttribute("name", "confirmPassword");
 		this.confirmPasswordInput.setAttribute("required", "");
 		this.confirmPasswordInput.type ="password";
 		this.confirmPasswordDiv.appendChild(this.confirmPasswordLabel);
@@ -516,7 +515,6 @@ class RegistrationView extends View {
 	addListeners() {
 		this.createButtonHandler = e => {
 			// form action
-			trace(e);
 			e.preventDefault();
 			// I dit it My Way
 	    this.createAccountButtonClick();
@@ -533,10 +531,15 @@ class RegistrationView extends View {
 			[...this.gamesAddField.childNodes].map((child, index) => {
 				if (child == e.srcElement.parentNode) this.index = index;
 			});
-			if (e.target.name == "game") this.gameComboChoice(this.gamesAddField.childNodes[this.index].childNodes, e.target.value);
+			if (e.target.name == "game"){
+				let tmp = this.gamesAddField.childNodes[this.index].childNodes;
+				if(tmp[1].options[tmp[1].selectedIndex].value == -1){
+					this.destroyNewGameEntry(this.gamesAddField.childNodes[this.index]);
+				}
+				this.gameComboChoice(tmp, e.target.value);
+			}
 		}
-		[...this.gamesAddField.childNodes].map((child, index) => {
-			this.index = index;
+		[...this.gamesAddField.childNodes].map((child) => {
 			child.addEventListener("change", this.gamesAddFieldHandle);
 		});
 
@@ -570,8 +573,13 @@ class RegistrationView extends View {
 	}
 
 	createAccountButtonClick(){
-		const FD = new FormData(this.form);
-		this.mvc.controller.createAccountButtonWasClicked(FD);
+		if (this.passwordInput.value == this.confirmPasswordInput.value){
+			const FD = new FormData(this.form);
+			this.mvc.controller.createAccountButtonWasClicked(FD);
+		}
+		else{
+			this.fillErrorDisplay("Password Mismatch");
+		}
 	}
 
 	loginButtonClick() {
@@ -605,7 +613,7 @@ class RegistrationView extends View {
 		//
 		if(combo == this.comboCountries){
 			let optionEmpty = document.createElement("option");
-			optionEmpty.value = -1;
+			optionEmpty.value = "Undefined";
 			optionEmpty.text = "Undefined";
 			combo.appendChild(optionEmpty);
 		}
@@ -695,7 +703,15 @@ class RegistrationView extends View {
 	}
 
 	displayAllCombosOfGameField(gameAddFieldArray){
-		gameAddFieldArray.forEach(combo => {combo.style.display = "";})
+		gameAddFieldArray.forEach(combo => {
+			combo.style.display = "";
+			combo.setAttribute("required", "");
+		})
+	}
+
+	destroyNewGameEntry(gameAddFieldArray){
+		trace(gameAddFieldArray)
+		this.gamesAddField.removeChild(gameAddFieldArray);
 	}
 
 	fillErrorDisplay(message){
@@ -731,12 +747,11 @@ class RegistrationControler extends Controller {
 	}
 
 	async gameComboWasChoosed(gameAddFieldArray, gameName){
-		//trace(gameAddFieldArray,"unfeddfjhdfhdjh")
+		//trace(gameAddFieldArray[1].options[gameAddFieldArray[1].selectedIndex].value)
 		this.mvc.view.updateComboWithList(gameAddFieldArray[3], await this.mvc.model.loadGamePlatforms(gameName));
 		this.mvc.view.updateComboWithList(gameAddFieldArray[5], this.mvc.model.loadPlaystyles());
 		this.mvc.view.updateComboWithList(gameAddFieldArray[7], this.mvc.model.loadLevels());
 		this.mvc.view.displayAllCombosOfGameField(gameAddFieldArray);
-		//platformsCombo.style.display = "";
 	}
 
 	platformComboWasChoosed(playstyleCombo){
