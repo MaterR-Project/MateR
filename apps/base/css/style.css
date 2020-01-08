@@ -28,3 +28,49 @@ body {
 	font-family: helvetica;
 	font-size: 10pt;
 }
+
+.footer {
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+	font-size: 15px;
+}
+
+.profil {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	overflow-x: auto;
+	font-size: 20px;
+	margin-bottom: 15%;
+	width: 70%;
+	height: 100%;
+}
+
+.profil div {
+	display: flex;
+	justify-content: space-between;
+}
+
+@media all and (max-width: 500px) {
+	.profil {
+		width: 100%;
+	}
+
+	.profil div {
+		flex-direction: column;
+	}
+
+	.profil-element {
+
+	}
+}
+
+.profil-label {
+	margin: 10px;
+	min-width: 10%;
+}
+
+.profil-element  {
+	margin: 10px;
+}

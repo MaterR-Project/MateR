@@ -16,8 +16,11 @@ class Base {
 		this.authenticationMVC = new MVC("authenticationMVC", this, new AutenticationModel(), new AutenticationView(), new AutenticationController()); // init app MVC
 		await this.authenticationMVC.initialize(); // run init async tasks
 
-		this.authenticationMVC.view.attach(document.body); // attach view
-		this.authenticationMVC.view.activate(); // activate user interface
+		this.profileMVC = new MVC("profileMVC", this, new ProfileModel(), new ProfileView(), new ProfileController());
+		await this.profileMVC.initialize();
+
+		this.authenticationMVC.view.attach(document.body);
+		this.authenticationMVC.view.activate();
 
 	}
 
