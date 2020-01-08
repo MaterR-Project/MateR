@@ -71,20 +71,6 @@ class MenuView extends View {
         // conversation summury div
         this.convDiv = document.createElement("div");
         this.mainDiv.appendChild(this.convDiv);
-        this.headerDiv = document.createElement("div");
-        this.convDiv.appendChild(this.headerDiv);
-
-        this.headerDiv.style.display = "flex";
-        this.headerDiv.style.justifyContent = "space-around";
-        this.headerDiv.style.alignItems = "center";
-        this.headerDiv.style.height = "20%";
-        this.headerDiv.style.border = "solid #999999";
-        this.searchIcon = document.createElement("i");
-        this.searchIcon.innerHTML = "?";
-        this.headerDiv.appendChild(this.searchIcon);
-        this.searchText = document.createElement("h2");
-        this.headerDiv.appendChild(this.searchText);
-        this.searchText.innerHTML = "My discussions";
         
         this.convDiv.style.overflow = "auto";
         this.convDiv.style.display = "flex";
@@ -108,6 +94,7 @@ class MenuView extends View {
         this.profileDiv.addEventListener("click", this.profileHandler);
         this.searchHandler = e => this.searchClick(e);
         this.searchDiv.addEventListener("click", this.searchHandler);
+
     }
     removeListeners() {
         this.profileDiv.removeEventListener("click", this.profileHandler);
@@ -119,7 +106,7 @@ class MenuView extends View {
     searchClick(e){
         this.mvc.controller.goSearch();
     }
-    displayShortConv(data){
+    async displayShortConv(data){
         data.map(async e =>{
             trace(e);
             let shortDiv = document.createElement("div");
@@ -153,6 +140,8 @@ class MenuView extends View {
                 messageBody.innerHTML = "You   : ";
             }
             messageBody.innerHTML += e.message.Message;
+            shortDiv.addEventListener("click", () => this.mvc.controller.goToConv(e.message.Id));
+
         })
     }
 }
@@ -180,10 +169,17 @@ class MenuController extends Controller{
     }
     async fetchConv(myId){
         trace("asking for the convs of : ", myId);
-        this.mvc.view.displayShortConv(await this.mvc.model.getConv(myId)); // get the conersation list of this user
+        this.convList = await this.mvc.model.getConv(myId)
+        await this.mvc.view.displayShortConv(this.convList); // get the conersation list of this user
+        
     }
     async goName(id){
         let name = await this.mvc.model.getName(id);
         return name;
+    }
+    goToConv(id){
+        this.mvc.view.destroy();
+        this.mvc.app.tchatMVC.view.attach(document.body, id);
+        this.mvc.app.tchatMVC.view.activate()
     }
 }
