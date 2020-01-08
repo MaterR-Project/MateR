@@ -40,11 +40,12 @@ body {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	overflow-x: auto;
+	overflow: auto;
 	font-size: 20px;
-	margin-bottom: 15%;
+	margin-bottom: 20px;
 	width: 70%;
 	height: 100%;
+	flex-shrink: 1;
 }
 
 .profil div {
