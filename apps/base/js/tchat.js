@@ -7,16 +7,20 @@ class TchatModel extends Model {
 	async initialize(mvc) {
 		super.initialize(mvc);
     }
+    // get the conersation between two users from server
     async getConv(id1, id2){
         let request = "getConvFromId/" + id1 + "/" + id2;
         this.convList = await Comm.get(request);
         return this.convList.response.return;
     }
+    // send a message to the server with the destination id and the source id
     async pushMessage(content){
         let request = "sendMessage/";
         let data = {message : content, src : this.mvc.view.src, dest : this.mvc.view.dest};
-        await Comm.post(request, data);
+        let result = await Comm.post(request, data);
+        return result.response.return;
     }
+    // gets the name of a user from his id
     async getName(id){
         let request = "getNameFromId/" + id;
         let result = await Comm.get(request);
@@ -30,7 +34,7 @@ class TchatView extends View {
 		super();
 		this.table = null;
 	}
-
+    // create the skeleton of the view
 	initialize(mvc) {
         super.initialize(mvc);
         this.stage.style.display ="flex";
@@ -88,7 +92,8 @@ class TchatView extends View {
         this.sendBtn.style.width = "15%";
         this.inputDiv.appendChild(this.sendBtn);
         this.sendBtn.innerHTML = "Send";
-	}
+    }
+    // atatch the view and collects the user's ID
     attach(parent, id){
         //this.targetId = id; // get the id of the person you want to speak with
         let targetId = 1;
@@ -104,13 +109,12 @@ class TchatView extends View {
 		super.activate();
 		this.addListeners(); // listen to events
 	}
-
 	// deactivate
 	deactivate() {
 		super.deactivate();
 		this.removeListeners();
 	}
-
+    // add event listeners
 	addListeners() {
         // menu button lsitener
         this.menuHandler = e => this.menuClick(e);
@@ -120,16 +124,17 @@ class TchatView extends View {
         this.keyHandler = e => this.keyPressed(e);
         document.addEventListener("keydown", this.keyHandler);
 	}
-
+    // remove event listeners
 	removeListeners() {
         this.menuButton.removeEventListener("click", this.menuHandler);
         this.sendBtn.removeEventListener("click", this.sendHandler);
         document.removeEventListener("keydown", this.keyHandler)
 	}
-    // event triggers
+    // handler to link to the controller and launch menuMVC
     menuClick() {
-		this.mvc.controller.menuClicked();		// link to the menu part of the controller
+		this.mvc.controller.menuClicked();
     }
+    // handler for the cliking of the send button, also user by keyPressed()
     sendClick(){
         let content = this.textInput.value;
         // call controller func to send this string to the dest;
@@ -139,12 +144,14 @@ class TchatView extends View {
             this.textInput.value = "";
         }
     }
+    // key down event handler to detect the press of ENTER
     keyPressed(event){
         if(event.which === 13){
             // start tchatting with this user
             this.sendClick();
         }
     }
+    // updates the view with the list of messages returned by the model
     displayConv(conv){
         conv.map(e =>{
             let messageDiv = document.createElement("div");
@@ -183,6 +190,7 @@ class TchatView extends View {
         // scroll to the bottom of the conversation aka newest messages
         this.convDiv.scrollTo(0, this.convDiv.scrollHeight);
     }
+    // adds a message to the view
     addMessage(content, src, state){
         trace("adding message : ", content, "from user : ", src);
         let messageDiv = document.createElement("div");
@@ -202,6 +210,7 @@ class TchatView extends View {
         messageContent.style.fontSize = "15px";
         messageContent.innerHTML = content;
         let messageHeader = document.createElement("div");
+        messageHeader.id = "latest";
         messageContent.style.width = "100%";
         messageContent.style.overflowWrap = "break-word";
         messageDiv.appendChild(messageHeader);
@@ -220,8 +229,29 @@ class TchatView extends View {
         // scroll to the bottom of the conversation aka newest messages
         this.convDiv.scrollTo(0, this.convDiv.scrollHeight);
     }
+    // updates the first div to the correspondant's user name
     setName(name){
         this.profileDiv.innerHTML = name;
+    }
+    // updates the latest sent message to set the message status
+    setStatus(data){
+        var lastMessage = document.getElementById("latest");
+        if(data == "ok"){
+            lastMessage.innerHTML = "";        // remove the sending status : it was sent
+            lastMessage.removeAttribute("id"); // clear the id
+            let timeStamp = document.createElement("div");  //set time to sent time
+            lastMessage.appendChild(timeStamp);
+            var time = new Date();
+            timeStamp.innerHTML = time.getHours()+":"+ time.getMinutes();
+            lastMessage.style.float = "right";
+        } else {
+            lastMessage.innerHTML = "FAILED TO SEND";
+            lastMessage.removeAttribute("id");
+            let timeStamp = document.createElement("div");  //set time to sent time
+            lastMessage.appendChild(timeStamp);
+            var time = new Date();
+            timeStamp.innerHTML = time.getHours()+":"+ time.getMinutes();
+        }
     }
 }
 
@@ -244,7 +274,7 @@ class TchatController extends Controller {
 		this.mvc.app.testMVC.view.attach(document.body);     // attach view of menu MVC
 		this.mvc.app.testMVC.view.activate(); 			     // activate user interface of menu MVC
     }
-
+    // function to link to the model that gets the message history and update the view
     async fetchConv(myId, targetId){
         if(myId > targetId){
             trace("asking for the conv : ", targetId, "_", myId);
@@ -255,7 +285,8 @@ class TchatController extends Controller {
         }
         this.mvc.view.setName(await this.mvc.model.getName(this.mvc.view.dest));
     }
+    // function to link to the model that sends a message and update the view
     async sendMessage (content){
-        await this.mvc.model.pushMessage(content);
+        this.mvc.view.setStatus(await this.mvc.model.pushMessage(content));
     }
 }

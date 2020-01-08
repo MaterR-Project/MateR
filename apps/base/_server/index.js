@@ -17,7 +17,7 @@ class Base extends ModuleBase {
 		this.users = JSON.parse(fs.readFileSync('database/users.json', 'utf8'));
 		this.vocals = JSON.parse(fs.readFileSync('database/vocals.json', 'utf8'));
 		this.sessionIds = new Map();
-
+		this.ssessions = new Map();
 		//trace(this.users,this.languages,this.levels,this.locals,this.playstyles,this.vocals);
 
 		// Create game names list
@@ -201,7 +201,11 @@ class Base extends ModuleBase {
 		let data =  this.vocals;
 		this.sendJSON(req, res, 200, {return: data}); // answer JSON
 	}
-
+	/**
+	 * @method sendLatestConv : sends the name of the latest conversation file between id1 & id2
+	 * @param {*} id1 : id of first user
+	 * @param {*} id2 : id of second user
+	 */
 	sendLatestConv(id1, id2){
 		var fs = require("fs");
 		var regex = new RegExp(id1 + "_" +id2);
@@ -220,14 +224,28 @@ class Base extends ModuleBase {
 		var mostRecent = list[list.length - 1];
 		return mostRecent;
 	}
-
-	sendMessage(req, res){
-		var busboy = new Busboy({headers: req.headers});
-		busboy.on('field', (fieldname, val) => {
-			trace(fieldname, " - ", val);
-			//check if src can send to dest
-		});
-		req.pipe(busboy);
+	/**
+	 * @method sendMessage : makes sure users can discuss and handles message sending
+	 * @param {*} req
+	 * @param {*} res
+	 */
+	async sendMessage(req, res){
+		let result = await this._getMessageFromRequest(req); 
+		let content = result[0];
+		let source = result[1];
+		let destination = result[2];
+		let test = this.users[source[1]].tchats.map(e =>{
+			if(e == destination[1])
+				return 1;
+		})
+		if(test == 1){
+			let data = "ok";
+			//send to other user TODO
+			this.sendJSON(req, res, 200, {return : data});
+		}else{
+			let data = "failed to send";
+			this.sendJSON(req, res, 200, {return : data});
+		}
 	}
 	/**
 	 * @method getConvFrom : object profile
@@ -285,6 +303,23 @@ class Base extends ModuleBase {
 			{id: 2, name: "data2", value: Math.random()}
 		];
 		this.sendJSON(req, res, 200, data); // answer JSON
+	}
+	/**
+	 * @method getVocalsFromDatabase : busboy func to get message target id and source id from req
+	 * @param {*} req
+	 */
+	async _getMessageFromRequest(req){
+		let busboy = new Busboy({headers : req.headers});
+		let result, prom = new Promise(resolve => result = resolve);
+		let message = new Array();
+		busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated){
+			message.push([fieldname, val]);
+		});
+		busboy.on('finish', function(){
+			result(message);
+		});
+		req.pipe(busboy);
+		return prom;
 	}
 
 	/**
