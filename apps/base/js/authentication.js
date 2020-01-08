@@ -58,6 +58,7 @@ class AutenticationView extends View {
 		this.pseudoDiv.style.width = "100%";
 		this.pseudoDiv.style.display = "flex";
     this.pseudoDiv.style.flexDirection = "column";
+		this.pseudoDiv.style.marginBottom = "10px";
 
 		this.pseudoLabel = document.createElement("label");
 		this.pseudoLabel.setAttribute("for","username");
@@ -98,12 +99,13 @@ class AutenticationView extends View {
 
     //button connect
     this.connectBtn = document.createElement("button");
-    this.connectBtn.innerHTML = "connect";
+    this.connectBtn.innerHTML = "Connect";
+		this.connectBtn.style.marginBottom = "10px";
     this.mainDiv.appendChild(this.connectBtn);
 
     //button create account
     this.createAccountBtn = document.createElement("button");
-    this.createAccountBtn.innerHTML = "create an account";
+    this.createAccountBtn.innerHTML = "Create an Account";
     this.mainDiv.appendChild(this.createAccountBtn);
 
 		this.stage.appendChild(this.mainDiv);
@@ -169,18 +171,18 @@ class AutenticationController extends Controller {
 			if (this.mvc.model.sessionId == undefined) {
 				this.mvc.view.updateWrongPsw(response.return);
 			}else{
+				this.mvc.app.initSocket(this.mvc.model.sessionId);
 				this.mvc.view.destroy();
-		    this.mvc.app.profileMVC.view.attach(document.body,this.mvc.model.sessionId);
-		    this.mvc.app.profileMVC.view.activate();
+		    this.mvc.app.mvcProfile.view.attach(document.body);
+		    this.mvc.app.mvcProfile.view.activate();
 			}
 		}
   }
 
-	// TODO with registration.js
-  async createAccountBtnWasClicked() {
+	async createAccountBtnWasClicked() {
     this.mvc.view.destroy();
-    this.mvc.app.testMVC.view.attach(document.body);
-    this.mvc.app.testMVC.view.activate();
+    this.mvc.app.mvcRegistration.view.attach(document.body);
+    this.mvc.app.mvcRegistration.view.activate();
   }
 
 	verifyPassword(password){
