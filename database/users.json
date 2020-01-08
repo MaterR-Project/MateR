@@ -10,7 +10,7 @@
     "region": "Oceania",
     "country": "New Zealand",
     "tchats": [
-      1
+      1, 2
     ],
     "languages" : ["English"],
     "games": [
@@ -62,6 +62,34 @@
     "vocals": [
       "Discord",
       "Skype"
+    ]
+  },
+  {
+    "id": 2,
+    "mail": "mail@mail.ma",
+    "username": "mail",
+    "password": "fd7b2397b174c3efda972c5bbf5db5f0dff674ec1a0a1e1931b62a3d2cfc17c1f7bb908a33af32a8e393133e2b770c4cb3f7edc71cb4ebdc23ebe03cae835ed7",
+    "bio": "Ma vie est un mail",
+    "gender": 0,
+    "year": 1999,
+    "region": "Western Europe",
+    "country": "France",
+    "tchats": [
+      0
+    ],
+    "languages" : ["English", "French"],
+    "games": [
+      {
+        "name": "Apex Legends",
+        "platform": "Windows",
+        "playstyles": [
+          "Try Hard"
+        ],
+        "level": "Pro Player"
+      }
+    ],
+    "vocals": [
+      "Discord", "Mumble"
     ]
   }
 ]

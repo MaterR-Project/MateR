@@ -22,6 +22,9 @@ class Base {
 		this.tchatMVC = new MVC("tchatMVC", this, new TchatModel(), new TchatView(), new TchatController());
 		await this.tchatMVC.initialize();
 		
+		this.menuMVC = new MVC("menuMVC", this, new MenuModel(), new MenuView(), new MenuController());
+		await this.menuMVC.initialize();
+
 		this.authenticationMVC.view.attach(document.body);
 		this.authenticationMVC.view.activate();
 

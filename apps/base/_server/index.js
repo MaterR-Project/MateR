@@ -33,7 +33,7 @@ class Base extends ModuleBase {
 		// Tests
 		//this.gamesName.map(name => {trace(name,"\n")});
 		//trace(this.games[0],"\n",this.games[0].crossplay);
-		//trace(this.users.length,"\n",this.users[0]);
+		//trace(this.users.length,"\n",this.users[2]);
 		//trace(this.languages,"\n",this.languages.length);
 	}
 
@@ -292,7 +292,66 @@ class Base extends ModuleBase {
 			this.sendJSON(req, res, 401, {return: "Wrong Login or Password"});
 		}
 	}
+	/**
+	 * @method sendLatestConv : sends the name of the latest conversation file between id1 & id2
+	 * @param {*} id1 : id of first user
+	 * @param {*} id2 : id of second user
+	 */
+	sendLatestConv(id1, id2){
+		var fs = require("fs");
+		var regex = new RegExp(id1 + "_" +id2);
+		var dir = fs.readdirSync("database/tchats");
+		var list = [];
+		// match directory content for tag1_tag2
+		dir.forEach( i => {
+			if(regex.test(i)) // push it !
+				list.push(i);
+		})
+		// make sure the list is sorted by creation date
+		list.sort(function(a, b){
+			return fs.statSync("database/tchats/" + a).mtime.getTime() - fs.statSync("database/tchats/" + b).mtime.getTime();
+		})
+		//get the newest one
+		var mostRecent = list[list.length - 1];
+		return mostRecent;
+	}
 
+	getShortConvFromId(req, res, id){
+		let convLstId = this.users[id].tchats;
+		let convLstFile = [];
+		let convLstLast = [];
+		let data = [];
+		convLstId.map(e =>{
+			if(id < e){
+				convLstFile.push(this.sendLatestConv(id, e));
+			} else{
+				convLstFile.push(this.sendLatestConv(e, id));
+			}
+		})
+		convLstFile.map(f =>{
+			let fullconv = JSON.parse(fs.readFileSync("database/tchats/" + f, "utf8"));
+			convLstLast.push(fullconv[fullconv.length - 1]);
+		})
+		convLstLast.forEach((elem, index) =>{
+			let theId = parseInt(convLstId[index]);
+			data.push({id : theId, message : elem});
+		})
+		this.sendJSON(req, res, 200, {return : data});
+	}
+	/**
+	* @method getNameFromid :
+	* @param {*} req
+	* @param {*} res
+	* @param  {...*} param : id
+	*/
+   getNameFromId(req, res, ...param){
+	   let id = [...param].join(" ");
+	   let name = 404; // error
+	   trace(id);
+	   if(id != -1) name = this.users[id].username;
+	   let data = name;
+	   this.sendJSON(req, res, 200, {return : data}); //send JSON
+   }
 	/**
 	 * @method hello : world
 	 * @param {*} req
