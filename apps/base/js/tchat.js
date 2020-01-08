@@ -49,8 +49,6 @@ class TchatView extends View {
         this.stage.appendChild(this.mainDiv);
         // header section above discussio
         this.headDiv = document.createElement("div");
-        this.mainDiv.style.backgroundColor ="black";
-        this.mainDiv.style.color = "white";
         this.mainDiv.appendChild(this.headDiv);
         this.headDiv.style.display = "flex";
         this.headDiv.style.justifyContent = "space-between";
