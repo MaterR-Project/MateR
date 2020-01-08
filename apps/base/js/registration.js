@@ -794,8 +794,9 @@ class RegistrationControler extends Controller {
 		}
 		else {
 			trace(result.response);
-			this.mvc.view.fillErrorDisplay(result.response.message);
+			//this.mvc.view.fillErrorDisplay(result.response.message);
 			// Go to authentication
+			this.mvc.view.deactivate();
 			this.mvc.view.destroy();
 			this.mvc.app.authenticationMVC.view.updateWrongPsw(result.response.message);
 			this.mvc.app.authenticationMVC.view.attach(document.body); // attach view
@@ -809,6 +810,7 @@ class RegistrationControler extends Controller {
 	}
 
 	loginButtonWasClicked(){
+		this.mvc.view.deactivate();
 		this.mvc.view.destroy();
 		this.mvc.app.authenticationMVC.view.attach(document.body); // attach view
 		this.mvc.app.authenticationMVC.view.activate(); // activate auth interface
