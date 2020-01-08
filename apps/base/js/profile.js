@@ -66,7 +66,6 @@ class ProfileView extends View {
 		this.nameDiv.style.display = "flex";
 		this.nameDiv.style.alignItems = "center";
 		this.nameDiv.style.justifyContent = "space-evenly";
-		//this.nameDiv.style.marginTop = "15%";
 		this.mainDiv.appendChild(this.nameDiv);
 
 		this.profileName = document.createElement("h1");
@@ -340,8 +339,8 @@ class ProfileController extends Controller {
 		trace("menu btn click", params);
 		this.mvc.view.destroy(); 						 // destroy current view
 		//this.mvc.app.mvc = this.mvc.app.mvcTest;		 // change current MVC to the target MVC : menu
-		this.mvc.app.mvcTest.view.attach(document.body); // attach view of menu MVC
-		this.mvc.app.mvcTest.view.activate(); 			 // activate user interface of menu MVC
+		this.mvc.app.menuMVC.view.attach(document.body); // attach view of menu MVC
+		this.mvc.app.menuMVC.view.activate(); 			 // activate user interface of menu MVC
 	}
 
 	async initProfil(){
