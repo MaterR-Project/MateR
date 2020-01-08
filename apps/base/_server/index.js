@@ -247,6 +247,9 @@ class Base extends ModuleBase {
 		if(test == 1){
 			let data = "ok";
 			//send to other user TODO
+			let sock = this.sessions[source[1]]; // get the socket of the destination
+			let tosend = JSON.stringify({message : content[1], src : source[1], dest : destination[1]});
+			sock.emit('message', tosend);
 			this.sendJSON(req, res, 200, {return : data});
 		}else{
 			let data = "failed to send";
