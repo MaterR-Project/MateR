@@ -27,6 +27,8 @@ body {
 	overflow: hidden;
 	font-family: helvetica;
 	font-size: 10pt;
+	background-color: black;
+	color: #999999;
 }
 
 .footer {
