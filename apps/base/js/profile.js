@@ -240,7 +240,7 @@ class ProfileView extends View {
 	attach(parent){
 		super.attach(parent);
 		trace("init profile");
-		this.mvc.controller.initProfil();
+		this.mvc.controller.initProfile();
 	}
 
 	// activate UI
@@ -346,7 +346,7 @@ class ProfileController extends Controller {
 		this.mvc.app.mvcTest.view.activate(); 			 // activate user interface of menu MVC
 	}
 
-	async initProfil(){
+	async initProfile(){
 		this.mvc.view.updateProfil(await this.mvc.model.getProfile());
 	}
 
