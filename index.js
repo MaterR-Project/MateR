@@ -41,9 +41,9 @@ class Server {
 
 		this._io.on('connection', socket => {
   		trace('a user connected');
-			this._io.on('authentication', sessionId => {
+			this._io.on('authentication', id => {
 				trace("authentication success");
-				this._app.sessions.set(sessionId,socket);
+				this._app.sessions.set(id,socket);
 			});
 		});
 
