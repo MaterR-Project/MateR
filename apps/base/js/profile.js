@@ -52,14 +52,19 @@ class ProfileView extends View {
 		this.topBtnDiv.style.justifyContent = "space-between"
 		this.topBtnDiv.style.width ="100%";
 		// create search btn to open the conversation slide tab
-		this.menuButton = document.createElement("button");
-		this.menuButton.innerHTML = "Menu";
-		this.menuButton.style.fontSize = "15px";
+		this.menuButton = document.createElement("span");
+		this.menuButton.setAttribute("class", "icon-Menu");
+		//this.menuButton.style.fontSize = "auto";
+		//this.menuButton.innerHTML = "Menu";
+		this.menuButton.style.fontSize = "45px";
+		this.menuButton.style.marginLeft="10px";
 		this.topBtnDiv.appendChild(this.menuButton);
 		// create disconnect btn
-		this.logoutButton = document.createElement("button");
-		this.logoutButton.innerHTML = "Disconnect";
-		this.logoutButton.style.fontSize = "15px";
+		this.logoutButton = document.createElement("span");
+		this.logoutButton.setAttribute("class", "icon-disconnect");
+		//this.logoutButton.innerHTML = "Disconnect";
+		this.logoutButton.style.fontSize = "45px";
+		this.logoutButton.style.marginRight="10px";
 		this.topBtnDiv.appendChild(this.logoutButton);
 
 		this.nameDiv = document.createElement("div");
@@ -224,13 +229,19 @@ class ProfileView extends View {
 		this.footer = document.createElement("div");
 		this.footer.setAttribute("class", "footer");
 			//button for change profil infos
-			this.changeBtn = document.createElement("button");
-			this.changeBtn.innerHTML = "Apply Changes";
+			this.changeBtn = document.createElement("span");
+			this.changeBtn.setAttribute("class", "icon-checkmark-no-changes");
+			this.changeBtn.style.fontSize = "45px";
+			this.changeBtn.style.marginLeft="10px";
+			//this.changeBtn.innerHTML = "Apply Changes";
 			this.footer.appendChild(this.changeBtn);
 
 			//button for search
-			this.searchBtn = document.createElement("button");
-			this.searchBtn.innerHTML = "Search";
+			this.searchBtn = document.createElement("span");
+			this.searchBtn.setAttribute("class", "icon-Search");
+			this.searchBtn.style.fontSize = "45px";
+			this.searchBtn.style.marginRight="10px";
+			//this.searchBtn.innerHTML = "Search";
 			this.footer.appendChild(this.searchBtn);
 
 		this.mainDiv.appendChild(this.footer);
@@ -296,7 +307,7 @@ class ProfileView extends View {
 	}
 	/* -------------------------------------------------------------------- */
 
-	updateProfil(data) {
+	updateProfile(data) {
 		console.log(data);
 		let languagesDisplay = "";
 		let vocalsDisplay = "";
@@ -327,27 +338,33 @@ class ProfileController extends Controller {
 		super.initialize(mvc);
 
 	}
-	async searchClicked(params){
+
+	searchClicked(params){
 		trace("search btn click", params);
+		this.mvc.view.deactivate();
 		this.mvc.view.destroy();						// destroy current view
 		this.mvc.app.mvcTest.view.attach(document.body);// attach view of search MVC
 		this.mvc.app.mvcTest.view.activate();			// activate user interface of search MVC
 	}
-	async logoutClicked(params) {
+
+	logoutClicked(params) {
 		trace("logout btn click", params);
+		this.mvc.view.deactivate();
 		this.mvc.view.destroy(); 						 // destroy current view
 		this.mvc.app.authenticationMVC.view.attach(document.body); // attach view of authenticate MVC
 		this.mvc.app.authenticationMVC.view.activate(); 			 // activate user interface of authenticate MVC
 	}
-	async menuClicked(params) {
+
+	menuClicked(params) {
 		trace("menu btn click", params);
+		this.mvc.view.deactivate();
 		this.mvc.view.destroy(); 						 // destroy current view
 		this.mvc.app.mvcTest.view.attach(document.body); // attach view of menu MVC
 		this.mvc.app.mvcTest.view.activate(); 			 // activate user interface of menu MVC
 	}
 
 	async initProfile(){
-		this.mvc.view.updateProfil(await this.mvc.model.getProfile());
+		this.mvc.view.updateProfile(await this.mvc.model.getProfile());
 	}
 
 }
