@@ -13,6 +13,7 @@ class ProfileModel extends Model {
 		trace("get session id");
 		let result = await Comm.get("getProfileFromSessionId/"+this.mvc.app.autenticationMVC.model.sessionId);
 		trace(result);
+		this.id = result.response.return.id;
 		return result.response.return;
 	}
 }
@@ -220,22 +221,19 @@ class ProfileView extends View {
     this.mainDiv.appendChild(this.profileData);
 
 		this.footer = document.createElement("div");
+		this.footer.setAttribute("class", "footer");
+			//button for change profil infos
+			this.changeBtn = document.createElement("button");
+			this.changeBtn.innerHTML = "Apply Changes";
+			this.footer.appendChild(this.changeBtn);
 
-		this.bottomDiv = document.createElement("div");
-		this.bottomDiv.style.display = "flex";has
-		this.bottomDiv.style.justifyContent = "space-around";
-		this.bottomDiv.style.width = "100%";
-		this.mainDiv.appendChild(this.bottomDiv)
-		// create btn to save changes applied to the other fields
-		this.applyButton = document.createElement("button");
-		this.applyButton.innerHTML = "Apply Changes";
-		this.applyButton.style.fontSize = "15px";
-		this.bottomDiv.appendChild(this.applyButton);
-		// create btn to link to Search MVC
-		this.searchButton = document.createElement("button");
-		this.searchButton.innerHTML = "Search";
-		this.searchButton.style.fontSize = "15px";
-		this.bottomDiv.appendChild(this.searchButton);
+			//button for search
+			this.searchBtn = document.createElement("button");
+			this.searchBtn.innerHTML = "Search";
+			this.footer.appendChild(this.searchBtn);
+
+		this.mainDiv.appendChild(this.footer);
+
 	}
 
 	// activate UI
@@ -257,10 +255,10 @@ class ProfileView extends View {
 		this.logoutButton.addEventListener("click", 	this.lougoutHandler);
 
 		this.searchHandler = e => this.searchClick(e);
-		this.searchButton.addEventListener("click", 	this.searchHandler);
+		this.searchBtn.addEventListener("click", 	this.searchHandler);
 
 		this.applyHandler = e => this.applyClick(e);
-		this.applyButton.addEventListener("click", 		this.applyHandler);
+		this.changeBtn.addEventListener("click", 		this.applyHandler);
 
 		this.menuHandler = e => this.menuClick(e);
 		this.menuButton.addEventListener("click", 		this.menuHandler);
@@ -268,8 +266,8 @@ class ProfileView extends View {
 
 	removeListeners() {
 		this.logoutButton.removeEventListener("click", 	this.logoutHandler);
-		this.searchButton.removeEventListener("click", 	this.searchHandler);
-		this.applyButton.removeEventListener("click", 	this.applyHandler);
+		this.searchBtn.removeEventListener("click", 	this.searchHandler);
+		this.changeBtn.removeEventListener("click", 	this.applyHandler);
 		this.menuButton.removeEventListener("click", 	this.menuHandler);
 
 	}

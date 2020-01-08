@@ -29,6 +29,13 @@ body {
 	font-size: 10pt;
 }
 
+.footer {
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+	font-size: 15px;
+}
+
 .profil {
 	display: flex;
 	flex-direction: column;
@@ -36,8 +43,7 @@ body {
 	overflow-x: auto;
 	font-size: 20px;
 	margin-bottom: 15%;
-	width: 100%;
-	max-width: 500px;
+	width: 70%;
 	height: 100%;
 }
 
