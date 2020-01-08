@@ -16,28 +16,26 @@ class Base extends ModuleBase {
 		this.playstyles = JSON.parse(fs.readFileSync('database/playstyles.json', 'utf8'));
 		this.users = JSON.parse(fs.readFileSync('database/users.json', 'utf8'));
 		this.vocals = JSON.parse(fs.readFileSync('database/vocals.json', 'utf8'));
+		this.sessions = new Map();
 		this.sessionIds = new Map();
-
-		//debug
-		this.sessionIds.set("123",0);
 
 		//trace(this.users,this.languages,this.levels,this.locals,this.playstyles,this.vocals);
 
 		// Create game names list
 		this.gamesName = new Array();
 		this.games.map(game => {this.gamesName.push(game.name)});
-		trace(this.gamesName,"\n\n");
+		//trace(this.gamesName,"\n\n");
 
 		// Create region names list
 		this.regions = new Array();
 		this.locals.map(local => {this.regions.push(local.name)});
-		trace(this.regions,"\n\n");
+		//trace(this.regions,"\n\n");
 
 		// Tests
-		this.gamesName.map(name => {trace(name,"\n")});
-		trace(this.games[0],"\n",this.games[0].crossplay);
-		trace(this.users.length,"\n",this.users[0]);
-		trace(this.languages,"\n",this.languages.length);
+		//this.gamesName.map(name => {trace(name,"\n")});
+		//trace(this.games[0],"\n",this.games[0].crossplay);
+		//trace(this.users.length,"\n",this.users[0]);
+		//trace(this.languages,"\n",this.languages.length);
 	}
 
 	/**
@@ -160,7 +158,28 @@ class Base extends ModuleBase {
 		let ssId = [...param].join(" ");
 		let id = this.getIdFromSessionId(ssId); // profile id of session id
 		let profile = 404; // error case
-		if (id != -1) profile = this.users[id];
+		if (id != -1) {
+			profile = this.users[id];
+			profile.password = "Nice Try ;)"
+		}
+		let data = profile; // object profile of user id
+		this.sendJSON(req, res, 200, {return: data}); // answer JSON
+	}
+	/**
+	 * @method getProfileFromId : object profile
+	 * @param {*} req
+	 * @param {*} res
+	 * @param  {...*} param : Id name
+	 */
+
+	getProfileFromId(req, res, ...param) {
+		trace(param)
+		let id = [...param].join(" ");
+		let profile = 404; // error case
+		if (id != -1) {
+			profile = this.users[id];
+			profile.password = "Nice Try ;)"
+		}
 		let data = profile; // object profile of user id
 		this.sendJSON(req, res, 200, {return: data}); // answer JSON
 	}
@@ -174,6 +193,24 @@ class Base extends ModuleBase {
 		// list of vocal from vocals database
 		let data =  this.vocals;
 		this.sendJSON(req, res, 200, {return: data}); // answer JSON
+	}
+
+	/**
+	 * @method login : connect a user
+	 * @param {*} req
+	 * @param {*} res
+	 * @param {*} username
+	 * @param {*} password
+	 */
+	login(req, res, username, password){
+		let profil = this.users.find( profil => profil.username == username && profil.password == password);
+		if (profil != undefined) {
+			let sessionId = this._createSessionId();
+			this.sessionIds.set(sessionId, profil.id);
+			this.sendJSON(req, res, 200, {return: sessionId});
+		}else{
+			this.sendJSON(req, res, 401, {return: "wrong login or password"});
+		}
 	}
 
 	/**
@@ -328,6 +365,17 @@ class Base extends ModuleBase {
 			if (profil.username == username) taken = true;
 		});
 		return taken;
+	}
+	
+	/**
+	 * @method createSessionId : create a session id
+	 */
+	_createSessionId() {
+		let sessionId = "" + Math.random();
+		while (this.sessionIds.get(sessionId) != undefined) {
+			sessionId = "" + Math.random();
+		}
+		return sessionId;
 	}
 
 	/**
