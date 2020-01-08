@@ -157,9 +157,12 @@ class TchatView extends View {
             if(this.src == e.Id){
                 messageDiv.style.float = "right";   // sent by us
                 messageDiv.style.backgroundColor = "#598500";
+                messageDiv.style.color = "white";
             } else if (this.dest == e.Id){
                 messageDiv.style.float = "left";    // sent by other
                 messageDiv.style.backgroundColor = "#292929";
+                messageDiv.style.color = "white";
+
             }
             messageDiv.style.margin = "5px";
             messageDiv.style.border = "medium solid #303030";
