@@ -340,7 +340,7 @@ class Base extends ModuleBase {
 
 		let data = await this._getDataFromRequest(req);
 
-		trace(data);
+		//trace(data);
 		let newProfile = {};
 		let errorMessage = "";
 		let games = [];
@@ -416,10 +416,10 @@ class Base extends ModuleBase {
 
 
 		if(errorMessage != ""){
-			this.sendJSON(req, res, 200, {return: 200, message: errorMessage});
+			this.sendJSON(req, res, 200, {return: 500, message: errorMessage});
 		}
 		else{
-			this.sendJSON(req, res, 200, {return: 200, message: "C'est Ok !"});
+			this.sendJSON(req, res, 200, {return: 200, message: "New Account Created"});
 			newProfile.id = this.users.length;
 			newProfile.tchats = [];
 			trace(newProfile);
