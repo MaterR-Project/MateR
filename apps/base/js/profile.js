@@ -298,17 +298,21 @@ class ProfileView extends View {
 
 	updateProfil(data) {
 		console.log(data);
-		this.profileName.innerHTML = data.username;
-		this.bio.innerHTML = data.bio;
-		this.games.innerHTML = data.games;
+		let languagesDisplay = "";
+		let vocalsDisplay = "";
+		data.languages.forEach(e => languagesDisplay += e+", ");
+		data.vocals.forEach(e => vocalsDisplay += e+", ");
 
-		this.vocals.innerHTML = data.vocals;
-		this.languages.innerHTML = data.languages;
+		this.profileName.innerHTML = data.username;
+		this.mail.innerHTML = data.mail;
+		this.bio.innerHTML = data.bio;
+		this.gender.innerHTML = data.gender;
+		this.age.innerHTML = new Date().getFullYear() - data.year;
 		this.region.innerHTML = data.region;
 		this.country.innerHTML = data.country;
-		this.age.innerHTML = new Date().getFullYear() - data.year;
-		this.gender.innerHTML = data.gender;
-		this.mail.innerHTML = data.mail;
+		this.languages.innerHTML = languagesDisplay.slice(0, -2);
+		this.games.innerHTML = data.games;
+		this.vocals.innerHTML = vocalsDisplay.slice(0, -2);
 	}
 
 }
