@@ -9,6 +9,7 @@
   "author": "nico pr",
   "license": "MIT",
   "dependencies": {
+    "busboy": "^0.3.1",
     "connect": "^3.7.0",
     "mime-types": "^2.1.25",
     "socket.io": "^2.3.0"

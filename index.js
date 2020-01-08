@@ -38,6 +38,14 @@ class Server {
 
 		this._io = SocketIO(this._server);
 
+		this._io.on('connection', socket => {
+  		trace('a user connected');
+			this._io.on('authentication', id => {
+				trace("authentication success");
+				this._app.sessions.set(id,socket);
+			});
+		});
+
 		this._app = new App(this, new Map()); // load app
 
 		this._routes = Object.getOwnPropertyNames(Object.getPrototypeOf(this._app)) // get class methods
