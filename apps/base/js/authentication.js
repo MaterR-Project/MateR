@@ -181,8 +181,8 @@ class AutenticationController extends Controller {
 
 	async createAccountBtnWasClicked() {
     this.mvc.view.destroy();
-    this.mvc.app.mvcRegistration.view.attach(document.body);
-    this.mvc.app.mvcRegistration.view.activate();
+    this.mvc.app.registrationMVC.view.attach(document.body);
+    this.mvc.app.registrationMVC.view.activate();
   }
 
 	verifyPassword(password){

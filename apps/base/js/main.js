@@ -10,14 +10,14 @@ class Base {
 
 	async initialize() {
 
-		this.mvcRegistration = new MVC("mvcRegistration", this, new RegistrationModel(), new RegistrationView(), new RegistrationControler());
-		await this.mvcRegistration.initialize(); // run init async tasks
+		this.registrationMVC = new MVC("registrationMVC", this, new RegistrationModel(), new RegistrationView(), new RegistrationControler());
+		await this.registrationMVC.initialize(); // run init async tasks
 
-		this.mvcAuthentication = new MVC("mvcAuthentication", this, new AutenticationModel(), new AutenticationView(), new AutenticationController()); // init app MVC
-		await this.mvcAuthentication.initialize(); // run init async tasks
+		this.authenticationMVC = new MVC("authenticationMVC", this, new AutenticationModel(), new AutenticationView(), new AutenticationController()); // init app MVC
+		await this.authenticationMVC.initialize(); // run init async tasks
 
-		this.mvcAuthentication.view.attach(document.body); // attach view
-		this.mvcAuthentication.view.activate(); // activate user interface
+		this.authenticationMVC.view.attach(document.body); // attach view
+		this.authenticationMVC.view.activate(); // activate user interface
 
 	}
 

@@ -790,16 +790,16 @@ class RegistrationControler extends Controller {
 			// TO DO Go to profile
 			/*
 			this.mvc.view.destroy();
-			this.mvc.app.mvcProfile.view.attach(document.body); // attach view
-			this.mvc.app.mvcProfile.view.activate(); // activate profile interface
+			this.mvc.app.profileMVC.view.attach(document.body); // attach view
+			this.mvc.app.profileMVC.view.activate(); // activate profile interface
 			*/
 		}
 	}
 
 	loginButtonWasClicked(){
 		this.mvc.view.destroy();
-		this.mvc.app.mvcAuthentication.view.attach(document.body); // attach view
-		this.mvc.app.mvcAuthentication.view.activate(); // activate auth interface
+		this.mvc.app.authenticationMVC.view.attach(document.body); // attach view
+		this.mvc.app.authenticationMVC.view.activate(); // activate auth interface
 	}
 
 }
