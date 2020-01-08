@@ -2,10 +2,10 @@
   font-family: 'icomoon_font';
   src: url('/fonts/icomoonFont.eot');
   src:
-    url('/fonts/icomoonFont.eot#iefix') format('embedded-opentype'),
+    url('/fonts/icomoonFont.eot') format('embedded-opentype'),
     url('/fonts/icomoonFont.ttf') format('truetype'),
     url('/fonts/icomoonFont.woff') format('woff'),
-    url('/fonts/icomoonFont.svg#icomoon_font') format('svg');
+    url('/fonts/icomoonFont.svg') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;

@@ -194,10 +194,11 @@ class RegistrationView extends View {
 		this.passwordDiv.style.alignItems = "center";
 		this.passwordDiv.style.marginBottom = "3%";
 		//this.passwordDiv.style.justifyContent ="space-between";
-		this.passwordLabel = document.createElement("span");
+		//this.passwordLabel = document.createElement("span");
+		this.passwordLabel = this.mvc.app.getElementIcon("icon-Password", "auto");
 		this.passwordLabel.style.width = "100%";
 		this.passwordLabel.style.margin = "2%";
-		this.passwordLabel.innerHTML = "Password* :";
+		this.passwordLabel.innerHTML = " Password* :";
 		this.passwordInput = document.createElement("input");
 		this.passwordInput.setAttribute("name", "password");
 		this.passwordInput.setAttribute("minlength","8");
@@ -215,10 +216,11 @@ class RegistrationView extends View {
 		this.confirmPasswordDiv.style.alignItems = "center";
 		this.confirmPasswordDiv.style.marginBottom = "3%";
 		//this.confirmPasswordDiv.style.justifyContent ="space-between";
-		this.confirmPasswordLabel = document.createElement("span");
+		//this.confirmPasswordLabel = document.createElement("span");
+		this.confirmPasswordLabel = this.mvc.app.getElementIcon("icon-Password", "auto");
 		this.confirmPasswordLabel.style.width = "100%";
 		this.confirmPasswordLabel.style.margin = "2%";
-		this.confirmPasswordLabel.innerHTML = "Confirm Password* :";
+		this.confirmPasswordLabel.innerHTML = " Confirm Password* :";
 		this.confirmPasswordInput = document.createElement("input");
 		this.confirmPasswordInput.setAttribute("required", "");
 		this.confirmPasswordInput.type ="password";
@@ -234,10 +236,12 @@ class RegistrationView extends View {
 		this.bioDiv.style.alignItems = "center";
 		this.bioDiv.style.marginBottom = "3%";
 		//this.bioDiv.style.justifyContent = "space-between";
-		this.bioLabel = document.createElement("span");
+		//this.bioLabel = document.createElement("span");
+		this.bioLabel = this.mvc.app.getElementIcon("icon-Bio", "auto");
+
 		//this.bioLabel.style.width = "100%";
 		this.bioLabel.style.margin = "2%";
-		this.bioLabel.innerHTML ="Bio :";
+		this.bioLabel.innerHTML =" Bio :";
 		this.bioDiv.appendChild(this.bioLabel);
 		this.bioInput = document.createElement("textarea");
 		this.bioInput.setAttribute("name", "bio");
@@ -256,9 +260,10 @@ class RegistrationView extends View {
 		this.genderDiv.style.alignItems = "center";
 		this.genderDiv.style.marginBottom = "3%";
 		//this.genderDiv.style.justifyContent = "space-between";
-		this.genderLabel = document.createElement("span");
+		//this.genderLabel = document.createElement("span");
+		this.genderLabel = this.mvc.app.getElementIcon("icon-Gender", "auto");
 		this.genderLabel.style.width = "100%";
-		this.genderLabel.innerHTML = "Gender :";
+		this.genderLabel.innerHTML = " Gender :";
 		this.genderLabel.style.margin = "2%";
 		this.comboGender = document.createElement("select");
 		this.comboGender.setAttribute("name", "gender");
@@ -287,9 +292,10 @@ class RegistrationView extends View {
 		this.yearDiv.style.alignItems = "center";
 		this.yearDiv.style.marginBottom = "3%";
 		//this.yearDiv.style.justifyContent = "space-between";
-		this.yearLabel = document.createElement("span");
+		//this.yearLabel = document.createElement("span");
+		this.yearLabel = this.mvc.app.getElementIcon("icon-Year", "auto");
 		this.yearLabel.style.width = "100%";
-		this.yearLabel.innerHTML = "Birth Year :";
+		this.yearLabel.innerHTML = " Birth Year :";
 		this.yearLabel.style.margin = "2%";
 		this.comboYear = document.createElement("select");
 		this.comboYear.setAttribute("name", "year");
@@ -315,10 +321,11 @@ class RegistrationView extends View {
 		this.regionsDiv.style.alignItems = "center";
 		this.regionsDiv.style.marginBottom = "3%";
 		//this.regDiv.style.justifyContent = "space-between";
-		this.regionsLabel = document.createElement("span");
+		//this.regionsLabel = document.createElement("span");
+		this.regionsLabel = this.mvc.app.getElementIcon("icon-Region", "auto");
 		this.regionsLabel.style.width = "100%";
 		this.regionsLabel.style.margin = "2%";
-		this.regionsLabel.innerHTML = "Region* :";
+		this.regionsLabel.innerHTML = " Region* :";
 		this.comboRegions = document.createElement("select");
 		this.comboRegions.setAttribute("name", "region");
 		this.comboRegions.setAttribute("id", "regions");
@@ -326,13 +333,6 @@ class RegistrationView extends View {
 		this.regionsDiv.appendChild(this.regionsLabel);
 		this.regionsDiv.appendChild(this.comboRegions);
 		this.form.appendChild(this.regionsDiv);
-
-/*
-		this.comboRegions.onchange = function(){
-		  this.countDiv.style.display = (this.selectedIndex == 0) ? "block" : "none";
-		}
-
-*/
 
 		// Country section
 		this.countDiv = document.createElement("div");
@@ -344,10 +344,11 @@ class RegistrationView extends View {
 		this.countDiv.style.alignItems = "center";
 		this.countDiv.style.marginBottom = "3%";
 		//this.countDiv.style.justifyContent = "space-between";
-		this.countryLabel = document.createElement("span");
+		//this.countryLabel = document.createElement("span");
+		this.countryLabel = this.mvc.app.getElementIcon("icon-Country", "auto");
 		this.countryLabel.style.width = "100%";
 		this.countryLabel.style.margin = "2%";
-		this.countryLabel.innerHTML = "Country :";
+		this.countryLabel.innerHTML = " Country :";
 		this.comboCountries = document.createElement("select");
 		this.comboCountries.setAttribute("name", "country");
 		this.countDiv.appendChild(this.countryLabel);
@@ -362,10 +363,11 @@ class RegistrationView extends View {
 		this.langDiv.style.alignItems = "center";
 		this.langDiv.style.marginBottom = "3%";
 		//this.langDiv.style.justifyContent = "space-between";
-		this.langLabel = document.createElement("span");
+		//this.langLabel = document.createElement("span");
+		this.langLabel = this.mvc.app.getElementIcon("icon-bubble", "auto");
 		this.langLabel.style.margin = "2%";
 		this.langLabel.style.width = "100%";
-		this.langLabel.innerHTML = "Languages* :";
+		this.langLabel.innerHTML = " Languages* :";
 		this.comboLanguages = document.createElement("select");
 		this.comboLanguages.setAttribute("name", "languages");
 		this.comboLanguages.setAttribute("multiple", "multiple");
@@ -382,11 +384,12 @@ class RegistrationView extends View {
 		this.gamesDiv.style.alignItems = "center";
 		this.gamesDiv.style.marginBottom = "3%";
 		//this.gamesDiv.style.justifyContent = "space-between";
-		this.gamesLabel = document.createElement("span");
+		//this.gamesLabel = document.createElement("span");
+		this.gamesLabel = this.mvc.app.getElementIcon("icon-Games", "auto");
 		this.gamesLabel.style.width = "100%";
 		this.gamesLabel.style.display = "flex";
 		this.gamesLabel.style.margin = "2%";
-		this.gamesLabel.innerHTML = "Games* :";
+		this.gamesLabel.innerHTML = " ° Games* :";
 		this.gamesAddField = document.createElement("div");
 		this.gamesAddField.style.marginBottom = "2%";
 
@@ -467,10 +470,11 @@ class RegistrationView extends View {
 		this.vocalsDiv.style.alignItems = "center";
 		this.vocalsDiv.style.marginBottom = "3%";
 		//this.vocalsDiv.style.justifyContent = "space-between";
-		this.vocalsLabel = document.createElement("span");
+		//this.vocalsLabel = document.createElement("span");
+		this.vocalsLabel = this.mvc.app.getElementIcon("icon-Vocal", "auto");
 		this.vocalsLabel.style.width = "100%";
 		this.vocalsLabel.style.margin = "2%";
-		this.vocalsLabel.innerHTML = "Vocals :";
+		this.vocalsLabel.innerHTML = " Vocals :";
 		this.comboVocals = document.createElement("select");
 		this.comboVocals.setAttribute("name", "vocals");
 		this.comboVocals.setAttribute("multiple", "multiple");
