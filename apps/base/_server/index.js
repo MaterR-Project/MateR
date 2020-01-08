@@ -242,7 +242,6 @@ class Base extends ModuleBase {
 	}
 
 	getShortConvFromId(req, res, id){
-		let conv = 404;
 		let convLstId = this.users[id].tchats;
 		let convLstFile = [];
 		let convLstLast = [];
