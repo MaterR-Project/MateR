@@ -60,17 +60,25 @@ body {
 	.profil div {
 		flex-direction: column;
 	}
-
-	.profil-element {
-
-	}
 }
 
 .profil-label {
 	margin: 10px;
 	min-width: 10%;
+	margin-bottom: 0px;
 }
 
 .profil-element  {
 	margin: 10px;
+}
+
+.game {
+	margin-left: 20px;
+	margin-bottom: 10px;
+}
+
+.game .property {
+	margin-left: 20px;
+	display: flex;
+	flex-direction: row;
 }
