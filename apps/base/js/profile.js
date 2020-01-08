@@ -80,21 +80,6 @@ class ProfileView extends View {
 
 		this.profileData = document.createElement("div");
 		this.profileData.setAttribute("class","profil");
-/*
-		// set the scroll box height depending on device resolution
-		this.profileData.style.width = "70%";
-		if (sizeWidth > 1200) {
-			  this.profileData.style.width = "45%";
-			  this.profileData.style.height = "150%";
-			  this.mainDiv.style.height = "100%";
-		}
-		else if (sizeWidth > 992) {
-			this.profileData.style.width = "55%";
-		}
-		else if (sizeWidth > 768){
-			this.profileData.style.width = "60%";
-		}
-*/
 
 		// fill profile data with fields :
 			// bio
@@ -196,49 +181,48 @@ class ProfileView extends View {
 			this.mailDiv.appendChild(this.mail);
 			this.profileData.appendChild(this.mailDiv);
 
-			// ask old password
-			this.oldPwdDiv =document.createElement("div");
-			this.oldPwdDiv.style.display = "flex";
-			this.oldPwdDiv.style.height = "35%";
-			this.oldPwdDiv.style.alignItems = "center";
-			this.oldPwdDiv.style.justifyContent ="space-between";
-			this.oldPwd = document.createElement("h4");
-			this.oldPwd.innerHTML = "Input your old password :"
-			this.oldPwdText = document.createElement("input");
-			this.oldPwdText.type ="password";
-			this.oldPwdDiv.appendChild(this.oldPwd);
-			this.oldPwdDiv.appendChild(this.oldPwdText);
-			this.profileData.appendChild(this.oldPwdDiv);
+			// old password
+			this.oldPswDiv = document.createElement("div");
+			this.oldPswLabel = document.createElement("h4");
+			this.oldPswLabel.setAttribute("class","profil-label");
+			this.oldPswLabel.innerHTML = "Input your old password :";
+			this.oldPswDiv.appendChild(this.oldPswLabel);
+			this.oldPsw = document.createElement("input");
+			this.oldPsw.setAttribute("type","password");
+			this.oldPsw.setAttribute("class","profil-element");
+			this.oldPswDiv.appendChild(this.oldPsw);
+			this.profileData.appendChild(this.oldPswDiv);
+
 			// new password
-			this.newPwdDiv1 =document.createElement("div");
-			this.newPwdDiv1.style.display = "flex";
-			this.newPwdDiv1.style.height = "35%";
-			this.newPwdDiv1.style.alignItems = "center";
-			this.newPwdDiv1.style.justifyContent ="space-between";
-			this.newPwd1 = document.createElement("h4");
-			this.newPwd1.innerHTML = "Input your new password :";
-			this.newPwd1Text = document.createElement("input");
-			this.newPwd1Text.type ="password";
-			this.newPwdDiv1.appendChild(this.newPwd1);
-			this.newPwdDiv1.appendChild(this.newPwd1Text);
-			this.profileData.appendChild(this.newPwdDiv1);
-			// new password confirmation
-			this.newPwdDiv2 =document.createElement("div");
-			this.newPwdDiv2.style.display = "flex";
-			this.newPwdDiv2.style.height = "35%";
-			this.newPwdDiv2.style.alignItems = "center";
-			this.newPwdDiv2.style.justifyContent ="space-between";
-			this.newPwd2 = document.createElement("h4");
-			this.newPwd2.innerHTML = "Confirm your new password :";
-			this.newPwd2Text = document.createElement("input");
-			this.newPwd2Text.type ="password";
-			this.newPwdDiv2.appendChild(this.newPwd2);
-			this.newPwdDiv2.appendChild(this.newPwd2Text);
-			this.profileData.appendChild(this.newPwdDiv2);
-        this.mainDiv.appendChild(this.profileData);
+			this.newPswDiv = document.createElement("div");
+			this.newPswLabel = document.createElement("h4");
+			this.newPswLabel.setAttribute("class","profil-label");
+			this.newPswLabel.innerHTML = "Input your new password :";
+			this.newPswDiv.appendChild(this.newPswLabel);
+			this.newPsw = document.createElement("input");
+			this.newPsw.setAttribute("type","password");
+			this.newPsw.setAttribute("class","profil-element");
+			this.newPswDiv.appendChild(this.newPsw);
+			this.profileData.appendChild(this.newPswDiv);
+
+			// conf password
+			this.confPswDiv = document.createElement("div");
+			this.confPswLabel = document.createElement("h4");
+			this.confPswLabel.setAttribute("class","profil-label");
+			this.confPswLabel.innerHTML = "Confirm your new password :";
+			this.confPswDiv.appendChild(this.confPswLabel);
+			this.confPsw = document.createElement("input");
+			this.confPsw.setAttribute("type","password");
+			this.confPsw.setAttribute("class","profil-element");
+			this.confPswDiv.appendChild(this.confPsw);
+			this.profileData.appendChild(this.confPswDiv);
+
+    this.mainDiv.appendChild(this.profileData);
+
+		this.footer = document.createElement("div");
 
 		this.bottomDiv = document.createElement("div");
-		this.bottomDiv.style.display = "flex";
+		this.bottomDiv.style.display = "flex";has
 		this.bottomDiv.style.justifyContent = "space-around";
 		this.bottomDiv.style.width = "100%";
 		this.mainDiv.appendChild(this.bottomDiv)

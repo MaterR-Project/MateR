@@ -52,12 +52,13 @@ body {
 	}
 
 	.profil-element {
-		
+
 	}
 }
 
 .profil-label {
 	margin: 10px;
+	min-width: 10%;
 }
 
 .profil-element  {
