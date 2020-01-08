@@ -8,92 +8,12 @@ class ProfileModel extends Model {
 		super.initialize(mvc);
 
 	}
-	setSessionId(ssid){
-		this.ssid = ssid;
-		console.log(this.ssid);
-	}
-	async getLanguages(){
-		let request = "getLanguagesFromDatabase";
-		this.languages = await Comm.get(request);
-		return this.languages.response.return;
-	}
-	async getRegions (){
-		let request = "getRegionsFromDatabase";
-		this.database = await Comm.get(request);
-		this.list = this.database.response.return
-		return this.list;
-	}
-	async getVocals(){
-		let request = "getVocalsFromDatabase";
-		this.vocals = await Comm.get(request);
-		return this.vocals.response.return;
-	}
-	async getGames(){
-		let request = "getGameNamesFromDatabase";
-		this.games = await Comm.get(request);
-		return this.games.response.return;
-	}
-	async getProfileFromSsid(){
-		let request = "getProfileFromSessionId/"+this.ssid;
-		this.profile = await Comm.get(request);
-		return this.profile.response.return;
-	}
-	async getGamePlatform(name){
-		let request = "getGamePlatformsFromGameName/" + name;
-		this.platformForGame = await Comm.get(request);
-		return this.profile.response.return;
-	}
-	async getRegionCountriesFromRegionName(reg){
-		let request = "getRegionCountriesFromRegionName/" + reg;
-		this.countries = await Comm.get(request);
-		return this.countries.response.return;
-	}
 
-	async getFormatedProfile(){
-		this.rawProfile = await this.getProfileFromSsid();
-		trace(this.rawProfile);
-		this.formatedProfile = [];
-		this.formatedProfile.push(this.rawProfile.bio);
-		//games
-		this.gamesList = await this.getGames();
-		let profileGames = []
-		this.rawProfile.games.map(e =>{
-			let currentGame = []
-			this.pos = this.gamesList.indexOf(e.name);
-			let platformPos =
-			currentGame.push(this.pos);
-		})
-
-		this.formatedProfile.push(currentGame);
-		//vocals
-		this.vocalList = await this.getVocals();
-		let profileVoc = [];
-		this.rawProfile.vocals.map(e => {
-			this.pos = this.vocalList.indexOf(e);
-			profileVoc.push(this.pos);
-		})
-		this.formatedProfile.push(profileVoc);
-		//languages
-		this.langList = await this.getLanguages();
-		let profileLang = [];
-		this.rawProfile.languages.map(e => {
-			this.pos = this.langList.indexOf(e);
-			profileLang.push(this.pos);
-		})
-		this.formatedProfile.push(profileLang);
-		//region
-		this.regList = await this.getRegions();
-		this.pos = this.regList.indexOf(this.rawProfile.region);
-		this.formatedProfile.push(this.pos);
-		//country
-		this.countList = await this.getRegionCountriesFromRegionName(this.rawProfile.region);
-		this.pos = this.countList.indexOf(this.rawProfile.country);
-		this.formatedProfile.push(this.pos);
-		//birth year
-		this.formatedProfile.push(this.rawProfile.year)
-		//gender
-		this.formatedProfile.push(this.rawProfile.gender);
-		trace(this.formatedProfile);
+	async getProfile(){
+		trace("get session id");
+		let result = await Comm.get("getProfileFromSessionId/"+this.mvc.app.autenticationMVC.model.sessionId);
+		trace(result);
+		return result.response.return;
 	}
 }
 
@@ -106,27 +26,27 @@ class ProfileView extends View {
 
 	initialize(mvc) {
 		super.initialize(mvc);
-	    this.stage.style.display = "flex";
-        // axe y
-        this.stage.style.alignItems = "center";
-        // axe x
-        this.stage.style.justifyContent = "center";
+	  this.stage.style.display = "flex";
+    // axe y
+    this.stage.style.alignItems = "center";
+    // axe x
+    this.stage.style.justifyContent = "center";
 
-        // View main div
-        this.mainDiv = document.createElement("div");
+    // View main div
+    this.mainDiv = document.createElement("div");
 
-        this.mainDiv.style.alignItems = "center";
-        this.mainDiv.style.justifyContent = "center";
+    this.mainDiv.style.alignItems = "center";
+    this.mainDiv.style.justifyContent = "center";
 		this.mainDiv.style.display = "flex";
 		this.mainDiv.style.justifyContent = "space-between";
 		this.mainDiv.style.height = "90%";
 		this.mainDiv.style.width = "100%";
-        this.mainDiv.style.flexDirection = "column";
-        this.stage.appendChild(this.mainDiv);
+    this.mainDiv.style.flexDirection = "column";
+    this.stage.appendChild(this.mainDiv);
 
 		this.topBtnDiv = document.createElement("div");
 		this.mainDiv.appendChild(this.topBtnDiv);
-		
+
 		this.topBtnDiv.style.display = "flex";
 		this.topBtnDiv.style.justifyContent = "space-between"
 		this.topBtnDiv.style.width ="100%";
@@ -145,7 +65,7 @@ class ProfileView extends View {
 		this.nameDiv.style.display = "flex";
 		this.nameDiv.style.alignItems = "center";
 		this.nameDiv.style.justifyContent = "space-evenly";
-		this.nameDiv.style.marginTop = "15%";
+		//this.nameDiv.style.marginTop = "15%";
 		this.mainDiv.appendChild(this.nameDiv);
 
 		this.profileName = document.createElement("h1");
@@ -159,10 +79,8 @@ class ProfileView extends View {
 		let sizeWidth = window.screen.width;
 
 		this.profileData = document.createElement("div");
-		this.profileData.style.fontSize = "20px";
-		this.profileData.style.overflow = "auto";
-		this.profileData.style.marginBottom = "15%";
-		this.profileData.style.height = "75%";
+		this.profileData.setAttribute("class","profil");
+/*
 		// set the scroll box height depending on device resolution
 		this.profileData.style.width = "70%";
 		if (sizeWidth > 1200) {
@@ -176,131 +94,108 @@ class ProfileView extends View {
 		else if (sizeWidth > 768){
 			this.profileData.style.width = "60%";
 		}
+*/
+
 		// fill profile data with fields :
-			// bio section
+			// bio
 			this.bioDiv = document.createElement("div");
-			this.bioDiv.style.display = "flex";
-			this.bioDiv.style.height = "15%";
-			this.bioDiv.style.alignItems = "center";
-			this.bioDiv.style.justifyContent = "space-between";
-			this.bio = document.createElement("h4");
-			this.bio.innerHTML ="Bio :";
+			this.bioLabel = document.createElement("h4");
+			this.bioLabel.setAttribute("class","profil-label");
+			this.bioLabel.innerHTML = "bio : ";
+			this.bioDiv.appendChild(this.bioLabel);
+			this.bio = document.createElement("div");
+			this.bio.setAttribute("class","profil-element");
 			this.bioDiv.appendChild(this.bio);
-			this.bioText = document.createElement("div");
-			this.bioText.style.width = "70%";
-			this.bioText.contentEditable = "true";
-			this.bioText.innerHTML = "This is my bio";
-			this.bioDiv.appendChild(this.bioText);
 			this.profileData.appendChild(this.bioDiv);
-			//games section
+
+			//games
 			this.gamesDiv = document.createElement("div");
-			this.gamesDiv.style.display = "flex";
-			this.gamesDiv.style.height = "15%";
-			this.gamesDiv.style.alignItems = "center";
-			this.gamesDiv.style.justifyContent = "space-between";
-			this.games = document.createElement("h4");
-			this.games.innerHTML = "Games :";
-			this.comboGame = document.createElement("select");
+			this.gamesLabel = document.createElement("h4");
+			this.gamesLabel.setAttribute("class","profil-label");
+			this.gamesLabel.innerHTML = "games : ";
+			this.gamesDiv.appendChild(this.gamesLabel);
+			this.games = document.createElement("div");
+			this.games.setAttribute("class","profil-element");
 			this.gamesDiv.appendChild(this.games);
-			this.gamesDiv.appendChild(this.comboGame);
 			this.profileData.appendChild(this.gamesDiv);
-			// vocals section
+
+			// vocals
 			this.vocalsDiv = document.createElement("div");
-			this.vocalsDiv.style.display = "flex";
-			this.vocalsDiv.style.height = "15%";
-			this.vocalsDiv.style.alignItems = "center";
-			this.vocalsDiv.style.justifyContent = "space-between";
-			this.vocals = document.createElement("h4");
-			this.vocals.innerHTML = "Vocals :";
-			this.comboVocals = document.createElement("select");
+			this.vocalsLabel = document.createElement("h4");
+			this.vocalsLabel.setAttribute("class","profil-label");
+			this.vocalsLabel.innerHTML = "vocals : ";
+			this.vocalsDiv.appendChild(this.vocalsLabel);
+			this.vocals = document.createElement("div");
+			this.vocals.setAttribute("class","profil-element");
 			this.vocalsDiv.appendChild(this.vocals);
-			this.vocalsDiv.appendChild(this.comboVocals);
 			this.profileData.appendChild(this.vocalsDiv);
-			// Lang section
-			this.langDiv = document.createElement("div");
-			this.langDiv.style.display = "flex";
-			this.langDiv.style.height = "15%";
-			this.langDiv.style.alignItems = "center";
-			this.langDiv.style.justifyContent = "space-between";
-			this.lang = document.createElement("h4");
-			this.lang.innerHTML = "Languages :";
-			this.comboLang = document.createElement("select");
-			this.langDiv.appendChild(this.lang);
-			this.langDiv.appendChild(this.comboLang);
-			this.profileData.appendChild(this.langDiv);
-			// Reg section
-			this.regDiv = document.createElement("div");
-			this.regDiv.style.display = "flex";
-			this.regDiv.style.height = "15%";
-			this.regDiv.style.alignItems = "center";
-			this.regDiv.style.justifyContent = "space-between";
-			this.reg = document.createElement("h4");
-			this.reg.innerHTML = "Region :";
-			this.comboReg = document.createElement("select");
-			console.log("set id")
-			this.comboReg.id = "regionCombo";
-			this.regDiv.appendChild(this.reg);
-			this.regDiv.appendChild(this.comboReg);
-			this.profileData.appendChild(this.regDiv);
-			// Country section
-			this.countDiv = document.createElement("div");
-			this.countDiv.style.display = "flex";
-			this.countDiv.style.height = "15%";
-			this.countDiv.style.alignItems = "center";
-			this.countDiv.style.justifyContent = "space-between";
-			this.country = document.createElement("h4");
-			this.country.innerHTML = "Country :";
-			this.comboCount = document.createElement("select");
-			this.countDiv.appendChild(this.country);
-			this.countDiv.appendChild(this.comboCount);
-			this.profileData.appendChild(this.countDiv);
-			// Year section (brith year)
-			this.yearDiv = document.createElement("div");
-			this.yearDiv.style.display = "flex";
-			this.yearDiv.style.height = "15%";
-			this.yearDiv.style.alignItems = "center";
-			this.yearDiv.style.justifyContent = "space-between";
-			this.year = document.createElement("h4");
-			this.year.innerHTML = "Birth Year :";
-			this.comboYear = document.createElement("select");
-			// add an entry for earch 120 year before now
-			var currentYear = new Date().getFullYear()
-			var option = "";
-			for (var i = currentYear-120 ; i <= currentYear; i++) {
-				var option = document.createElement("option");
-				option.text = i;
-				option.value = i;
-				this.comboYear.appendChild(option)
-				
-			}
-			this.yearDiv.appendChild(this.year);
-			this.yearDiv.appendChild(this.comboYear);
-			this.profileData.appendChild(this.yearDiv);
-			// Gender section
+
+			// Lang
+			this.languagesDiv = document.createElement("div");
+			this.languagesLabel = document.createElement("h4");
+			this.languagesLabel.setAttribute("class","profil-label");
+			this.languagesLabel.innerHTML = "languages : ";
+			this.languagesDiv.appendChild(this.languagesLabel);
+			this.languages = document.createElement("div");
+			this.languages.setAttribute("class","profil-element");
+			this.languagesDiv.appendChild(this.languages);
+			this.profileData.appendChild(this.languagesDiv);
+
+			// Reg
+			this.regionDiv = document.createElement("div");
+			this.regionLabel = document.createElement("h4");
+			this.regionLabel.setAttribute("class","profil-label");
+			this.regionLabel.innerHTML = "region : ";
+			this.regionDiv.appendChild(this.regionLabel);
+			this.region = document.createElement("div");
+			this.region.setAttribute("class","profil-element");
+			this.regionDiv.appendChild(this.region);
+			this.profileData.appendChild(this.regionDiv);
+
+			// Country
+			this.countryDiv = document.createElement("div");
+			this.countryLabel = document.createElement("h4");
+			this.countryLabel.setAttribute("class","profil-label");
+			this.countryLabel.innerHTML = "country : ";
+			this.countryDiv.appendChild(this.countryLabel);
+			this.country = document.createElement("div");
+			this.country.setAttribute("class","profil-element");
+			this.countryDiv.appendChild(this.country);
+			this.profileData.appendChild(this.countryDiv);
+
+			// Year (brith year)
+			this.ageDiv = document.createElement("div");
+			this.ageLabel = document.createElement("h4");
+			this.ageLabel.setAttribute("class","profil-label");
+			this.ageLabel.innerHTML = "age : ";
+			this.ageDiv.appendChild(this.ageLabel);
+			this.age = document.createElement("div");
+			this.age.setAttribute("class","profil-element");
+			this.ageDiv.appendChild(this.age);
+			this.profileData.appendChild(this.ageDiv);
+
+			// Gender
 			this.genderDiv = document.createElement("div");
-			this.genderDiv.style.display = "flex";
-			this.genderDiv.style.height = "15%";
-			this.genderDiv.style.alignItems = "center";
-			this.genderDiv.style.justifyContent = "space-between";
-			this.gender = document.createElement("h4");
-			this.gender.innerHTML = "Gender :";
-			this.comboGender = document.createElement("select");
-			// add undefined male and female options
-			this.undefinedGender = document.createElement("option");
-			this.undefinedGender.value = "0";
-			this.undefinedGender.appendChild (document.createTextNode("Gamer 8)"));
-			this.maleGender = document.createElement("option");
-			this.maleGender.value = "1";
-			this.maleGender.appendChild (document.createTextNode("Male"));
-			this.femaleGender = document.createElement("option");
-			this.femaleGender.value = "2";
-			this.femaleGender.appendChild (document.createTextNode("Female"));
-			this.comboGender.appendChild(this.undefinedGender);
-			this.comboGender.appendChild(this.maleGender);
-			this.comboGender.appendChild(this.femaleGender);
+			this.genderLabel = document.createElement("h4");
+			this.genderLabel.setAttribute("class","profil-label");
+			this.genderLabel.innerHTML = "gender : ";
+			this.genderDiv.appendChild(this.genderLabel);
+			this.gender = document.createElement("div");
+			this.gender.setAttribute("class","profil-element");
 			this.genderDiv.appendChild(this.gender);
-			this.genderDiv.appendChild(this.comboGender);
 			this.profileData.appendChild(this.genderDiv);
+
+			// Mail
+			this.mailDiv = document.createElement("div");
+			this.mailLabel = document.createElement("h4");
+			this.mailLabel.setAttribute("class","profil-label");
+			this.mailLabel.innerHTML = "mail : ";
+			this.mailDiv.appendChild(this.mailLabel);
+			this.mail = document.createElement("div");
+			this.mail.setAttribute("class","profil-element");
+			this.mailDiv.appendChild(this.mail);
+			this.profileData.appendChild(this.mailDiv);
+
 			// ask old password
 			this.oldPwdDiv =document.createElement("div");
 			this.oldPwdDiv.style.display = "flex";
@@ -357,19 +252,12 @@ class ProfileView extends View {
 		this.searchButton.innerHTML = "Search";
 		this.searchButton.style.fontSize = "15px";
 		this.bottomDiv.appendChild(this.searchButton);
-
-
-
 	}
 
-	attach(parent, ssid){
-		this.mvc.controller.initProfile(ssid);
-		super.attach(parent);
-	}
 	// activate UI
 	activate() {
-		// passer au modele le ssid
-		this.mvc.controller.grabRegions();
+		//this.mvc.controller.grabRegions();
+		this.mvc.controller.initProfil();
 		super.activate();
 		this.addListeners(); // listen to events
 	}
@@ -386,7 +274,7 @@ class ProfileView extends View {
 
 		this.searchHandler = e => this.searchClick(e);
 		this.searchButton.addEventListener("click", 	this.searchHandler);
-		
+
 		this.applyHandler = e => this.applyClick(e);
 		this.applyButton.addEventListener("click", 		this.applyHandler);
 
@@ -420,38 +308,21 @@ class ProfileView extends View {
 	}
 	/* -------------------------------------------------------------------- */
 
-	update(data) {
-		/*while(this.table.firstChild) this.table.removeChild(this.table.firstChild); // empty table
-		data.forEach(el => { // loop data
-			let line = document.createElement("tr"); // create line
-			Object.keys(el).forEach(key => { // loop object keys
-				let cell = document.createElement("td"); // create cell
-				cell.innerHTML = el[key]; // display
-				line.appendChild(cell); // add cell
-			});
-			this.table.appendChild(line); // add line
-		});*/
-		console.log("useless data");
-	}
-    displayProfile(data, regions){
-		//display the profile
-		console.log("in display");
-		this.bioText.innerHTML = data.bio;
-		this.comboReg.value = regions.indexOf(data.region);
+	updateProfil(data) {
+		console.log(data);
+		this.profileName.innerHTML = data.username;
+		this.bio.innerHTML = data.bio;
+		this.games.innerHTML = data.games;
 
+		this.vocals.innerHTML = data.vocals;
+		this.languages.innerHTML = data.languages;
+		this.region.innerHTML = data.region;
+		this.country.innerHTML = data.country;
+		this.age.innerHTML = new Date().getFullYear() - data.year;
+		this.gender.innerHTML = data.gender;
+		this.mail.innerHTML = data.mail;
 	}
-	createRgeionEntries(data){
-		this.regionsList = data;
-		let inc = 0;
-		let combo = this.comboReg;
-		data.map(element => {
-			let entry = document.createElement("option");
-			entry.value = inc;
-			entry.text = element;
-			combo.appendChild(entry);
-			inc++;
-		})
-	}
+
 }
 
 class ProfileController extends Controller {
@@ -485,11 +356,9 @@ class ProfileController extends Controller {
 		this.mvc.app.mvcTest.view.attach(document.body); // attach view of menu MVC
 		this.mvc.app.mvcTest.view.activate(); 			 // activate user interface of menu MVC
 	}
-	async initProfile(ssid){
-		this.mvc.model.setSessionId(ssid);
-		this.mvc.view.displayProfile(await this.mvc.model.getFormatedProfile());
+
+	async initProfil(){
+		this.mvc.view.updateProfil(await this.mvc.model.getProfile());
 	}
-	async grabRegions(){
-		this.mvc.view.createRgeionEntries(await this.mvc.model.getRegions());
-	}
+
 }
