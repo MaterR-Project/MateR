@@ -11,7 +11,7 @@ class ProfileModel extends Model {
 
 	async getProfile(){
 		trace("get session id");
-		let result = await Comm.get("getProfileFromSessionId/"+this.mvc.app.autenticationMVC.model.sessionId);
+		let result = await Comm.get("getProfileFromSessionId/"+this.mvc.app.authenticationMVC.model.sessionId);
 		trace(result);
 		this.id = result.response.return.id;
 		return result.response.return;
@@ -236,10 +236,15 @@ class ProfileView extends View {
 
 	}
 
+	attach(parent){
+		super.attach(parent);
+		trace("init profile");
+		this.mvc.controller.initProfil();
+	}
+
 	// activate UI
 	activate() {
 		//this.mvc.controller.grabRegions();
-		this.mvc.controller.initProfil();
 		super.activate();
 		this.addListeners(); // listen to events
 	}

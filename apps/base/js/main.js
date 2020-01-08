@@ -19,8 +19,8 @@ class Base {
 		this.profileMVC = new MVC("profileMVC", this, new ProfileModel(), new ProfileView(), new ProfileController());
 		await this.profileMVC.initialize();
 
-		this.autenticationMVC.view.attach(document.body);
-		this.autenticationMVC.view.activate();
+		this.authenticationMVC.view.attach(document.body);
+		this.authenticationMVC.view.activate();
 
 	}
 
