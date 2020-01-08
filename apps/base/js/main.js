@@ -10,13 +10,15 @@ class Base {
 
 	async initialize() {
 
+/*
 		this.iospace = "baseapp"; // IO namespace for this app
 		this.io = io.connect("http://localhost/" + this.iospace); // connect socket.io
 		this.io.on("connect", () => this.onIOConnect()); // listen connect event
-
+*/
+/*
 		this.testMVC = new MVC("myMVC", this, new MyModel(), new MyView(), new MyController()); // init app MVC
 		await this.testMVC.initialize(); // run init async tasks
-
+*/
 		this.autenticationMVC = new MVC("autenticationMVC", this, new AutenticationModel(), new AutenticationView(), new AutenticationController()); // init app MVC
 		await this.autenticationMVC.initialize(); // run init async tasks
 
@@ -28,12 +30,26 @@ class Base {
 	/**
 	 * @method test : test server GET fetch
 	 */
+/*
 	async test() {
 		console.log("test server hello method");
 		let result = await Comm.get("hello/everyone"); // call server hello method with argument "everyone"
 		console.log("result", result);
 		console.log("response", result.response);
 	}
+*/
+
+		/**
+		 * @method initSocket : connect socket
+		 */
+		initSocket(sessionId) {
+			trace("init socket");
+			this.io = io();
+			this.io.emit('authentication', sessionId);
+			this.io.on('message', msg => {
+				this.conversationMVC.model.updateConversation();	// TODO remplacer par fonction qui gere les message recu
+			});
+		}
 
 	/**
 	 * @method onIOConnect : socket is connected
@@ -54,6 +70,7 @@ class Base {
 	}
 }
 
+/*
 class MyModel extends Model {
 
 	constructor() {
@@ -182,3 +199,4 @@ class MyController extends Controller {
 	}
 
 }
+*/

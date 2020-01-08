@@ -15,6 +15,7 @@ class Base extends ModuleBase {
 		this.playstyles = JSON.parse(fs.readFileSync('database/playstyles.json', 'utf8'));
 		this.users = JSON.parse(fs.readFileSync('database/users.json', 'utf8'));
 		this.vocals = JSON.parse(fs.readFileSync('database/vocals.json', 'utf8'));
+		this.sessions = new Map();
 		this.sessionIds = new Map();
 
 		//trace(this.users,this.languages,this.levels,this.locals,this.playstyles,this.vocals);
@@ -22,18 +23,18 @@ class Base extends ModuleBase {
 		// Create game names list
 		this.gamesName = new Array();
 		this.games.map(game => {this.gamesName.push(game.name)});
-		trace(this.gamesName,"\n\n");
+		//trace(this.gamesName,"\n\n");
 
 		// Create region names list
 		this.regions = new Array();
 		this.locals.map(local => {this.regions.push(local.name)});
-		trace(this.regions,"\n\n");
+		//trace(this.regions,"\n\n");
 
 		// Tests
-		this.gamesName.map(name => {trace(name,"\n")});
-		trace(this.games[0],"\n",this.games[0].crossplay);
-		trace(this.users.length,"\n",this.users[0]);
-		trace(this.languages,"\n",this.languages.length);
+		//this.gamesName.map(name => {trace(name,"\n")});
+		//trace(this.games[0],"\n",this.games[0].crossplay);
+		//trace(this.users.length,"\n",this.users[0]);
+		//trace(this.languages,"\n",this.languages.length);
 	}
 
 	/**

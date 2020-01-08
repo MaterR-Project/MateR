@@ -169,8 +169,9 @@ class AutenticationController extends Controller {
 			if (this.mvc.model.sessionId == undefined) {
 				this.mvc.view.updateWrongPsw(response.return);
 			}else{
+				this.mvc.app.initSocket(this.mvc.model.sessionId);
 				this.mvc.view.destroy();
-		    this.mvc.app.profileMVC.view.attach(document.body,this.mvc.model.sessionId);
+		    this.mvc.app.profileMVC.view.attach(document.body);
 		    this.mvc.app.profileMVC.view.activate();
 			}
 		}
