@@ -197,6 +197,8 @@ class RegistrationView extends View {
 		this.passwordLabel.innerHTML = "Password* :";
 		this.passwordInput = document.createElement("input");
 		this.passwordInput.setAttribute("name", "password");
+		this.passwordInput.setAttribute("minlength","8");
+		this.passwordInput.setAttribute("maxlength","32");
 		this.passwordInput.setAttribute("required", "");
 		this.passwordInput.type ="password";
 		this.passwordDiv.appendChild(this.passwordLabel);
@@ -575,6 +577,8 @@ class RegistrationView extends View {
 	createAccountButtonClick(){
 		if (this.passwordInput.value == this.confirmPasswordInput.value){
 			const FD = new FormData(this.form);
+			trace(FD, FD.password);
+			FD.set("password", sha512(this.passwordInput.value));
 			this.mvc.controller.createAccountButtonWasClicked(FD);
 		}
 		else{
@@ -783,7 +787,7 @@ class RegistrationControler extends Controller {
 		else {
 			trace(result.response);
 			this.mvc.view.fillErrorDisplay(result.response.message);
-			// Go to profile
+			// TO DO Go to profile
 			/*
 			this.mvc.view.destroy();
 			this.mvc.app.mvcProfile.view.attach(document.body); // attach view
@@ -793,11 +797,9 @@ class RegistrationControler extends Controller {
 	}
 
 	loginButtonWasClicked(){
-		/*
 		this.mvc.view.destroy();
 		this.mvc.app.mvcAuthentication.view.attach(document.body); // attach view
 		this.mvc.app.mvcAuthentication.view.activate(); // activate auth interface
-		*/
 	}
 
 }
