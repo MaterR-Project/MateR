@@ -173,16 +173,16 @@ class AutenticationController extends Controller {
 			}else{
 				this.mvc.app.initSocket(this.mvc.model.sessionId);
 				this.mvc.view.destroy();
-		    this.mvc.app.mvcProfile.view.attach(document.body);
-		    this.mvc.app.mvcProfile.view.activate();
+		    this.mvc.app.profileMVC.view.attach(document.body);
+		    this.mvc.app.profileMVC.view.activate();
 			}
 		}
   }
 
 	async createAccountBtnWasClicked() {
     this.mvc.view.destroy();
-    this.mvc.app.mvcRegistration.view.attach(document.body);
-    this.mvc.app.mvcRegistration.view.activate();
+    this.mvc.app.registrationMVC.view.attach(document.body);
+    this.mvc.app.registrationMVC.view.activate();
   }
 
 	verifyPassword(password){

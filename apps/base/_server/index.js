@@ -282,7 +282,7 @@ class Base extends ModuleBase {
 			this.sessionIds.set(sessionId, profil.id);
 			this.sendJSON(req, res, 200, {return: sessionId});
 		}else{
-			this.sendJSON(req, res, 401, {return: "wrong login or password"});
+			this.sendJSON(req, res, 401, {return: "Wrong Login or Password"});
 		}
 	}
 
@@ -456,7 +456,7 @@ class Base extends ModuleBase {
 		});
 		return taken;
 	}
-	
+
 	/**
 	 * @method createSessionId : create a session id
 	 */

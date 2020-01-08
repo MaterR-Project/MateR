@@ -10,11 +10,11 @@ class Base {
 
 	async initialize() {
 
-		this.mvcRegistration = new MVC("mvcRegistration", this, new RegistrationModel(), new RegistrationView(), new RegistrationControler());
-		await this.mvcRegistration.initialize(); // run init async tasks
+		this.registrationMVC = new MVC("registrationMVC", this, new RegistrationModel(), new RegistrationView(), new RegistrationControler());
+		await this.registrationMVC.initialize(); // run init async tasks
 
-		this.mvcAuthentication = new MVC("mvcAuthentication", this, new AutenticationModel(), new AutenticationView(), new AutenticationController()); // init app MVC
-		await this.mvcAuthentication.initialize(); // run init async tasks
+		this.authenticationMVC = new MVC("authenticationMVC", this, new AutenticationModel(), new AutenticationView(), new AutenticationController()); // init app MVC
+		await this.authenticationMVC.initialize(); // run init async tasks
 
 		this.tchatMVC = new MVC("tchatMVC", this, new TchatModel(), new TchatView(), new TchatController()); // init app MVC
 		await this.tchatMVC.initialize(); // run init async tasks
