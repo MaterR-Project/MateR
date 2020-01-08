@@ -16,9 +16,8 @@ class Base extends ModuleBase {
 		this.playstyles = JSON.parse(fs.readFileSync('database/playstyles.json', 'utf8'));
 		this.users = JSON.parse(fs.readFileSync('database/users.json', 'utf8'));
 		this.vocals = JSON.parse(fs.readFileSync('database/vocals.json', 'utf8'));
-		this.sessions = new Map();
 		this.sessionIds = new Map();
-		this.ssessions = new Map();
+		this.sessions = new Map();
 		//trace(this.users,this.languages,this.levels,this.locals,this.playstyles,this.vocals);
 
 		// Create game names list
