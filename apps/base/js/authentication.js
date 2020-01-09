@@ -128,7 +128,7 @@ class AutenticationView extends View {
 	// activate UI
 	activate() {
 		super.activate();
-		this.passwordLabel.value = ""
+		this.passwordInput.value = ""
 		this.addListeners(); // listen to events
 	}
 
