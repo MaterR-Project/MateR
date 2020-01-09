@@ -34,7 +34,7 @@ class Base {
 		 * @method initSocket : connect socket
 		 */
 		initSocket(id) {
-			trace("init socket");
+			//trace("init socket");
 			this.io = io();
 			this.io.emit('authentication', id);
 			this.io.on('message', msg => {

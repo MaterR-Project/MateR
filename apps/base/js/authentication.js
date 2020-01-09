@@ -14,11 +14,11 @@ class AutenticationModel extends Model {
 	async login(pseudo, password) {
 		trace("get session id");
 		let result = await Comm.get("login/"+pseudo+"/"+password);
-		trace(result);
+		//trace(result);
 		if (result.status == 200) {
 			this.sessionId = result.response.return;
 		}
-		trace(this.sessionId);
+		//trace(this.sessionId);
 		return result.response;
 	}
 
