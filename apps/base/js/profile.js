@@ -357,8 +357,6 @@ class ProfileView extends View {
 	updateProfile(data) {
 		console.log(data);
 
-		let profileData = this.profileData.cloneNode(true);
-
 		this.mail.innerHTML = data.mail;
 		this.profileName.innerHTML = data.username;
 		this.mail.innerHTML = data.mail;
@@ -368,9 +366,13 @@ class ProfileView extends View {
 		this.region.innerHTML = data.region;
 		this.country.innerHTML = data.country;
 		this.languages.innerHTML = data.languages.join(', ');
+
+		this.games.innerHTML = "";
 		data.games.forEach( game => this.addGameToDisplay(game));
-		//this.vocals.innerHTML = data.vocals.join(', ');
-		data.vocals.forEach(e => {
+
+		this.vocals.innerHTML = "";
+		data.vocals.forEach((e, _, vocals) => {
+			trace(vocals)
 			let div = document.createElement("div");
 			div.style.display = "flex";
 			div.style.flexDirection = "row";
@@ -378,7 +380,9 @@ class ProfileView extends View {
 			icon.style.marginLeft = "5px";
 			icon.style.marginRight = "5px";
 			div.appendChild(icon);
-			div.append(e+", ");
+			if (e == vocals[vocals.length-1]) {
+				div.append(e);
+			}else div.append(e+", ");
 			this.vocals.appendChild(div);
 		});
 
