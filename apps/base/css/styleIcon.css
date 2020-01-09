@@ -215,6 +215,7 @@
 }
 .icon-MacOS:before {
   content: "\eabf";
+  color: #3880C8;
 }
 .icon-Android:before {
   content: "\eac0";
