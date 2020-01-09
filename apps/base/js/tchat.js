@@ -238,7 +238,11 @@ class TchatView extends View {
         let timeStamp = document.createElement("div");
         messageHeader.appendChild(timeStamp);
         var time = new Date();
-        timeStamp.innerHTML = time.getHours()+":"+ time.getMinutes();
+				let minutes = time.getMinutes();
+				let hours = time.getHours();
+				if (minutes < 10) minutes = "0"+minutes;
+				if (hours < 10) hours = "0"+hours;
+        timeStamp.innerHTML = hours+":"+ minutes;
         //timeStamp.
         // scroll to the bottom of the conversation aka newest messages
         this.convDiv.scrollTo(0, this.convDiv.scrollHeight);
@@ -256,7 +260,11 @@ class TchatView extends View {
             let timeStamp = document.createElement("div");  //set time to sent time
             lastMessage.appendChild(timeStamp);
             var time = new Date();
-            timeStamp.innerHTML = time.getHours()+":"+ time.getMinutes();
+						let minutes = time.getMinutes();
+						let hours = time.getHours();
+						if (minutes < 10) minutes = "0"+minutes;
+						if (hours < 10) hours = "0"+hours;
+            timeStamp.innerHTML = hours+":"+ minutes;
             lastMessage.style.float = "right";
         } else {
             lastMessage.innerHTML = "FAILED TO SEND";
@@ -264,7 +272,11 @@ class TchatView extends View {
             let timeStamp = document.createElement("div");  //set time to sent time
             lastMessage.appendChild(timeStamp);
             var time = new Date();
-            timeStamp.innerHTML = time.getHours()+":"+ time.getMinutes();
+						let minutes = time.getMinutes();
+						let hours = time.getHours();
+						if (minutes < 10) minutes = "0"+minutes;
+						if (hours < 10) hours = "0"+hours;
+            timeStamp.innerHTML = hours+":"+ minutes;
         }
     }
 }

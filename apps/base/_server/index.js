@@ -234,7 +234,11 @@ class Base extends ModuleBase {
 				if(err) trace("error reading file, ", file, " : ", err);
 				var convText = JSON.parse(data);
 				let temp = new Date();
-				let time = temp.getHours() + ":" + temp.getMinutes();
+				let minutes = temp.getMinutes();
+				let hours = temp.getHours();
+				if (minutes < 10) minutes = "0"+minutes;
+				if (hours < 10) hours = "0"+hours;
+				let time = hours + ":" + minutes;
 				let date = temp.getDate() + "-" + (temp.getMonth() + 1) + "-" + temp.getFullYear();
 				convText.push({Id : source[1], Message : content[1], State : "not seen", Time : time, Date : date})
 				fs.writeFile(file, JSON.stringify(convText), "utf-8", function(err){
