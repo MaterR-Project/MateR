@@ -108,7 +108,7 @@ class MenuView extends View {
     }
     async displayShortConv(data){
         data.map(async e =>{
-            trace(e);
+            //trace(e);
             let shortDiv = document.createElement("div");
             this.convDiv.appendChild(shortDiv);
             shortDiv.style.marginLeft = "10px";
@@ -157,7 +157,9 @@ class MenuController extends Controller{
     }
 
     goProfile(){
+        this.mvc.view.convDiv.innerHTML = "";
         this.mvc.view.destroy();
+        this.mvc.view.deactivate();
         this.mvc.app.profileMVC.view.attach(document.body);
         this.mvc.app.profileMVC.view.activate();
     }
@@ -168,7 +170,6 @@ class MenuController extends Controller{
         //this.mvc.app.searchMVC.view.activate();
     }
     async fetchConv(myId){
-        trace("asking for the convs of : ", myId);
         this.convList = await this.mvc.model.getConv(myId)
         await this.mvc.view.displayShortConv(this.convList); // get the conersation list of this user
         
@@ -178,7 +179,9 @@ class MenuController extends Controller{
         return name;
     }
     goToConv(id){
+        this.mvc.view.convDiv.innerHTML = "";
         this.mvc.view.destroy();
+        this.mvc.view.deactivate();
         this.mvc.app.tchatMVC.view.attach(document.body, id);
         this.mvc.app.tchatMVC.view.activate()
     }

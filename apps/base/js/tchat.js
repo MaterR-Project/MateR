@@ -269,8 +269,9 @@ class TchatController extends Controller {
      * @method menuClicked : destroys the current view and start the menu MVC
      */
 	async menuClicked() {
+        this.mvc.view.convDiv.innerHTML = ""
+        this.mvc.view.deactivate();
 		this.mvc.view.destroy(); 						     // destroy current view
-		this.mvc.app.mvc = this.mvc.app.testMVC;		     // change current MVC to the target MVC : menu
 		this.mvc.app.menuMVC.view.attach(document.body);     // attach view of menu MVC
 		this.mvc.app.menuMVC.view.activate(); 			     // activate user interface of menu MVC
     }

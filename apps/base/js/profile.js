@@ -10,9 +10,9 @@ class ProfileModel extends Model {
 	}
 
 	async getProfile(){
-		trace("get session id");
+		//trace("get session id");
 		let result = await Comm.get("getProfileFromSessionId/"+this.mvc.app.authenticationMVC.model.sessionId);
-		trace(result);
+		//trace(result);
 		this.id = result.response.return.id;
 		return result.response.return;
 	}
@@ -308,7 +308,7 @@ class ProfileView extends View {
 	/* -------------------------------------------------------------------- */
 
 	updateProfile(data) {
-		console.log(data);
+		//console.log(data);
 		let languagesDisplay = "";
 		let vocalsDisplay = "";
 		data.languages.forEach(e => languagesDisplay += e+", ");
@@ -355,11 +355,10 @@ class ProfileController extends Controller {
 		this.mvc.app.authenticationMVC.view.activate(); 			 // activate user interface of authenticate MVC
 	}
 
-	menuClicked(params) {
-		trace("menu btn click", params);
+	menuClicked() {
+		trace("menu btn click");
 		this.mvc.view.deactivate();
 		this.mvc.view.destroy(); 						 // destroy current view
-		//this.mvc.app.mvc = this.mvc.app.mvcTest;		 // change current MVC to the target MVC : menu
 		this.mvc.app.menuMVC.view.attach(document.body); // attach view of menu MVC
 		this.mvc.app.menuMVC.view.activate(); 			 // activate user interface of menu MVC
 	}
