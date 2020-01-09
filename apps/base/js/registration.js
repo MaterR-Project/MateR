@@ -306,15 +306,19 @@ class RegistrationView extends View {
 		this.comboYear = document.createElement("select");
 		this.comboYear.setAttribute("name", "year");
 		// add an entry for earch 120 year before now
-		var currentYear = new Date().getFullYear()
-		var option = "";
+		var currentYear = new Date().getFullYear()		
 		for (var i = currentYear-120 ; i <= currentYear; i++) {
 			var option = document.createElement("option");
 			option.text = i;
 			option.value = i;
-			if (i == currentYear) option.setAttribute("selected", "");
+			//if (i == currentYear) option.setAttribute("selected", "");
 			this.comboYear.appendChild(option);
 		}
+		var option = document.createElement("option");
+		option.text = "Undefined";
+		option.value = -1;
+		option.setAttribute("selected", "");
+		this.comboYear.appendChild(option);
 		this.yearDiv.appendChild(this.yearLabel);
 		this.yearDiv.appendChild(this.comboYear);
 		this.form.appendChild(this.yearDiv);
