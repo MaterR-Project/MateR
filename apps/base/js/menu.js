@@ -48,8 +48,7 @@ class MenuView extends View {
         this.profileDiv.style.alignItems = "center";
         this.profileDiv.style.height = "20%"
         this.profileDiv.style.border = "solid #999999";
-        this.profileIcon = document.createElement("i");
-        this.profileIcon.innerHTML = "?";
+        this.profileIcon = this.mvc.app.getElementIcon("icon-Profile", "45px");
         this.profileDiv.appendChild(this.profileIcon);
         this.nameDiv = document.createElement("h2");
         this.profileDiv.appendChild(this.nameDiv);
@@ -62,8 +61,7 @@ class MenuView extends View {
         this.searchDiv.style.alignItems = "center";
         this.searchDiv.style.height = "20%";
         this.searchDiv.style.border = "solid #999999";
-        this.searchIcon = document.createElement("i");
-        this.searchIcon.innerHTML = "?";
+        this.searchIcon = this.searchIcon = this.mvc.app.getElementIcon("icon-Search", "45px");
         this.searchDiv.appendChild(this.searchIcon);
         this.searchText = document.createElement("h2");
         this.searchDiv.appendChild(this.searchText);

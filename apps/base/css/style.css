@@ -42,11 +42,12 @@ body {
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	overflow-x: auto;
+	overflow: auto;
 	font-size: 20px;
-	margin-bottom: 15%;
+	margin-bottom: 20px;
 	width: 70%;
 	height: 100%;
+	flex-shrink: 1;
 }
 
 .profil div {
@@ -62,6 +63,16 @@ body {
 	.profil div {
 		flex-direction: column;
 	}
+
+	.profil-element {
+		flex-direction: column;
+	}
+
+	.property {
+		flex-direction: row;
+	}
+
+
 }
 
 .profil-label {
@@ -77,10 +88,14 @@ body {
 .game {
 	margin-left: 20px;
 	margin-bottom: 10px;
+	flex-direction: column;
 }
 
-.game .property {
+.property {
 	margin-left: 20px;
-	display: flex;
 	flex-direction: row;
+}
+
+.gameProperties {
+	flex-direction: column;
 }

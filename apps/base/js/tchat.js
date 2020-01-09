@@ -103,7 +103,6 @@ class TchatView extends View {
         this.dest = id;
         this.myId = this.mvc.app.profileMVC.model.id; // get my own id from the profile mvc
         this.src = this.myId;
-        trace(this.src, this.dest);
         this.mvc.controller.fetchConv(this.myId, this.dest); // init the controller to start getting the conv bewteen us
         super.attach(parent);
     }
@@ -214,6 +213,7 @@ class TchatView extends View {
         messageDiv.style.margin = "5px";
         messageDiv.style.border = "medium solid #303030";
         messageDiv.style.width = "50%";
+        messageDiv.style.color = "#FFFFFF";
         let messageContent = document.createElement("div");
         messageDiv.appendChild(messageContent);
         messageContent.style.fontSize = "15px";
@@ -225,9 +225,9 @@ class TchatView extends View {
         messageDiv.appendChild(messageHeader);
         messageHeader.style.display = "flex";
         messageHeader.style.fontSize = "12px";
+        messageHeader.style.color = "#b5b5b5";
         messageHeader.style.flexDirection = "row";
         messageHeader.style.justifyContent = "space-between";
-        messageHeader.style.color = "#b5b5b5";
         let statusDiv = document.createElement("div");
         messageHeader.appendChild(statusDiv);
         messageHeader.innerHTML = state;
@@ -298,5 +298,6 @@ class TchatController extends Controller {
     // function to link to the model that sends a message and update the view
     async sendMessage (content){
         this.mvc.view.setStatus(await this.mvc.model.pushMessage(content));
+        
     }
 }

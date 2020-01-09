@@ -237,19 +237,23 @@ class Base extends ModuleBase {
 	 */
 	async sendMessage(req, res){
 		let result = await this._getMessageFromRequest(req); 
+		trace(result)
 		let content = result[0];
 		let source = result[1];
 		let destination = result[2];
-		let test = this.users[source[1]].tchats.map(e =>{
+		let canSend;
+		this.users[source[1]].tchats.map(e =>{
 			if(e == destination[1])
-				return 1;
+				canSend = 1;
 		})
-		if(test == 1){
+		trace(canSend);
+		if(canSend == 1){
 			let data = "ok";
 			//send to other user TODO
 			let sock = this.sessions[source[1]]; // get the socket of the destination
 			let tosend = JSON.stringify({message : content[1], src : source[1], dest : destination[1]});
-			sock.emit('message', tosend);
+			if(sock)
+				sock.emit('message', tosend);
 			this.sendJSON(req, res, 200, {return : data});
 		}else{
 			let data = "failed to send";
