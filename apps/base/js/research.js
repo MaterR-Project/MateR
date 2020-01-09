@@ -20,7 +20,6 @@ class SearchView extends View {
 	initialize(mvc) {
 		super.initialize(mvc);
 
-		
 	}
 
 	// activate UI
