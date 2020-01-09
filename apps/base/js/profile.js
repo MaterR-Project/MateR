@@ -351,7 +351,6 @@ class ProfileView extends View {
 	}
 	menuClick(event) {
 		this.mvc.controller.menuClicked();		// link to the menu part of the controller
-
 	}
 	/* -------------------------------------------------------------------- */
 
