@@ -319,7 +319,10 @@ class Base extends ModuleBase {
 		var mostRecent = list[list.length - 1];
 		return mostRecent;
 	}
-
+	/**
+	 * @method getShortConvFromID : sends a mini conv with the specified
+	 * @param {*} id : id of user you want the conv with
+	 */
 	getShortConvFromId(req, res, id){
 		let convLstId = this.users[id].tchats;
 		let convLstFile = [];
@@ -493,6 +496,11 @@ class Base extends ModuleBase {
 			trace(newProfile);
 			this.users.push(newProfile);
 			//TODO UPDATE JSON
+			fs.writeFile("database/users.json", JSON.stringify(this.users), function(err){
+				if(err) trace("couldnt write file");
+				trace( "write complete");
+			});
+
 		}
 	}
 
