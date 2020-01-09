@@ -355,8 +355,7 @@ class ProfileView extends View {
 	/* -------------------------------------------------------------------- */
 
 	updateProfile(data) {
-		console.log(data);
-
+		//console.log(data);
 		this.mail.innerHTML = data.mail;
 		this.profileName.innerHTML = data.username;
 		this.mail.innerHTML = data.mail;
@@ -372,7 +371,6 @@ class ProfileView extends View {
 
 		this.vocals.innerHTML = "";
 		data.vocals.forEach((e, _, vocals) => {
-			trace(vocals)
 			let div = document.createElement("div");
 			div.style.display = "flex";
 			div.style.flexDirection = "row";
