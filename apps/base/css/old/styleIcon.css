@@ -1,7 +1,8 @@
 @font-face {
-  font-family: 'icomoonFont';
-  src:  url('/fonts/icomoonFont.eot');
-  src:  url('/fonts/icomoonFont.eot') format('embedded-opentype'),
+  font-family: 'icomoon_font';
+  src: url('/fonts/icomoonFont.eot');
+  src:
+    url('/fonts/icomoonFont.eot') format('embedded-opentype'),
     url('/fonts/icomoonFont.ttf') format('truetype'),
     url('/fonts/icomoonFont.woff') format('woff'),
     url('/fonts/icomoonFont.svg') format('svg');
@@ -10,9 +11,10 @@
   font-display: block;
 }
 
-[class^="icon-"], [class*=" icon-"] {
+[class^="icon-"],
+[class*=" icon-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: 'icomoonFont' !important;
+  font-family: 'icomoon_font' !important;
   speak: none;
   font-style: normal;
   font-weight: normal;
@@ -25,9 +27,6 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-paper-plane:before {
-  content: "\e90d";
-}
 .icon-Discord:before {
   content: "\e900";
   color: #7289da;
