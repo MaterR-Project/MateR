@@ -16,6 +16,11 @@ class ProfileModel extends Model {
 		this.id = result.response.return.id;
 		return result.response.return;
 	}
+
+	async dummyRequest(){
+		let data = {OriginId : "0", Game :"Apex Legends", Level : "Pro Player", Playstyle : "Chill", Country : "France", Region: "Western Europe", Languages: ["French", "English", "Arabic"], Age : "25", Genre : "", Vocals : ["Discord", "Skype"]}
+		let result = await Comm.post("getMatchingProfiles/", data);
+	}
 }
 
 class ProfileView extends View {
@@ -340,9 +345,7 @@ class ProfileView extends View {
 
 	}
 	searchClick(event){
-		//this.mvc.view.destroy();
-		//this.mvc.app.searchMVC.view.attach(document.body);
-		//this.mvc.app.searchMVC.view.activate();
+		this.mvc.controller.searchClicked();
 	}
 	applyClick(event) {
 		console.log("apply");					// link to the apply part of the controller
@@ -489,13 +492,13 @@ class ProfileController extends Controller {
 
 	}
 
-	searchClicked(params){
-		trace("search btn click", params);
-		this.mvc.view.deactivate();
-		//this.mvc.view.deleteProfile();
-		this.mvc.view.destroy();						// destroy current view
-		this.mvc.app.mvcTest.view.attach(document.body);// attach view of search MVC
-		this.mvc.app.mvcTest.view.activate();			// activate user interface of search MVC
+	async searchClicked(params){
+		trace(await this.mvc.model.dummyRequest());
+		//this.mvc.view.deactivate();
+		//trace("search btn click", params);
+		//this.mvc.view.destroy();						// destroy current view
+		//this.mvc.app.searchMVC.view.attach(document.body);// attach view of search MVC
+		//this.mvc.app.searchMVC.view.activate();			// activate user interface of search MVC
 	}
 
 	logoutClicked(params) {
