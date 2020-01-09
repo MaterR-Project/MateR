@@ -21,7 +21,7 @@ class Base {
 
 		this.tchatMVC = new MVC("tchatMVC", this, new TchatModel(), new TchatView(), new TchatController());
 		await this.tchatMVC.initialize();
-		
+
 		this.menuMVC = new MVC("menuMVC", this, new MenuModel(), new MenuView(), new MenuController());
 		await this.menuMVC.initialize();
 
@@ -33,13 +33,22 @@ class Base {
 		/**
 		 * @method initSocket : connect socket
 		 */
-		initSocket(id) {
-			//trace("init socket");
+		initSocket(sessionId) {
+			trace("init socket with : "+sessionId);
 			this.io = io();
-			this.io.emit('authentication', id);
-			this.io.on('message', msg => {
-				this.conversationMVC.model.updateConversation();	// TODO remplacer par fonction qui gere les message recu
-			});
+      this.io.on('connectSession', data => {
+        console.log("connection : " + data);
+        this.io.emit('auth', sessionId);
+        console.log("emit ping with session = 0");
+        this.io.on('authConfirm', data =>{
+          console.log("authentication : "+data);
+          if (data == "ok") {
+            this.io.on('msg', data => {
+							// todo afficher les message dans tchat
+            });
+          }
+        });
+      });
 		}
 
 		/**

@@ -39,15 +39,46 @@ class Server {
 		this._io = SocketIO(this._server);
 
 		this._io.on('connection', socket => {
-  		trace('a user connected');
-			this._io.on('authentication', id => {
-				trace("authentication success");
-				this._app.sessions.set(id,socket);
-			});
-		});
+		  console.log('a user connected');
+			socket.emit('connectSession', "ok");
+		  console.log("emit connectSession : ok");
+		  socket.on('auth', data => {
+		    console.log("ssid : " + data);
+				let session = this._app.sessionIds.get(data);
+		    if(session != undefined){
+					console.log("chaussette ouverte");
+		      this._app.sessions.set(session, socket);
 
-		this._io.on('disconnect', () => {
-  		trace('a user deconnected');
+					trace("map socket : ", this._app.sessions.keys());
+					trace("map session : ", this._app.sessionIds);
+
+		      socket.emit('authConfirm', "ok");
+		      socket.on('msg', data =>{
+		        console.log("id : "+data.id+"\nmessage : "+data.message);
+						//todo conserver les messages sur le server
+						//complete data avec info date et heure
+		        this._app.sessions.get(data.id).emit('msg', data);
+		      });
+		    }else{
+					console.log("access denied");
+		      socket.emit('authConfirm', "not ok");
+		    }
+		  });
+			socket.on('disconnect', () => {
+		    trace('a user deconnected');
+				for (let [sessionId,soc] of this._app.sessions.entries()) {
+					if (soc == socket) {
+						for (let [id,ssid] of this._app.sessionIds.entries()) {
+							if (ssid == sessionId) {
+								this._app.sessionIds.delete(id);
+								break ;
+							}
+						}
+						this._app.sessions.delete(soc);
+						break ;
+					}
+				}
+		  });
 		});
 
 		this._app = new App(this, new Map()); // load app

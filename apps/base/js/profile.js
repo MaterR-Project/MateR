@@ -355,7 +355,7 @@ class ProfileView extends View {
 	/* -------------------------------------------------------------------- */
 
 	updateProfile(data) {
-		console.log(data);
+		//console.log(data);
 
 		let profileData = this.profileData.cloneNode(true);
 
@@ -496,6 +496,7 @@ class ProfileController extends Controller {
 
 	logoutClicked(params) {
 		trace("logout btn click", params);
+		this.mvc.app.io.disconnect();
 		this.mvc.view.deactivate();
 		//this.mvc.view.deleteProfile();
 		this.mvc.view.destroy(); 						 // destroy current view
