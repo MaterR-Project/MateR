@@ -10,9 +10,10 @@ class ProfileModel extends Model {
 	}
 
 	async getProfile(){
-		trace("get session id");
-		let result = await Comm.get("getProfileFromSessionId/"+this.mvc.app.autenticationMVC.model.sessionId);
-		trace(result);
+		//trace("get session id");
+		let result = await Comm.get("getProfileFromSessionId/"+this.mvc.app.authenticationMVC.model.sessionId);
+		//trace(result);
+		this.id = result.response.return.id;
 		return result.response.return;
 	}
 }
@@ -51,52 +52,51 @@ class ProfileView extends View {
 		this.topBtnDiv.style.justifyContent = "space-between"
 		this.topBtnDiv.style.width ="100%";
 		// create search btn to open the conversation slide tab
-		this.menuButton = document.createElement("button");
-		this.menuButton.innerHTML = "Menu";
-		this.menuButton.style.fontSize = "15px";
+		this.menuButton = document.createElement("span");
+		this.menuButton.setAttribute("class", "icon-Menu");
+		//this.menuButton.style.fontSize = "auto";
+		//this.menuButton.innerHTML = "Menu";
+		this.menuButton.style.fontSize = "45px";
+		this.menuButton.style.marginLeft="10px";
 		this.topBtnDiv.appendChild(this.menuButton);
 		// create disconnect btn
-		this.logoutButton = document.createElement("button");
-		this.logoutButton.innerHTML = "Disconnect";
-		this.logoutButton.style.fontSize = "15px";
+		this.logoutButton = document.createElement("span");
+		this.logoutButton.setAttribute("class", "icon-disconnect");
+		//this.logoutButton.innerHTML = "Disconnect";
+		this.logoutButton.style.fontSize = "45px";
+		this.logoutButton.style.marginRight="10px";
 		this.topBtnDiv.appendChild(this.logoutButton);
 
-		this.nameDiv = document.createElement("div");
-		this.nameDiv.style.display = "flex";
-		this.nameDiv.style.alignItems = "center";
-		this.nameDiv.style.justifyContent = "space-evenly";
-		//this.nameDiv.style.marginTop = "15%";
-		this.mainDiv.appendChild(this.nameDiv);
+		// header
+		this.header = document.createElement("div");
+			// create search btn to open the conversation slide tab
 
+			// create disconnect btn
+		this.mainDiv.appendChild(this.header);
+
+		// profile name
 		this.profileName = document.createElement("h1");
-        this.profileName.innerHTML = "My Name";
-        this.profileName.style.marginTop = "3%"
-		this.profileName.style.fontSize = "35px";
-		this.profileName.contentEditable = "true";
-		this.nameDiv.appendChild(this.profileName);
+		this.profileName.innerHTML = "My Name";
+		this.profileName.setAttribute("class","profil- name");
 
-		// get screen height and width
-		let sizeWidth = window.screen.width;
+		this.mainDiv.appendChild(this.profileName);
 
 		this.profileData = document.createElement("div");
 		this.profileData.setAttribute("class","profil");
-/*
-		// set the scroll box height depending on device resolution
-		this.profileData.style.width = "70%";
-		if (sizeWidth > 1200) {
-			  this.profileData.style.width = "45%";
-			  this.profileData.style.height = "150%";
-			  this.mainDiv.style.height = "100%";
-		}
-		else if (sizeWidth > 992) {
-			this.profileData.style.width = "55%";
-		}
-		else if (sizeWidth > 768){
-			this.profileData.style.width = "60%";
-		}
-*/
 
 		// fill profile data with fields :
+
+			// Mail
+			this.mailDiv = document.createElement("div");
+			this.mailLabel = document.createElement("h4");
+			this.mailLabel.setAttribute("class","profil-label");
+			this.mailLabel.innerHTML = "mail : ";
+			this.mailDiv.appendChild(this.mailLabel);
+			this.mail = document.createElement("div");
+			this.mail.setAttribute("class","profil-element");
+			this.mailDiv.appendChild(this.mail);
+			this.profileData.appendChild(this.mailDiv);
+
 			// bio
 			this.bioDiv = document.createElement("div");
 			this.bioLabel = document.createElement("h4");
@@ -108,38 +108,27 @@ class ProfileView extends View {
 			this.bioDiv.appendChild(this.bio);
 			this.profileData.appendChild(this.bioDiv);
 
-			//games
-			this.gamesDiv = document.createElement("div");
-			this.gamesLabel = document.createElement("h4");
-			this.gamesLabel.setAttribute("class","profil-label");
-			this.gamesLabel.innerHTML = "games : ";
-			this.gamesDiv.appendChild(this.gamesLabel);
-			this.games = document.createElement("div");
-			this.games.setAttribute("class","profil-element");
-			this.gamesDiv.appendChild(this.games);
-			this.profileData.appendChild(this.gamesDiv);
+			// Gender
+			this.genderDiv = document.createElement("div");
+			this.genderLabel = document.createElement("h4");
+			this.genderLabel.setAttribute("class","profil-label");
+			this.genderLabel.innerHTML = "gender : ";
+			this.genderDiv.appendChild(this.genderLabel);
+			this.gender = document.createElement("div");
+			this.gender.setAttribute("class","profil-element");
+			this.genderDiv.appendChild(this.gender);
+			this.profileData.appendChild(this.genderDiv);
 
-			// vocals
-			this.vocalsDiv = document.createElement("div");
-			this.vocalsLabel = document.createElement("h4");
-			this.vocalsLabel.setAttribute("class","profil-label");
-			this.vocalsLabel.innerHTML = "vocals : ";
-			this.vocalsDiv.appendChild(this.vocalsLabel);
-			this.vocals = document.createElement("div");
-			this.vocals.setAttribute("class","profil-element");
-			this.vocalsDiv.appendChild(this.vocals);
-			this.profileData.appendChild(this.vocalsDiv);
-
-			// Lang
-			this.languagesDiv = document.createElement("div");
-			this.languagesLabel = document.createElement("h4");
-			this.languagesLabel.setAttribute("class","profil-label");
-			this.languagesLabel.innerHTML = "languages : ";
-			this.languagesDiv.appendChild(this.languagesLabel);
-			this.languages = document.createElement("div");
-			this.languages.setAttribute("class","profil-element");
-			this.languagesDiv.appendChild(this.languages);
-			this.profileData.appendChild(this.languagesDiv);
+			// Year (brith year)
+			this.ageDiv = document.createElement("div");
+			this.ageLabel = document.createElement("h4");
+			this.ageLabel.setAttribute("class","profil-label");
+			this.ageLabel.innerHTML = "age : ";
+			this.ageDiv.appendChild(this.ageLabel);
+			this.age = document.createElement("div");
+			this.age.setAttribute("class","profil-element");
+			this.ageDiv.appendChild(this.age);
+			this.profileData.appendChild(this.ageDiv);
 
 			// Reg
 			this.regionDiv = document.createElement("div");
@@ -163,101 +152,108 @@ class ProfileView extends View {
 			this.countryDiv.appendChild(this.country);
 			this.profileData.appendChild(this.countryDiv);
 
-			// Year (brith year)
-			this.ageDiv = document.createElement("div");
-			this.ageLabel = document.createElement("h4");
-			this.ageLabel.setAttribute("class","profil-label");
-			this.ageLabel.innerHTML = "age : ";
-			this.ageDiv.appendChild(this.ageLabel);
-			this.age = document.createElement("div");
-			this.age.setAttribute("class","profil-element");
-			this.ageDiv.appendChild(this.age);
-			this.profileData.appendChild(this.ageDiv);
+			// Lang
+			this.languagesDiv = document.createElement("div");
+			this.languagesLabel = document.createElement("h4");
+			this.languagesLabel.setAttribute("class","profil-label");
+			this.languagesLabel.innerHTML = "languages : ";
+			this.languagesDiv.appendChild(this.languagesLabel);
+			this.languages = document.createElement("div");
+			this.languages.setAttribute("class","profil-element");
+			this.languagesDiv.appendChild(this.languages);
+			this.profileData.appendChild(this.languagesDiv);
 
-			// Gender
-			this.genderDiv = document.createElement("div");
-			this.genderLabel = document.createElement("h4");
-			this.genderLabel.setAttribute("class","profil-label");
-			this.genderLabel.innerHTML = "gender : ";
-			this.genderDiv.appendChild(this.genderLabel);
-			this.gender = document.createElement("div");
-			this.gender.setAttribute("class","profil-element");
-			this.genderDiv.appendChild(this.gender);
-			this.profileData.appendChild(this.genderDiv);
+			//games
+			this.gamesDiv = document.createElement("div");
+			this.gamesLabel = document.createElement("h4");
+			this.gamesLabel.setAttribute("class","profil-label");
+			this.gamesLabel.innerHTML = "games : ";
+			this.gamesDiv.appendChild(this.gamesLabel);
+			this.games = document.createElement("div");
+			this.games.setAttribute("class","profil-element");
+			this.gamesDiv.appendChild(this.games);
+			this.profileData.appendChild(this.gamesDiv);
 
-			// Mail
-			this.mailDiv = document.createElement("div");
-			this.mailLabel = document.createElement("h4");
-			this.mailLabel.setAttribute("class","profil-label");
-			this.mailLabel.innerHTML = "mail : ";
-			this.mailDiv.appendChild(this.mailLabel);
-			this.mail = document.createElement("div");
-			this.mail.setAttribute("class","profil-element");
-			this.mailDiv.appendChild(this.mail);
-			this.profileData.appendChild(this.mailDiv);
+			// vocals
+			this.vocalsDiv = document.createElement("div");
+			this.vocalsLabel = document.createElement("h4");
+			this.vocalsLabel.setAttribute("class","profil-label");
+			this.vocalsLabel.innerHTML = "vocals : ";
+			this.vocalsDiv.appendChild(this.vocalsLabel);
+			this.vocals = document.createElement("div");
+			this.vocals.setAttribute("class","profil-element");
+			this.vocalsDiv.appendChild(this.vocals);
+			this.profileData.appendChild(this.vocalsDiv);
 
-			// ask old password
-			this.oldPwdDiv =document.createElement("div");
-			this.oldPwdDiv.style.display = "flex";
-			this.oldPwdDiv.style.height = "35%";
-			this.oldPwdDiv.style.alignItems = "center";
-			this.oldPwdDiv.style.justifyContent ="space-between";
-			this.oldPwd = document.createElement("h4");
-			this.oldPwd.innerHTML = "Input your old password :"
-			this.oldPwdText = document.createElement("input");
-			this.oldPwdText.type ="password";
-			this.oldPwdDiv.appendChild(this.oldPwd);
-			this.oldPwdDiv.appendChild(this.oldPwdText);
-			this.profileData.appendChild(this.oldPwdDiv);
+			// old password
+			this.oldPswDiv = document.createElement("div");
+			this.oldPswLabel = document.createElement("h4");
+			this.oldPswLabel.setAttribute("class","profil-label");
+			this.oldPswLabel.innerHTML = "Input your old password :";
+			this.oldPswDiv.appendChild(this.oldPswLabel);
+			this.oldPsw = document.createElement("input");
+			this.oldPsw.setAttribute("type","password");
+			this.oldPsw.setAttribute("class","profil-element");
+			this.oldPswDiv.appendChild(this.oldPsw);
+			this.profileData.appendChild(this.oldPswDiv);
+
 			// new password
-			this.newPwdDiv1 =document.createElement("div");
-			this.newPwdDiv1.style.display = "flex";
-			this.newPwdDiv1.style.height = "35%";
-			this.newPwdDiv1.style.alignItems = "center";
-			this.newPwdDiv1.style.justifyContent ="space-between";
-			this.newPwd1 = document.createElement("h4");
-			this.newPwd1.innerHTML = "Input your new password :";
-			this.newPwd1Text = document.createElement("input");
-			this.newPwd1Text.type ="password";
-			this.newPwdDiv1.appendChild(this.newPwd1);
-			this.newPwdDiv1.appendChild(this.newPwd1Text);
-			this.profileData.appendChild(this.newPwdDiv1);
-			// new password confirmation
-			this.newPwdDiv2 =document.createElement("div");
-			this.newPwdDiv2.style.display = "flex";
-			this.newPwdDiv2.style.height = "35%";
-			this.newPwdDiv2.style.alignItems = "center";
-			this.newPwdDiv2.style.justifyContent ="space-between";
-			this.newPwd2 = document.createElement("h4");
-			this.newPwd2.innerHTML = "Confirm your new password :";
-			this.newPwd2Text = document.createElement("input");
-			this.newPwd2Text.type ="password";
-			this.newPwdDiv2.appendChild(this.newPwd2);
-			this.newPwdDiv2.appendChild(this.newPwd2Text);
-			this.profileData.appendChild(this.newPwdDiv2);
-        this.mainDiv.appendChild(this.profileData);
+			this.newPswDiv = document.createElement("div");
+			this.newPswLabel = document.createElement("h4");
+			this.newPswLabel.setAttribute("class","profil-label");
+			this.newPswLabel.innerHTML = "Input your new password :";
+			this.newPswDiv.appendChild(this.newPswLabel);
+			this.newPsw = document.createElement("input");
+			this.newPsw.setAttribute("type","password");
+			this.newPsw.setAttribute("class","profil-element");
+			this.newPswDiv.appendChild(this.newPsw);
+			this.profileData.appendChild(this.newPswDiv);
 
-		this.bottomDiv = document.createElement("div");
-		this.bottomDiv.style.display = "flex";
-		this.bottomDiv.style.justifyContent = "space-around";
-		this.bottomDiv.style.width = "100%";
-		this.mainDiv.appendChild(this.bottomDiv)
-		// create btn to save changes applied to the other fields
-		this.applyButton = document.createElement("button");
-		this.applyButton.innerHTML = "Apply Changes";
-		this.applyButton.style.fontSize = "15px";
-		this.bottomDiv.appendChild(this.applyButton);
-		// create btn to link to Search MVC
-		this.searchButton = document.createElement("button");
-		this.searchButton.innerHTML = "Search";
-		this.searchButton.style.fontSize = "15px";
-		this.bottomDiv.appendChild(this.searchButton);
+			// conf password
+			this.confPswDiv = document.createElement("div");
+			this.confPswLabel = document.createElement("h4");
+			this.confPswLabel.setAttribute("class","profil-label");
+			this.confPswLabel.innerHTML = "Confirm your new password :";
+			this.confPswDiv.appendChild(this.confPswLabel);
+			this.confPsw = document.createElement("input");
+			this.confPsw.setAttribute("type","password");
+			this.confPsw.setAttribute("class","profil-element");
+			this.confPswDiv.appendChild(this.confPsw);
+			this.profileData.appendChild(this.confPswDiv);
+
+    this.mainDiv.appendChild(this.profileData);
+
+		this.footer = document.createElement("div");
+		this.footer.setAttribute("class", "footer");
+			//button for change profil infos
+			this.changeBtn = document.createElement("span");
+			this.changeBtn.setAttribute("class", "icon-checkmark-no-changes");
+			this.changeBtn.style.fontSize = "45px";
+			this.changeBtn.style.marginLeft="10px";
+			//this.changeBtn.innerHTML = "Apply Changes";
+			this.footer.appendChild(this.changeBtn);
+
+			//button for search
+			this.searchBtn = document.createElement("span");
+			this.searchBtn.setAttribute("class", "icon-Search");
+			this.searchBtn.style.fontSize = "45px";
+			this.searchBtn.style.marginRight="10px";
+			//this.searchBtn.innerHTML = "Search";
+			this.footer.appendChild(this.searchBtn);
+
+		this.mainDiv.appendChild(this.footer);
+
+	}
+
+	attach(parent){
+		super.attach(parent);
+		trace("init profile");
+		this.mvc.controller.initProfile();
 	}
 
 	// activate UI
 	activate() {
 		//this.mvc.controller.grabRegions();
-		this.mvc.controller.initProfil();
 		super.activate();
 		this.addListeners(); // listen to events
 	}
@@ -273,10 +269,10 @@ class ProfileView extends View {
 		this.logoutButton.addEventListener("click", 	this.lougoutHandler);
 
 		this.searchHandler = e => this.searchClick(e);
-		this.searchButton.addEventListener("click", 	this.searchHandler);
+		this.searchBtn.addEventListener("click", 	this.searchHandler);
 
 		this.applyHandler = e => this.applyClick(e);
-		this.applyButton.addEventListener("click", 		this.applyHandler);
+		this.changeBtn.addEventListener("click", 		this.applyHandler);
 
 		this.menuHandler = e => this.menuClick(e);
 		this.menuButton.addEventListener("click", 		this.menuHandler);
@@ -284,8 +280,8 @@ class ProfileView extends View {
 
 	removeListeners() {
 		this.logoutButton.removeEventListener("click", 	this.logoutHandler);
-		this.searchButton.removeEventListener("click", 	this.searchHandler);
-		this.applyButton.removeEventListener("click", 	this.applyHandler);
+		this.searchBtn.removeEventListener("click", 	this.searchHandler);
+		this.changeBtn.removeEventListener("click", 	this.applyHandler);
 		this.menuButton.removeEventListener("click", 	this.menuHandler);
 
 	}
@@ -295,8 +291,9 @@ class ProfileView extends View {
 
 	}
 	searchClick(event){
-		this.mvc.controller.searchClicked();	// link for the search part of the controller
-
+		//this.mvc.view.destroy();
+		//this.mvc.app.searchMVC.view.attach(document.body);
+		//this.mvc.app.searchMVC.view.activate();
 	}
 	applyClick(event) {
 		console.log("apply");					// link to the apply part of the controller
@@ -308,19 +305,87 @@ class ProfileView extends View {
 	}
 	/* -------------------------------------------------------------------- */
 
-	updateProfil(data) {
+	updateProfile(data) {
 		console.log(data);
+		this.mail.innerHTML = data.mail;
 		this.profileName.innerHTML = data.username;
+		this.mail.innerHTML = data.mail;
 		this.bio.innerHTML = data.bio;
-		this.games.innerHTML = data.games;
-
-		this.vocals.innerHTML = data.vocals;
-		this.languages.innerHTML = data.languages;
+		this.gender.innerHTML = data.gender;
+		this.age.innerHTML = new Date().getFullYear() - data.year;
 		this.region.innerHTML = data.region;
 		this.country.innerHTML = data.country;
-		this.age.innerHTML = new Date().getFullYear() - data.year;
-		this.gender.innerHTML = data.gender;
-		this.mail.innerHTML = data.mail;
+		data.games.forEach( game => this.addGameToDisplay(game));
+		this.vocals.innerHTML = data.vocals.join(', ');
+		this.languages.innerHTML = data.languages.join(', ');
+	}
+
+	deleteProfile() {
+		this.mail.innerHTML = "";
+		this.profileName.innerHTML = "";
+		this.mail.innerHTML = "";
+		this.bio.innerHTML = "";
+		this.gender.innerHTML = "";
+		this.age.innerHTML = "";
+		this.region.innerHTML = "";
+		this.country.innerHTML = "";
+		this.games.innerHTML = ""
+		this.vocals.innerHTML = ""
+		this.languages.innerHTML = "";
+	}
+
+	addGameToDisplay(game){
+
+		trace(game);
+
+		// game div
+		let gameDiv = document.createElement("div");
+			gameDiv.setAttribute("class","game");
+
+			// game title
+			let gameName = document.createElement("span");
+				gameName.innerHTML = game.name;
+			gameDiv.appendChild(gameName);
+
+			//game property
+			let gameProperty = document.createElement("div");
+				gameProperty.setAttribute("class", "gameProperties");
+
+				// platform
+				let platform = document.createElement("div");
+					platform.setAttribute("class","property");
+					let labelPlatform = document.createElement("span");
+						labelPlatform.innerHTML = "platform : "
+					platform.appendChild(labelPlatform);
+					let namePlatform = document.createElement("span");
+						namePlatform.innerHTML = game.platform;
+					platform.appendChild(namePlatform);
+				gameProperty.appendChild(platform);
+
+				// playstyle
+				let playstyle = document.createElement("div");
+					playstyle.setAttribute("class","property");
+					let labelPlaystyle = document.createElement("span");
+						labelPlaystyle.innerHTML = "play style : "
+					playstyle.appendChild(labelPlaystyle);
+					let playStyleNames = document.createElement("span");
+						playStyleNames.innerHTML = game.playstyles.join(', ')
+					playstyle.appendChild(playStyleNames);
+				gameProperty.appendChild(playstyle);
+
+				// level of play
+				let level = document.createElement("div");
+					level.setAttribute("class","property");
+					let labelLevel = document.createElement("span");
+						labelLevel.innerHTML = "level : "
+					level.appendChild(labelLevel);
+					let nameLevel = document.createElement("span");
+						nameLevel.innerHTML = game.level;
+					level.appendChild(nameLevel);
+				gameProperty.appendChild(level);
+
+			gameDiv.appendChild(gameProperty);
+		this.games.appendChild(gameDiv);
 	}
 
 }
@@ -335,30 +400,34 @@ class ProfileController extends Controller {
 		super.initialize(mvc);
 
 	}
-	async searchClicked(params){
+
+	searchClicked(params){
 		trace("search btn click", params);
+		this.mvc.view.deactivate();
 		this.mvc.view.destroy();						// destroy current view
-		this.mvc.app.mvc = this.mvc.app.mvcTest;		// change current mvc to search MVC
 		this.mvc.app.mvcTest.view.attach(document.body);// attach view of search MVC
 		this.mvc.app.mvcTest.view.activate();			// activate user interface of search MVC
 	}
-	async logoutClicked(params) {
+
+	logoutClicked(params) {
 		trace("logout btn click", params);
+		this.mvc.view.deactivate();
+		this.mvc.view.deleteProfile();
 		this.mvc.view.destroy(); 						 // destroy current view
-		this.mvc.app.mvc = this.mvc.app.mvcTest;		 // change current MVC to the target MVC : authenticate
-		this.mvc.app.mvcTest.view.attach(document.body); // attach view of authenticate MVC
-		this.mvc.app.mvcTest.view.activate(); 			 // activate user interface of authenticate MVC
-	}
-	async menuClicked(params) {
-		trace("menu btn click", params);
-		this.mvc.view.destroy(); 						 // destroy current view
-		this.mvc.app.mvc = this.mvc.app.mvcTest;		 // change current MVC to the target MVC : menu
-		this.mvc.app.mvcTest.view.attach(document.body); // attach view of menu MVC
-		this.mvc.app.mvcTest.view.activate(); 			 // activate user interface of menu MVC
+		this.mvc.app.authenticationMVC.view.attach(document.body); // attach view of authenticate MVC
+		this.mvc.app.authenticationMVC.view.activate(); 			 // activate user interface of authenticate MVC
 	}
 
-	async initProfil(){
-		this.mvc.view.updateProfil(await this.mvc.model.getProfile());
+	menuClicked() {
+		trace("menu btn click");
+		this.mvc.view.deactivate();
+		this.mvc.view.destroy(); 						 // destroy current view
+		this.mvc.app.menuMVC.view.attach(document.body); // attach view of menu MVC
+		this.mvc.app.menuMVC.view.activate(); 			 // activate user interface of menu MVC
+	}
+
+	async initProfile(){
+		this.mvc.view.updateProfile(await this.mvc.model.getProfile());
 	}
 
 }
