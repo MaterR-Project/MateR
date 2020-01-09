@@ -308,6 +308,7 @@ class ProfileView extends View {
 		console.log(data);
 		this.mail.innerHTML = data.mail;
 		this.profileName.innerHTML = data.username;
+		this.mail.innerHTML = data.mail;
 		this.bio.innerHTML = data.bio;
 		this.gender.innerHTML = data.gender;
 		this.age.innerHTML = new Date().getFullYear() - data.year;
@@ -316,6 +317,20 @@ class ProfileView extends View {
 		data.games.forEach( game => this.addGameToDisplay(game));
 		this.vocals.innerHTML = data.vocals.join(', ');
 		this.languages.innerHTML = data.languages.join(', ');
+	}
+
+	deleteProfile() {
+		this.mail.innerHTML = "";
+		this.profileName.innerHTML = "";
+		this.mail.innerHTML = "";
+		this.bio.innerHTML = "";
+		this.gender.innerHTML = "";
+		this.age.innerHTML = "";
+		this.region.innerHTML = "";
+		this.country.innerHTML = "";
+		this.games.innerHTML = ""
+		this.vocals.innerHTML = ""
+		this.languages.innerHTML = "";
 	}
 
 	addGameToDisplay(game){
@@ -333,6 +348,7 @@ class ProfileView extends View {
 
 			//game property
 			let gameProperty = document.createElement("div");
+				gameProperty.setAttribute("class", "gameProperties");
 
 				// platform
 				let platform = document.createElement("div");
@@ -395,6 +411,7 @@ class ProfileController extends Controller {
 	logoutClicked(params) {
 		trace("logout btn click", params);
 		this.mvc.view.deactivate();
+		this.mvc.view.deleteProfile();
 		this.mvc.view.destroy(); 						 // destroy current view
 		this.mvc.app.authenticationMVC.view.attach(document.body); // attach view of authenticate MVC
 		this.mvc.app.authenticationMVC.view.activate(); 			 // activate user interface of authenticate MVC
