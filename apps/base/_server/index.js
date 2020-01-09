@@ -509,17 +509,17 @@ class Base extends ModuleBase {
 	 * @param {*} req
 	 */
 	async _getDataFromRequest(req){
-    let busboy = new Busboy({ headers: req.headers });
+    	let busboy = new Busboy({ headers: req.headers });
 		let result, prom = new Promise(resolve => result = resolve);
 		let form = new Array();
-    busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated) {
+	    busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated) {
 			form.push([fieldname, val]);
-    });
-    busboy.on('finish', function() {
+    	});
+    	busboy.on('finish', function() {
 			result(form);
-      trace('Done parsing form!');
-    });
-    req.pipe(busboy);
+      		trace('Done parsing form!');
+    	});
+    	req.pipe(busboy);
 		return prom;
 	}
 
