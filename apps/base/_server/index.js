@@ -376,6 +376,9 @@ class Base extends ModuleBase {
 					newProfile[elem[0]] = elem[1];
 				}
 			}
+			else if(elem[0] == "year"){
+				newProfile[elem[0]] = parseInt(elem[1]);
+			}
 			else if(elem[0] == "languages"){
 				if(newProfile.hasOwnProperty("languages")){
 					newProfile.languages.push(elem[1]);

@@ -362,7 +362,9 @@ class ProfileView extends View {
 		this.mail.innerHTML = data.mail;
 		this.bio.innerHTML = data.bio;
 		this.gender.innerHTML = data.gender;
-		this.age.innerHTML = new Date().getFullYear() - data.year;
+		if (data.year != -1){
+			this.age.innerHTML = new Date().getFullYear() - data.year;
+		}else{ this.age.innerHTML = "Undefined";}
 		this.region.innerHTML = data.region;
 		this.country.innerHTML = data.country;
 		this.languages.innerHTML = data.languages.join(', ');
