@@ -191,7 +191,7 @@ class TchatView extends View {
             messageHeader.style.color = "#b5b5b5";
             let statusDiv = document.createElement("span");
             //let statusDiv = document.createElement("div");
-						trace(e.State == "seen", this.src == e.Id)
+						//trace(e.State == "seen", this.src == e.Id)
             if(e.State == "seen" && this.src == e.Id){
                 statusDiv = this.mvc.app.getElementIcon("icon-seen", "auto");// e.State;
 								messageHeader.style.marginLeft="5px";
