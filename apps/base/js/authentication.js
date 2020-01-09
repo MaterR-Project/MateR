@@ -60,6 +60,8 @@ class AutenticationView extends View {
 		//this.pseudoLabel = document.createElement("label");
 		this.pseudoLabel = this.mvc.app.getElementIcon("icon-Profile", "auto");
 		this.pseudoLabel.setAttribute("for","username");
+		this.pseudoLabel.style.fontSize = "20px";
+		this.pseudoLabel.style.marginBottom = "5px";
 		this.pseudoLabel.innerHTML = " Username :";
 		this.pseudoDiv.appendChild(this.pseudoLabel);
 
@@ -79,6 +81,8 @@ class AutenticationView extends View {
 		//this.passwordLabel = document.createElement("label");
 		this.passwordLabel = this.mvc.app.getElementIcon("icon-Password", "auto");
 		this.passwordLabel.setAttribute("for","password");
+		this.passwordLabel.style.fontSize = "20px";
+		this.passwordLabel.style.marginBottom = "5px";
 		this.passwordLabel.innerHTML = " Password (8 - 32 characters) :";
 		this.passwordDiv.appendChild(this.passwordLabel);
 
@@ -99,6 +103,7 @@ class AutenticationView extends View {
     //button connect
     this.connectBtn = document.createElement("button");
     this.connectBtn.innerHTML = "Connect";
+		this.connectBtn.style.fontSize = "20px";
 		this.connectBtn.style.marginBottom = "10px";
     this.mainDiv.appendChild(this.connectBtn);
 
@@ -114,6 +119,7 @@ class AutenticationView extends View {
 	// activate UI
 	activate() {
 		super.activate();
+		this.passwordLabel.value = ""
 		this.addListeners(); // listen to events
 	}
 
