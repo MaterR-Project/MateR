@@ -70,7 +70,6 @@ class MenuView extends View {
         // conv header
         this.headerDiv = document.createElement("div");
         this.mainDiv.appendChild(this.headerDiv);
-
         this.headerDiv.style.display = "flex";
         this.headerDiv.style.justifyContent = "space-around";
         this.headerDiv.style.alignItems = "center";
