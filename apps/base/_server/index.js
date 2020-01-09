@@ -352,7 +352,7 @@ class Base extends ModuleBase {
 	 */
 	async register(req, res) {
 
-		let data = await this._getDataFromRequest(req);
+		let data = await this._getDataFromFormDataPost(req);
 
 		//trace(data);
 		let newProfile = {};
@@ -460,10 +460,10 @@ class Base extends ModuleBase {
  	}
 
 	/**
-	 * @method _getDataFromRequest : get the post data from request
+	 * @method _getDataFromFormDataPost : get the post data from request
 	 * @param {*} req
 	 */
-	async _getDataFromRequest(req){
+	async _getDataFromFormDataPost(req){
     	let busboy = new Busboy({ headers: req.headers });
 		let result, prom = new Promise(resolve => result = resolve);
 		let form = new Array();
