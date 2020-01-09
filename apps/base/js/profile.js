@@ -76,6 +76,7 @@ class ProfileView extends View {
 		// profile name
 		this.profileName = document.createElement("h1");
 		this.profileName.innerHTML = "My Name";
+		this.profileName.style.fontSize = "40px";
 		this.profileName.setAttribute("class","profil- name");
 
 		this.mainDiv.appendChild(this.profileName);

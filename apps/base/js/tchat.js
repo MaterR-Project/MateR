@@ -61,12 +61,16 @@ class TchatView extends View {
 				//this.menuButton.style.fontSize = "15px";
         this.headDiv.appendChild(this.menuButton);
         // profile display
-        this.profileDiv = document.createElement("h3");
+        this.profileDiv = document.createElement("span");
         this.profileDiv.style.display = "flex";
         this.profileDiv.style.aligneItems = "center";
-        this.profileDiv.style.marginRight = "15%";
+				this.profileDiv.style.marginTop = "20px";
+        this.profileDiv.style.fontSize = "45px";
+				this.profileDiv.style.fontWeight = "bold";
         this.profileDiv.innerHTML = "correspondant_name"
         this.headDiv.appendChild(this.profileDiv);
+				let tmpSpan = document.createElement("span");
+				this.headDiv.appendChild(tmpSpan);
         // conversation history
         this.convDiv = document.createElement("div");
         this.convDiv.style.overflow = "auto";
