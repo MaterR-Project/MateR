@@ -151,6 +151,7 @@ class AutenticationView extends View {
 	removeListeners() {
     this.connectBtn.removeEventListener("click", this.connectBtnHandler);
     this.createAccountBtn.removeEventListener("click", this.createAccountBtnHandler);
+		//trace("REMOVE !!!!!!!!!!!!!")
 	}
 
   connectClick(event) {

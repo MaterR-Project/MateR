@@ -27,6 +27,7 @@ class ProfileView extends View {
 
 	initialize(mvc) {
 		super.initialize(mvc);
+
 	  this.stage.style.display = "flex";
     // axe y
     this.stage.style.alignItems = "center";
@@ -312,8 +313,8 @@ class ProfileView extends View {
 	}
 
 	addListeners() {
-		this.lougoutHandler = e => this.lougoutClick(e);
-		this.logoutButton.addEventListener("click", 	this.lougoutHandler);
+		this.logoutHandler = e => this.logoutClick(e);
+		this.logoutButton.addEventListener("click", 	this.logoutHandler);
 
 		this.searchHandler = e => this.searchClick(e);
 		this.searchBtn.addEventListener("click", 	this.searchHandler);
@@ -326,6 +327,7 @@ class ProfileView extends View {
 	}
 
 	removeListeners() {
+		trace("remove profile")
 		this.logoutButton.removeEventListener("click", 	this.logoutHandler);
 		this.searchBtn.removeEventListener("click", 	this.searchHandler);
 		this.changeBtn.removeEventListener("click", 	this.applyHandler);
@@ -333,7 +335,7 @@ class ProfileView extends View {
 
 	}
 	/* ------- Calling the Controller of this MVC ------------------------- */
-	lougoutClick(event){
+	logoutClick(event){
 		this.mvc.controller.logoutClicked();	// link to the disconect part of the controller
 
 	}
@@ -354,6 +356,9 @@ class ProfileView extends View {
 
 	updateProfile(data) {
 		console.log(data);
+
+		let profileData = this.profileData.cloneNode(true);
+
 		this.mail.innerHTML = data.mail;
 		this.profileName.innerHTML = data.username;
 		this.mail.innerHTML = data.mail;
@@ -380,6 +385,7 @@ class ProfileView extends View {
 
 	}
 
+	/*
 	deleteProfile() {
 		this.mail.innerHTML = "";
 		this.profileName.innerHTML = "";
@@ -393,6 +399,7 @@ class ProfileView extends View {
 		this.vocals.innerHTML = ""
 		this.languages.innerHTML = "";
 	}
+	*/
 
 	addGameToDisplay(game){
 
@@ -482,7 +489,7 @@ class ProfileController extends Controller {
 	searchClicked(params){
 		trace("search btn click", params);
 		this.mvc.view.deactivate();
-		this.mvc.view.deleteProfile();
+		//this.mvc.view.deleteProfile();
 		this.mvc.view.destroy();						// destroy current view
 		this.mvc.app.mvcTest.view.attach(document.body);// attach view of search MVC
 		this.mvc.app.mvcTest.view.activate();			// activate user interface of search MVC
@@ -491,7 +498,7 @@ class ProfileController extends Controller {
 	logoutClicked(params) {
 		trace("logout btn click", params);
 		this.mvc.view.deactivate();
-		this.mvc.view.deleteProfile();
+		//this.mvc.view.deleteProfile();
 		this.mvc.view.destroy(); 						 // destroy current view
 		this.mvc.app.authenticationMVC.view.attach(document.body); // attach view of authenticate MVC
 		this.mvc.app.authenticationMVC.view.activate(); 			 // activate user interface of authenticate MVC
@@ -500,7 +507,7 @@ class ProfileController extends Controller {
 	menuClicked() {
 		trace("menu btn click");
 		this.mvc.view.deactivate();
-		this.mvc.view.deleteProfile();
+		//this.mvc.view.deleteProfile();
 		this.mvc.view.destroy(); 						 // destroy current view
 		this.mvc.app.menuMVC.view.attach(document.body); // attach view of menu MVC
 		this.mvc.app.menuMVC.view.activate(); 			 // activate user interface of menu MVC

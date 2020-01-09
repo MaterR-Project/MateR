@@ -573,7 +573,7 @@ class RegistrationView extends View {
 
 		this.form.removeEventListener("submit", this.createButtonHandler);
 
-		this.createAccountButton.removeEventListener("click", this.loginButtonHandler);
+		this.loginButton.removeEventListener("click", this.loginButtonHandler);
 
 		this.addGameButton.removeEventListener("click", this.addGameButtonHandler);
 
@@ -582,6 +582,8 @@ class RegistrationView extends View {
 		});
 
 		this.comboRegions.removeEventListener("change", this.regionHandler);
+
+		//trace("remove register");
 	}
 
 	refreshListeners(){
