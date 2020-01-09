@@ -132,8 +132,11 @@ class MenuView extends View {
             messageBody.style.margin = "5px";
             messageBody.style.display = "flex";
             messageBody.style.alignSelf = "flex-end";
+            messageBody.style.maxWidth = "90%";
+            messageBody.style.textOverflow = "ellipsis";
+            messageBody.style.whiteSpace = "nowrap";
+            messageBody.style.overflow = "hidden";
             shortDiv.appendChild(messageBody);
-            messageBody.style.overflow = "ellipsis";
             if(e.message.Id == this.mvc.app.profileMVC.model.id){
                 messageBody.innerHTML = "You   : ";
             }
