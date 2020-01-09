@@ -1,4 +1,4 @@
-class ResearchModel extends Model {
+class SearchModel extends Model {
 
 	constructor() {
 		super();
@@ -10,7 +10,7 @@ class ResearchModel extends Model {
 
 }
 
-class ResearchView extends View {
+class SearchView extends View {
 
 	constructor() {
 		super();
@@ -20,45 +20,7 @@ class ResearchView extends View {
 	initialize(mvc) {
 		super.initialize(mvc);
 
-		this.stage.style.display = "flex";
-    this.stage.style.alignItems = "center";
-    this.stage.style.justifyContent = "center";
-		this.stage.style.flexDirection = "column";
-
-		//logo MateR
-		this.header = document.createElement("h1");
-		this.header.innerHTML = "MateR";
-		this.header.style.position = "absolute";
-		this.header.style.margin = "10px";
-		this.header.style.top = "0px";
-		this.header.style.fontSize = "60px";
-		this.stage.appendChild(this.header);
-
-		//button menu
-		this.btnMenu = document.createElement("button");
-		this.btnMenu.style.position = "absolute";
-		this.btnMenu.style.top = "10px";
-		this.btnMenu.style.left = "10px";
-		this.btnMenu.style.height = "50px";
-		this.btnMenu.style.width = "50px";
-		this.stage.appendChild(this.btnMenu);
-
-		//division principal
-		this.mainDiv = document.createElement("div");
-		this.mainDiv.style.display = "flex";
-    this.mainDiv.style.alignItems = "center";
-    this.mainDiv.style.justifyContent = "center";
-		this.mainDiv.style.flexDirection = "column";
-
-		this.gamePlatformChoice = document.createElement("select");
-		this.gamePlatformChoice.style.margin = "10px";
-		this.mainDiv.appendChild(this.gamePlatformChoice);
-
-		this.playstyleChoice = document.createElement("select");
-		this.playstyleChoice.style.margin = "10px";
-		this.mainDiv.appendChild(this.playstyleChoice);
-
-		this.stage.appendChild(this.mainDiv);
+		
 	}
 
 	// activate UI
@@ -104,7 +66,7 @@ class ResearchView extends View {
 
 }
 
-class ResearchController extends Controller {
+class SearchController extends Controller {
 
 	constructor() {
 		super();
@@ -113,6 +75,15 @@ class ResearchController extends Controller {
 	initialize(mvc) {
 		super.initialize(mvc);
 
+	}
+
+	menuClicked() {
+		trace("menu btn click");
+		this.mvc.view.deactivate();
+		//this.mvc.view.deleteProfile();
+		this.mvc.view.destroy(); 						 // destroy current view
+		this.mvc.app.menuMVC.view.attach(document.body); // attach view of menu MVC
+		this.mvc.app.menuMVC.view.activate(); 			 // activate user interface of menu MVC
 	}
 
 }

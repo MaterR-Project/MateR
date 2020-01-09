@@ -83,7 +83,7 @@ class MenuView extends View {
         this.msgDiv.innerHTML = "My conversations :";
         // conversation summury div
         this.convDiv = document.createElement("div");
-        this.mainDiv.appendChild(this.convDiv);        
+        this.mainDiv.appendChild(this.convDiv);
         this.convDiv.style.overflow = "auto";
         this.convDiv.style.display = "flex";
         this.convDiv.style.flexDirection = "column";
@@ -180,14 +180,14 @@ class MenuController extends Controller{
     }
     goSearch(){
         trace("uncomment the lines below me !!");
-        //this.mvc.view.destroy();
-        //this.mvc.app.searchMVC.view.attach(document.body);
-        //this.mvc.app.searchMVC.view.activate();
+        this.mvc.view.destroy();
+        this.mvc.app.searchMVC.view.attach(document.body);
+        this.mvc.app.searchMVC.view.activate();
     }
     async fetchConv(myId){
         this.convList = await this.mvc.model.getConv(myId)
         await this.mvc.view.displayShortConv(this.convList); // get the conersation list of this user
-        
+
     }
     async goName(id){
         let name = await this.mvc.model.getName(id);
