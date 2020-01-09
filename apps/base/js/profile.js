@@ -446,15 +446,27 @@ class ProfileView extends View {
 				let playstyle = document.createElement("div");
 					playstyle.setAttribute("class","property");
 					playstyle.style.display = "flex";
-					playstyle.style.flexDirection ="row";
+					playstyle.style.flexDirection ="column";
 					playstyle.style.justifyContent = "flex-start";
 					let labelPlaystyle = document.createElement("span");
 						labelPlaystyle.innerHTML = "Playstyles : "
 					playstyle.appendChild(labelPlaystyle);
-					let playStyleNames = document.createElement("span");
-						playStyleNames.style.marginLeft = "3px";
-						playStyleNames.innerHTML = game.playstyles.join(', ')
+
+					let playStyleNames = document.createElement("div");
+					game.playstyles.forEach((ps, _, psArray) => {
+						let playStyleSpan = document.createElement("span");
+						if (ps == psArray[psArray.length-1]) {
+							playStyleSpan.append(ps);
+						}else playStyleSpan.append(ps+", ");
+						//playStyleSpan.style.marginRight = "3px";
+						//playStyleSpan.style.alignSelf = "flex-end";
+						playStyleNames.appendChild(playStyleSpan);
+					});
+						playStyleNames.style.marginLeft = "10px";
+						playStyleNames.style.alignSelf = "flex-end";
+						//playStyleNames.innerHTML = game.playstyles.join(', ')
 					playstyle.appendChild(playStyleNames);
+
 				gameProperty.appendChild(playstyle);
 
 				// level of play
