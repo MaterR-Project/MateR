@@ -255,6 +255,26 @@ class Base extends ModuleBase {
 			if(sock)
 				sock.emit('message', tosend);
 			this.sendJSON(req, res, 200, {return : data});
+
+			let file;
+			if(parseInt(source[1] < parseInt(destination[1]))){
+				file = this.sendLatestConv(source[1], destination[1]);
+			} else {
+				file = this.sendLatestConv(destination[1], source[1]);
+			}
+			file = "database/tchats/" + file;
+			trace(file);
+			fs.readFile(file, "utf-8", function(err, data){
+				if(err) trace("error reading file, ", file, " : ", err);
+				var convText = JSON.parse(data);
+				let temp = new Date();
+				let time = temp.getHours() + ":" + temp.getMinutes();
+				let date = temp.getDate() + "-" + (temp.getMonth() + 1) + "-" + temp.getFullYear();
+				convText.push({Id : source[1], Message : content[1], State : "not seen", Time : time, Date : date})
+				fs.writeFile(file, JSON.stringify(convText), "utf-8", function(err){
+					if(err) trace("could not rewrite the file");
+				})
+			})
 		}else{
 			let data = "failed to send";
 			this.sendJSON(req, res, 200, {return : data});
