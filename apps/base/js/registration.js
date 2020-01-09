@@ -199,6 +199,11 @@ class RegistrationView extends View {
 		this.passwordLabel.style.width = "100%";
 		this.passwordLabel.style.margin = "2%";
 		this.passwordLabel.innerHTML = " Password* :";
+		this.passwordLabelIntel = document.createElement("span");
+		this.passwordLabelIntel.innerHTML = "(8 - 32 characters)";
+		this.passwordLabelIntel.style.alignSelf = "flex-end";
+		this.passwordLabelIntel.style.fontSize = "10px";
+		this.passwordLabelIntel.style.marginBottom = "5px";
 		this.passwordInput = document.createElement("input");
 		this.passwordInput.setAttribute("name", "password");
 		this.passwordInput.setAttribute("minlength","8");
@@ -206,6 +211,7 @@ class RegistrationView extends View {
 		this.passwordInput.setAttribute("required", "");
 		this.passwordInput.type ="password";
 		this.passwordDiv.appendChild(this.passwordLabel);
+		this.passwordDiv.appendChild(this.passwordLabelIntel);
 		this.passwordDiv.appendChild(this.passwordInput);
 		this.form.appendChild(this.passwordDiv);
 		// new password confirmation
@@ -494,7 +500,7 @@ class RegistrationView extends View {
 		this.createAccountButton.innerHTML = "Create Account";
 		//this.createAccountButton.style.alignSelf = "center";
 		this.createAccountButton.style.width = "60%";
-		this.createAccountButton.style.fontSize = "25px";
+		this.createAccountButton.style.fontSize = "30px";
 		this.createAccountButton.style.marginTop = "15px";
 		this.createAccountButton.style.marginBottom = "15px";
 		this.form.appendChild(this.createAccountButton);
@@ -507,6 +513,7 @@ class RegistrationView extends View {
 		this.loginButton = document.createElement("button");
 		this.loginButton.innerHTML = "Already got Account !";
 		this.loginButton.style.marginBottom = "15px";
+
 		this.mainDiv.appendChild(this.loginButton);
 	}
 
