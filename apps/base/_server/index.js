@@ -16,6 +16,7 @@ class Base extends ModuleBase {
 		this.playstyles = JSON.parse(fs.readFileSync('database/playstyles.json', 'utf8'));
 		this.users = JSON.parse(fs.readFileSync('database/users.json', 'utf8'));
 		this.vocals = JSON.parse(fs.readFileSync('database/vocals.json', 'utf8'));
+		this.ages = JSON.parse(fs.readFileSync('database/ages.json', 'utf-8'));
 		this.sessionIds = new Map();
 		this.sessions = new Map();
 		//trace(this.users,this.languages,this.levels,this.locals,this.playstyles,this.vocals);
@@ -140,7 +141,6 @@ class Base extends ModuleBase {
 	 * @param {*} res
 	 * @param  {...*} param : ssId name
 	 */
-
 	getProfileFromSessionId(req, res, ...param) {
 		trace(param)
 		let ssId = [...param].join(" ");
@@ -172,7 +172,6 @@ class Base extends ModuleBase {
 	 * @param {*} res
 	 * @param  {...*} param : Id name
 	 */
-
 	_getProfileFromId(req, res, ...param) {
 		trace(param)
 		let id = [...param].join(" ");
@@ -318,14 +317,14 @@ class Base extends ModuleBase {
 	 * @param {*} res
  	 * @param  {...*} param : id
 	 */
-  getNameFromId(req, res, ...param){
+  	getNameFromId(req, res, ...param){
 	  let id = [...param].join(" ");
 	  let name = 404; // error
 	  trace(id);
 	  if(id != -1) name = this.users[id].username;
 	  let data = name;
 	  this.sendJSON(req, res, 200, {return : data}); //send JSON
-  }
+  	}
 
 	/**
 	 * @method _getMessageFromRequest : busboy func to get message target id and source id from req
@@ -447,6 +446,184 @@ class Base extends ModuleBase {
 		}
 	}
 
+	async getMatchingProfiles(req, res, obj){
+		let data = await this._getDataFromRequest(req);
+		trace(data);
+		this.users.map(u =>{
+			let userWeight = 0;
+			if (u.id == data[0][1]){
+				trace("disqualified - self");
+				return false; // dont match yourself
+			}	
+			// give it user candidate user, taget game and target level
+			// game level
+			userWeight += (2 * this._getLevelWeight(u, data[1][1], data[2][1])); // 2* to set the importance of the level
+			// play style 
+			if (this._getStyleWeight(u, data[1][1], data[3][1]) == 0){
+				trace("disqualified - playstyle");
+				return false; //skip the user if playstyles dont match
+
+			} 
+			// country
+			userWeight += (6* this._getCountryWeight(u, data[4][1]));
+			//region
+			userWeight += (4 * this._getRegionWeight(u, data[5][1]));
+			//languages
+			let tmp;
+			if(data[6][1] == ""){
+				tmp = this._getLanguagesWeight(u, this.users[data[0][1].languages]);	// use user's languages by default
+			} else{													// else use the data provided by search
+				let langArray = data[6][1].split(",");			
+				tmp = this._getLanguagesWeight(u, langArray);
+			}
+			if (tmp == -1){
+				trace("disqualified - language")
+				return false;
+			} else {
+				userWeight += tmp * 0.75	
+			}
+			// ages
+			let date = new Date();
+			let year = date.getFullYear();
+			if(data[7][1] == ""){
+				userWeight += 0.8 * this._getAgeWeight(u, year - this.users[data[0][1].year], year);
+			} else{
+				userWeight += 0.8 * this._getAgeWeight(u, data[7][1], year);
+			}
+			// gender
+			if(data[8][1] != ""){			// if a gender was given in search
+				if(u.gender != data[8][1]){
+					trace("disqualified - gender")
+					return false;			// if gender is different, skip the user
+				}
+			}
+			// vocals
+			if(data[9][1] != ""){			// if vocals were given
+				let vocalArray = data[9][1].split(",");
+				userWeight += this._getVocalsWeght(u, vocalArray);
+			}
+
+			trace("the user ", u.id, " has weight ", userWeight);
+		})
+	}
+	_getLevelWeight(candidate, targetGame, targetLevel){
+		let weight = 0;
+		candidate.games.map(g =>{
+			if(g.name == targetGame){	// if user plays the desired game
+				let delta = this.levels.indexOf(g.level) - this.levels.indexOf(targetLevel);
+				delta = Math.abs(delta);
+				if (delta == 0){		// same levels
+					weight = 5;
+				}else if(delta == 1 ){	// almost same level
+					weight = 2;
+				}else if (delta == 2){	// not really same level
+					weight = 1;
+				}else if (delta == 3){	// not same level at all
+					weight = 0;
+				}
+			}else {
+				weight = -1;			// user doesnt play the same game, elimination case
+			}
+		})
+		return weight;
+	}
+	_getStyleWeight(candidate, targetGame, targetstyle){
+		let weight = 0;
+		candidate.games.map(g =>{
+			if(g.name == targetGame){	// if user plays the desired game
+				g.playstyles.map(p =>{
+					if(p == targetstyle){
+						weight = 1;		// user has a mathing playstyle
+					}
+				})
+			}
+		})
+		return weight;	// 1 if plays game and same playstyle, 0 otherwise
+	}
+	_getCountryWeight(candidate, targetCountry){
+		let weight = 0;
+		if(candidate.country == targetCountry)
+			weight = 1;
+		return weight;
+	}
+	_getRegionWeight(candidate, targetRegion){
+		let weight = 0;
+		if(candidate.region == targetRegion)
+			weight = 1;
+		return weight;
+		
+	}
+	_getLanguagesWeight(candidate, targetLanguage){
+		let count = 0;
+		candidate.languages.map(l =>{
+			if(targetLanguage.includes(l))
+			count ++;
+		})
+		let percentage = (count * 100) / targetLanguage.length;
+		let weight = 0;
+		if(percentage == 100){			// all in commun !
+			weight = 4;
+		} else if (percentage > 66){	// 66 % or more
+			weight = 3;
+		} else if (percentage > 33){	// 33% or more
+			weight = 2;
+		} else if (percentage > 0){		// less than 33%
+			weight = 1;
+		} else{							// no language, skip user
+			weight = -1;
+		}
+		return weight;
+	}
+	_getAgeWeight(candidate, targetAge, year){
+		if(candidate.year == -1)	// if the user didnt give any birth year, set the weight to 0
+			return 0;
+		let candidateAge =  year - candidate.year;
+		let candidateRange = this._getAgeRange(candidateAge); // get the candicate's age area
+		let targetRange = this._getAgeRange(targetAge);		  // get user's age area
+		let delta = candidateRange - targetRange;			  // get delta of this
+		switch (delta){
+			case 0 : return 5;
+			case 1 : return 4;
+			case -1 : return 3;
+			case 2 : return 3;
+			case -2 : return 2;
+			case 3 : return 2;
+			case (delta <= -3) : return 1;
+			case (delta >= 4) : return 1;
+		}
+	}
+	_getAgeRange(age){
+		let candidateRange;
+		for(var i = 0; i < this.ages.length; i++){
+			if(this.ages[i] > age){
+				candidateRange =  this.ages.indexOf(this.ages[i]) - 1;
+				break;
+			}
+		}
+		return candidateRange;
+	}
+	_getVocalsWeght(candidate, vocals){
+		let count = 0;
+		candidate.vocals.map(v =>{
+			if(vocals.includes(v)){
+				count++;
+			}
+		})
+		let percentage = (count * 100) / vocals.length;
+		let weight = 0;
+		if(percentage == 100){
+			weight = 4;
+		} else if (percentage > 66){
+			weight = 3;
+		}else if (percentage > 33){
+			weight = 2;
+		}else if (percentage > 0){
+			weight = 1;
+		} else{
+			weight = 0;
+		}
+		return weight;
+	}
 	/**
 	 * @method _getIdFromSessionId : string id of connect session
 	 * @param {string} sessionId
