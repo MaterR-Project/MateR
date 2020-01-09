@@ -293,10 +293,9 @@ class ProfileView extends View {
 
 	}
 	searchClick(event){
-		//this.mvc.controller.searchClicked();	// link for the search part of the controller
-		this.mvc.view.destroy();
-		this.mvc.app.tchatMVC.view.attach(document.body);
-		this.mvc.app.tchatMVC.view.activate();
+		//this.mvc.view.destroy();
+		//this.mvc.app.searchMVC.view.attach(document.body);
+		//this.mvc.app.searchMVC.view.activate();
 	}
 	applyClick(event) {
 		console.log("apply");					// link to the apply part of the controller
