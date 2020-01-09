@@ -176,6 +176,7 @@ class TchatView extends View {
 						messageContent.style.marginLeft="5px";
             messageDiv.appendChild(messageContent);
             messageContent.style.fontSize = "15px";
+            messageContent.style.overflowWrap = "break-word";
             messageContent.innerHTML = e.Message;
             let messageHeader = document.createElement("div");
             messageDiv.appendChild(messageHeader);
@@ -185,11 +186,11 @@ class TchatView extends View {
             messageHeader.style.justifyContent = "space-between";
             messageHeader.style.color = "#b5b5b5";
             //let statusDiv = document.createElement("span");
-
+            let statusDiv = document.createElement("div");
+            messageHeader.appendChild(statusDiv);
             if(e.State == "seen" && this.src == e.Id){
-                let statusDiv = this.mvc.app.getElementIcon("icon-seen", "auto");// e.State;
+                statusDiv = this.mvc.app.getElementIcon("icon-seen", "auto");// e.State;
 								messageHeader.style.marginLeft="5px";
-								messageHeader.appendChild(statusDiv);
             }
             let timeStamp = document.createElement("div");
             messageHeader.appendChild(timeStamp);
@@ -235,6 +236,7 @@ class TchatView extends View {
         messageHeader.appendChild(timeStamp);
         var time = new Date();
         timeStamp.innerHTML = time.getHours()+":"+ time.getMinutes();
+        //timeStamp.
         // scroll to the bottom of the conversation aka newest messages
         this.convDiv.scrollTo(0, this.convDiv.scrollHeight);
     }
