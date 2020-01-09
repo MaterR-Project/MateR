@@ -29,6 +29,7 @@ class MenuView extends View {
     }
 
 	initialize(mvc) {
+        trace("------------------ init")
         super.initialize(mvc);
         this.stage.style.display ="flex";
         this.stage.style.alignItems = "center";
@@ -46,7 +47,7 @@ class MenuView extends View {
         this.profileDiv.style.display = "flex";
         this.profileDiv.style.justifyContent = "space-around";
         this.profileDiv.style.alignItems = "center";
-        this.profileDiv.style.height = "20%"
+        this.profileDiv.style.height = "15%"
         this.profileDiv.style.border = "solid #999999";
         this.profileIcon = this.mvc.app.getElementIcon("icon-Profile", "45px");
         this.profileDiv.appendChild(this.profileIcon);
@@ -59,17 +60,30 @@ class MenuView extends View {
         this.searchDiv.style.display = "flex";
         this.searchDiv.style.justifyContent = "space-around";
         this.searchDiv.style.alignItems = "center";
-        this.searchDiv.style.height = "20%";
+        this.searchDiv.style.height = "15%";
         this.searchDiv.style.border = "solid #999999";
         this.searchIcon = this.searchIcon = this.mvc.app.getElementIcon("icon-Search", "45px");
         this.searchDiv.appendChild(this.searchIcon);
         this.searchText = document.createElement("h2");
         this.searchDiv.appendChild(this.searchText);
         this.searchText.innerHTML = "Give me some mates !";
+        // conv header
+        this.headerDiv = document.createElement("div");
+        this.mainDiv.appendChild(this.headerDiv);
+
+        this.headerDiv.style.display = "flex";
+        this.headerDiv.style.justifyContent = "space-around";
+        this.headerDiv.style.alignItems = "center";
+        this.headerDiv.style.height = "15%"
+        this.headerDiv.style.border = "solid #999999";
+        this.msgIcon = this.mvc.app.getElementIcon("icon-bubbles3", "45px");
+        this.headerDiv.appendChild(this.msgIcon);
+        this.msgDiv = document.createElement("h2");
+        this.headerDiv.appendChild(this.msgDiv);
+        this.msgDiv.innerHTML = "My conversations :";
         // conversation summury div
         this.convDiv = document.createElement("div");
-        this.mainDiv.appendChild(this.convDiv);
-        
+        this.mainDiv.appendChild(this.convDiv);        
         this.convDiv.style.overflow = "auto";
         this.convDiv.style.display = "flex";
         this.convDiv.style.flexDirection = "column";

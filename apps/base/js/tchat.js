@@ -61,12 +61,16 @@ class TchatView extends View {
 				//this.menuButton.style.fontSize = "15px";
         this.headDiv.appendChild(this.menuButton);
         // profile display
-        this.profileDiv = document.createElement("h3");
+        this.profileDiv = document.createElement("span");
         this.profileDiv.style.display = "flex";
         this.profileDiv.style.aligneItems = "center";
-        this.profileDiv.style.marginRight = "15%";
+				this.profileDiv.style.marginTop = "20px";
+        this.profileDiv.style.fontSize = "45px";
+				this.profileDiv.style.fontWeight = "bold";
         this.profileDiv.innerHTML = "correspondant_name"
         this.headDiv.appendChild(this.profileDiv);
+				let tmpSpan = document.createElement("span");
+				this.headDiv.appendChild(tmpSpan);
         // conversation history
         this.convDiv = document.createElement("div");
         this.convDiv.style.overflow = "auto";
@@ -185,16 +189,19 @@ class TchatView extends View {
             messageHeader.style.flexDirection = "row";
             messageHeader.style.justifyContent = "space-between";
             messageHeader.style.color = "#b5b5b5";
-            //let statusDiv = document.createElement("span");
-            let statusDiv = document.createElement("div");
-            messageHeader.appendChild(statusDiv);
+            let statusDiv = document.createElement("span");
+            //let statusDiv = document.createElement("div");
+						trace(e.State == "seen", this.src == e.Id)
             if(e.State == "seen" && this.src == e.Id){
                 statusDiv = this.mvc.app.getElementIcon("icon-seen", "auto");// e.State;
 								messageHeader.style.marginLeft="5px";
             }
-            let timeStamp = document.createElement("div");
+						messageHeader.appendChild(statusDiv);
+            let timeStamp = document.createElement("span");
+						timeStamp.innerHTML = e.Time;
+						//timeStamp.style.width = "100%";
+						timeStamp.style.justifyContent = "flex-end";
             messageHeader.appendChild(timeStamp);
-            timeStamp.innerHTML = e.Time;
         })
         // scroll to the bottom of the conversation aka newest messages
         this.convDiv.scrollTo(0, this.convDiv.scrollHeight);
@@ -235,7 +242,11 @@ class TchatView extends View {
         let timeStamp = document.createElement("div");
         messageHeader.appendChild(timeStamp);
         var time = new Date();
-        timeStamp.innerHTML = time.getHours()+":"+ time.getMinutes();
+				let minutes = time.getMinutes();
+				let hours = time.getHours();
+				if (minutes < 10) minutes = "0"+minutes;
+				if (hours < 10) hours = "0"+hours;
+        timeStamp.innerHTML = hours+":"+ minutes;
         //timeStamp.
         // scroll to the bottom of the conversation aka newest messages
         this.convDiv.scrollTo(0, this.convDiv.scrollHeight);
@@ -253,7 +264,11 @@ class TchatView extends View {
             let timeStamp = document.createElement("div");  //set time to sent time
             lastMessage.appendChild(timeStamp);
             var time = new Date();
-            timeStamp.innerHTML = time.getHours()+":"+ time.getMinutes();
+						let minutes = time.getMinutes();
+						let hours = time.getHours();
+						if (minutes < 10) minutes = "0"+minutes;
+						if (hours < 10) hours = "0"+hours;
+            timeStamp.innerHTML = hours+":"+ minutes;
             lastMessage.style.float = "right";
         } else {
             lastMessage.innerHTML = "FAILED TO SEND";
@@ -261,7 +276,11 @@ class TchatView extends View {
             let timeStamp = document.createElement("div");  //set time to sent time
             lastMessage.appendChild(timeStamp);
             var time = new Date();
-            timeStamp.innerHTML = time.getHours()+":"+ time.getMinutes();
+						let minutes = time.getMinutes();
+						let hours = time.getHours();
+						if (minutes < 10) minutes = "0"+minutes;
+						if (hours < 10) hours = "0"+hours;
+            timeStamp.innerHTML = hours+":"+ minutes;
         }
     }
 }
@@ -300,6 +319,6 @@ class TchatController extends Controller {
     // function to link to the model that sends a message and update the view
     async sendMessage (content){
         this.mvc.view.setStatus(await this.mvc.model.pushMessage(content));
-        
+
     }
 }
