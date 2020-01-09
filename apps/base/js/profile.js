@@ -515,6 +515,8 @@ class ProfileController extends Controller {
 	logoutClicked(params) {
 		trace("logout btn click", params);
 		this.mvc.app.io.disconnect();
+		this.mvc.app.authenticationMVC.model.sessionId = undefined;
+		//trace(this.mvc.app.authenticationMVC.model.sessionId);
 		this.mvc.view.deactivate();
 		//this.mvc.view.deleteProfile();
 		this.mvc.view.destroy(); 						 // destroy current view
