@@ -140,10 +140,14 @@ class AutenticationView extends View {
 	addListeners() {
     this.connectBtnHandler = e => {
 			this.connectClick(e);
+			this.updateWrongPsw("");
 		}
     this.connectBtn.addEventListener("click", this.connectBtnHandler);
 
-    this.createAccountBtnHandler = e => this.createAccountClick(e);
+    this.createAccountBtnHandler = e => {
+			this.createAccountClick(e);
+			this.updateWrongPsw("");
+		}
     this.createAccountBtn.addEventListener("click", this.createAccountBtnHandler);
 	}
 
