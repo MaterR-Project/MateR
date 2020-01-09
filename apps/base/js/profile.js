@@ -413,6 +413,8 @@ class ProfileView extends View {
 			// game title
 			let gameName = document.createElement("span");
 				gameName.innerHTML = game.name;
+				gameName.style.textDecoration = "underline";
+				gameName.style.marginBottom = "5px";
 			gameDiv.appendChild(gameName);
 
 			//game property
@@ -447,7 +449,7 @@ class ProfileView extends View {
 					playstyle.style.flexDirection ="row";
 					playstyle.style.justifyContent = "flex-start";
 					let labelPlaystyle = document.createElement("span");
-						labelPlaystyle.innerHTML = "Play style : "
+						labelPlaystyle.innerHTML = "Playstyles : "
 					playstyle.appendChild(labelPlaystyle);
 					let playStyleNames = document.createElement("span");
 						playStyleNames.style.marginLeft = "3px";
