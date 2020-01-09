@@ -33,7 +33,6 @@ class AutenticationView extends View {
 
 	initialize(mvc) {
 		super.initialize(mvc);
-
     this.stage.style.display = "flex";
     this.stage.style.alignItems = "center";
     this.stage.style.justifyContent = "center";

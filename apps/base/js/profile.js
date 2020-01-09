@@ -365,7 +365,6 @@ class ProfileView extends View {
 		this.languages.innerHTML = data.languages.join(', ');
 		data.games.forEach( game => this.addGameToDisplay(game));
 		//this.vocals.innerHTML = data.vocals.join(', ');
-
 		data.vocals.forEach(e => {
 			let div = document.createElement("div");
 			div.style.display = "flex";
