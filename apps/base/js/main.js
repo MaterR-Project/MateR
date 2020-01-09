@@ -25,6 +25,9 @@ class Base {
 		this.menuMVC = new MVC("menuMVC", this, new MenuModel(), new MenuView(), new MenuController());
 		await this.menuMVC.initialize();
 
+		this.searchMVC = new MVC("searchMVC", this, new SearchModel(), new SearchView(), new SearchController());
+		await this.searchMVC.initialize();
+
 		this.authenticationMVC.view.attach(document.body);
 		this.authenticationMVC.view.activate();
 

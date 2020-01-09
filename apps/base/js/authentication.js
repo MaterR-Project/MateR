@@ -21,7 +21,6 @@ class AutenticationModel extends Model {
 		//trace(this.sessionId);
 		return result.response;
 	}
-
 }
 
 class AutenticationView extends View {
@@ -179,7 +178,7 @@ class AutenticationController extends Controller {
 
 	initialize(mvc) {
 		super.initialize(mvc);
-
+		trace(["truc",2,{"bidule":"chouette"}]);
 	}
 
 	// TODO with profile.js
@@ -216,5 +215,4 @@ class AutenticationController extends Controller {
 		}
 		return true
 	}
-
 }
