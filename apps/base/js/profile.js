@@ -482,6 +482,7 @@ class ProfileController extends Controller {
 	searchClicked(params){
 		trace("search btn click", params);
 		this.mvc.view.deactivate();
+		this.mvc.view.deleteProfile();
 		this.mvc.view.destroy();						// destroy current view
 		this.mvc.app.mvcTest.view.attach(document.body);// attach view of search MVC
 		this.mvc.app.mvcTest.view.activate();			// activate user interface of search MVC
@@ -499,6 +500,7 @@ class ProfileController extends Controller {
 	menuClicked() {
 		trace("menu btn click");
 		this.mvc.view.deactivate();
+		this.mvc.view.deleteProfile();
 		this.mvc.view.destroy(); 						 // destroy current view
 		this.mvc.app.menuMVC.view.attach(document.body); // attach view of menu MVC
 		this.mvc.app.menuMVC.view.activate(); 			 // activate user interface of menu MVC
