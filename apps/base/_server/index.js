@@ -152,7 +152,7 @@ class Base extends ModuleBase {
 	 * @param {*} res
 	 * @param  {...*} param : ssId name
 	 */
-	
+
 	getProfileFromSessionId(req, res, ...param) {
 		trace(param)
 		let ssId = [...param].join(" ");
@@ -236,7 +236,7 @@ class Base extends ModuleBase {
 	 * @param {*} res
 	 */
 	async sendMessage(req, res){
-		let result = await this._getMessageFromRequest(req); 
+		let result = await this._getMessageFromRequest(req);
 		trace(result)
 		let content = result[0];
 		let source = result[1];
@@ -303,7 +303,7 @@ class Base extends ModuleBase {
 	 */
 	login(req, res, username, password){
 		trace(username, password);
-		let profil = this.users.find(profil => profil.username == username);
+		let profil = this.users.find(profil => profil.username == username && profil.password == password);
 		trace("profil", profil);
 		trace('map', this.sessionIds);
 		trace('users', this.users);
