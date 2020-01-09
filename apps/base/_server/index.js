@@ -38,19 +38,7 @@ class Base extends ModuleBase {
 	}
 
 	/**
-	 * @method getIdFromSessionId : id of connect session
-	 * @param {*} sessionId
-	 */
-	 getIdFromSessionId(sessionId) {
- 		let id = this.sessionIds.get(sessionId);
- 		if (id === undefined) {
- 			id = -1;
- 		}
- 		return id;
- 	}
-
-	/**
-	 * @method getGameNamesFromDatabase : list of game names
+	 * @method getGameNamesFromDatabase : array of game names
 	 * @param {*} req
 	 * @param {*} res
 	 */
@@ -61,7 +49,7 @@ class Base extends ModuleBase {
 	}
 
 	/**
-	 * @method getGamePlatformsFromGameName : list of platform
+	 * @method getGamePlatformsFromGameName : array of platform
 	 * @param {*} req
 	 * @param {*} res
 	 * @param  {...*} param : game name
@@ -75,7 +63,7 @@ class Base extends ModuleBase {
 	}
 
 	/**
-	 * @method getGameCrossplayFromGameName : id of crossplay
+	 * @method getGameCrossplayFromGameName : boolean of crossplay
 	 * @param {*} req
 	 * @param {*} res
 	 * @param  {...*} param : game name
@@ -89,7 +77,7 @@ class Base extends ModuleBase {
 	}
 
 	/**
-	 * @method getLanguagesFromDatabase : list of language
+	 * @method getLanguagesFromDatabase : array of language
 	 * @param {*} req
 	 * @param {*} res
 	 */
@@ -100,7 +88,7 @@ class Base extends ModuleBase {
 	}
 
 	/**
-	 * @method getLevelsFromDatabase : list of level
+	 * @method getLevelsFromDatabase : array of level
 	 * @param {*} req
 	 * @param {*} res
 	 */
@@ -111,7 +99,7 @@ class Base extends ModuleBase {
 	}
 
 	/**
-	 * @method getRegionsFromDatabase : list of region
+	 * @method getRegionsFromDatabase : array of region
 	 * @param {*} req
 	 * @param {*} res
 	 */
@@ -122,7 +110,7 @@ class Base extends ModuleBase {
 	}
 
 	/**
-	 * @method getRegionCountriesFromRegionName : list of country
+	 * @method getRegionCountriesFromRegionName : array of country
 	 * @param {*} req
 	 * @param {*} res
 	 * @param  {...*} param : region name
@@ -136,7 +124,7 @@ class Base extends ModuleBase {
 	}
 
 	/**
-	 * @method getPlaystylesFromDatabase : list of playstyle
+	 * @method getPlaystylesFromDatabase : array of playstyle
 	 * @param {*} req
 	 * @param {*} res
 	 */
@@ -152,21 +140,21 @@ class Base extends ModuleBase {
 	 * @param {*} res
 	 * @param  {...*} param : ssId name
 	 */
-	
+
 	getProfileFromSessionId(req, res, ...param) {
 		trace(param)
 		let ssId = [...param].join(" ");
-		let id = this.getIdFromSessionId(ssId); // profile id of session id
+		let id = this._getIdFromSessionId(ssId); // profile id of session id
 		let profile = 404; // error case
 		if (id != -1) {
-			profile = this.users[id];
-			profile.password = "Nice Try ;)"
+			profile = this._returnCopyOfObject(this.users[id]);
+			delete profile["password"];
 		}
 		let data = profile; // object profile of user id
 		this.sendJSON(req, res, 200, {return: data}); // answer JSON
 	}
 	/**
-	 * @method getNameFrom$Id : object profile
+	 * @method getNameFrom$Id : string username
 	 * @param {*} req
 	 * @param {*} res
 	 * @param  {...*} param : id
@@ -185,20 +173,20 @@ class Base extends ModuleBase {
 	 * @param  {...*} param : Id name
 	 */
 
-	getProfileFromId(req, res, ...param) {
+	_getProfileFromId(req, res, ...param) {
 		trace(param)
 		let id = [...param].join(" ");
 		let profile = 404; // error case
 		if (id != -1) {
-			profile = this.users[id];
-			profile.password = "Nice Try ;)"
+			profile = this._returnCopyOfObject(this.users[id]);
+			delete profile["password"];
 		}
 		let data = profile; // object profile of user id
 		this.sendJSON(req, res, 200, {return: data}); // answer JSON
 	}
 
 	/**
-	 * @method getVocalsFromDatabase : list of vocal
+	 * @method getVocalsFromDatabase : array of vocal
 	 * @param {*} req
 	 * @param {*} res
 	 */
@@ -207,115 +195,100 @@ class Base extends ModuleBase {
 		let data =  this.vocals;
 		this.sendJSON(req, res, 200, {return: data}); // answer JSON
 	}
+
 	/**
-	 * @method sendLatestConv : sends the name of the latest conversation file between id1 & id2
-	 * @param {*} id1 : id of first user
-	 * @param {*} id2 : id of second user
-	 */
-	sendLatestConv(id1, id2){
-		var fs = require("fs");
-		var regex = new RegExp(id1 + "_" +id2);
-		var dir = fs.readdirSync("database/tchats");
-		var list = [];
-		// match directory content for tag1_tag2
-		dir.forEach( i => {
-			if(regex.test(i)) // push it !
-				list.push(i);
-		})
-		// make sure the list is sorted by creation date
-		list.sort(function(a, b){
-			return fs.statSync("database/tchats/" + a).mtime.getTime() - fs.statSync("database/tchats/" + b).mtime.getTime();
-		})
-		//get the newest one
-		var mostRecent = list[list.length - 1];
-		return mostRecent;
-	}
-	/**
-	 * @method sendMessage : makes sure users can discuss and handles message sending
+	 * @method sendMessage : Object of tchats - makes sure users can discuss
 	 * @param {*} req
 	 * @param {*} res
 	 */
 	async sendMessage(req, res){
-		let result = await this._getMessageFromRequest(req); 
+		let result = await this._getMessageFromRequest(req);
+		trace(result)
 		let content = result[0];
 		let source = result[1];
 		let destination = result[2];
-		let test = this.users[source[1]].tchats.map(e =>{
+		let canSend;
+		this.users[source[1]].tchats.map(e =>{
 			if(e == destination[1])
-				return 1;
+				canSend = 1;
 		})
-		if(test == 1){
+		trace(canSend);
+		if(canSend == 1){
 			let data = "ok";
 			//send to other user TODO
 			let sock = this.sessions[source[1]]; // get the socket of the destination
 			let tosend = JSON.stringify({message : content[1], src : source[1], dest : destination[1]});
-			sock.emit('message', tosend);
+			if(sock)
+				sock.emit('message', tosend);
 			this.sendJSON(req, res, 200, {return : data});
+
+			let file;
+			if(parseInt(source[1] < parseInt(destination[1]))){
+				file = this._sendLatestConv(source[1], destination[1]);
+			} else {
+				file = this._sendLatestConv(destination[1], source[1]);
+			}
+			file = "database/tchats/" + file;
+			trace(file);
+			fs.readFile(file, "utf-8", function(err, data){
+				if(err) trace("error reading file, ", file, " : ", err);
+				var convText = JSON.parse(data);
+				let temp = new Date();
+				let time = temp.getHours() + ":" + temp.getMinutes();
+				let date = temp.getDate() + "-" + (temp.getMonth() + 1) + "-" + temp.getFullYear();
+				convText.push({Id : source[1], Message : content[1], State : "not seen", Time : time, Date : date})
+				fs.writeFile(file, JSON.stringify(convText), "utf-8", function(err){
+					if(err) trace("could not rewrite the file");
+				})
+			})
 		}else{
 			let data = "failed to send";
 			this.sendJSON(req, res, 200, {return : data});
 		}
 	}
 	/**
-	 * @method getConvFrom : object profile
+	 * @method getConvFromId : object tchats
 	 * @param {*} req
 	 * @param {*} res
 	 * @param  {...*} param : Ids of the conv to get
 	 */
 	getConvFromId(req, res, ...param){
 		let conv = 404;
-		if(param[0] != -1 && param[1] != -1) conv = this.sendLatestConv(param[0], param[1]);
+		if(param[0] != -1 && param[1] != -1) conv = this._sendLatestConv(param[0], param[1]);
 		conv = JSON.parse(fs.readFileSync('database/tchats/' + conv, 'utf8'));
 		let data = conv;
 		this.sendJSON(req, res, 200, {return: data});
 	}
 
 	/**
-	 * @method login : connect a user
+	 * @method login : string of session id - connect a user
 	 * @param {*} req
 	 * @param {*} res
-	 * @param {*} username
-	 * @param {*} password
+	 * @param {string} username
+	 * @param {string} password
 	 */
 	login(req, res, username, password){
 		trace(username, password);
-		let profil = this.users.find(profil => profil.username == username);
-		trace("profil", profil);
+		let profile = this.users.find(profile => profile.username == username && profile.password == password);
+		trace("profile", profile);
 		trace('map', this.sessionIds);
 		trace('users', this.users);
-		if (profil != undefined) {
+		if (profile != undefined) {
 			let sessionId = this._createSessionId();
-			this.sessionIds.set(sessionId, profil.id);
+			this.sessionIds.set(sessionId, profile.id);
 			trace(sessionId);
 			this.sendJSON(req, res, 200, {return: sessionId});
 		}else{
 			this.sendJSON(req, res, 401, {return: "Wrong Login or Password"});
 		}
 	}
-	/**
-	 * @method sendLatestConv : sends the name of the latest conversation file between id1 & id2
-	 * @param {*} id1 : id of first user
-	 * @param {*} id2 : id of second user
-	 */
-	sendLatestConv(id1, id2){
-		var fs = require("fs");
-		var regex = new RegExp(id1 + "_" +id2);
-		var dir = fs.readdirSync("database/tchats");
-		var list = [];
-		// match directory content for tag1_tag2
-		dir.forEach( i => {
-			if(regex.test(i)) // push it !
-				list.push(i);
-		})
-		// make sure the list is sorted by creation date
-		list.sort(function(a, b){
-			return fs.statSync("database/tchats/" + a).mtime.getTime() - fs.statSync("database/tchats/" + b).mtime.getTime();
-		})
-		//get the newest one
-		var mostRecent = list[list.length - 1];
-		return mostRecent;
-	}
 
+	/**
+	 * @method getShortConvFromID : object short message - sends a mini conv with the specified
+	 * @param {*} req
+	 * @param {*} res
+	 * @param {string} id : id of user you want the conv with
+	 */
 	getShortConvFromId(req, res, id){
 		let convLstId = this.users[id].tchats;
 		let convLstFile = [];
@@ -323,9 +296,9 @@ class Base extends ModuleBase {
 		let data = [];
 		convLstId.map(e =>{
 			if(id < e){
-				convLstFile.push(this.sendLatestConv(id, e));
+				convLstFile.push(this._sendLatestConv(id, e));
 			} else{
-				convLstFile.push(this.sendLatestConv(e, id));
+				convLstFile.push(this._sendLatestConv(e, id));
 			}
 		})
 		convLstFile.map(f =>{
@@ -338,47 +311,24 @@ class Base extends ModuleBase {
 		})
 		this.sendJSON(req, res, 200, {return : data});
 	}
-	/**
-	* @method getNameFromid :
-	* @param {*} req
-	* @param {*} res
-	* @param  {...*} param : id
-	*/
-   getNameFromId(req, res, ...param){
-	   let id = [...param].join(" ");
-	   let name = 404; // error
-	   trace(id);
-	   if(id != -1) name = this.users[id].username;
-	   let data = name;
-	   this.sendJSON(req, res, 200, {return : data}); //send JSON
-   }
-	/**
-	 * @method hello : world
-	 * @param {*} req
-	 * @param {*} res
-	 * @param  {...*} params : some arguments
-	 */
-	hello(req, res, ... params) {
-		let answer = ["hello", ...params, "!"].join(" "); // say hello
-		trace(answer); // say it
-		this.sendJSON(req, res, 200, {message: answer}); // answer JSON
-	}
 
 	/**
-	 * @method data : random data response
+   * @method getNameFromId : string username
 	 * @param {*} req
 	 * @param {*} res
+ 	 * @param  {...*} param : id
 	 */
-	data(req, res) {
-		let data = [ // some random data
-			{id: 0, name: "data0", value: Math.random()},
-			{id: 1, name: "data1", value: Math.random()},
-			{id: 2, name: "data2", value: Math.random()}
-		];
-		this.sendJSON(req, res, 200, data); // answer JSON
-	}
+  getNameFromId(req, res, ...param){
+	  let id = [...param].join(" ");
+	  let name = 404; // error
+	  trace(id);
+	  if(id != -1) name = this.users[id].username;
+	  let data = name;
+	  this.sendJSON(req, res, 200, {return : data}); //send JSON
+  }
+
 	/**
-	 * @method getVocalsFromDatabase : busboy func to get message target id and source id from req
+	 * @method _getMessageFromRequest : busboy func to get message target id and source id from req
 	 * @param {*} req
 	 */
 	async _getMessageFromRequest(req){
@@ -488,43 +438,60 @@ class Base extends ModuleBase {
 			newProfile.tchats = [];
 			trace(newProfile);
 			this.users.push(newProfile);
-			//TODO UPDATE JSON
+			//TODO UPDATE JSON In NEW FILE
+			fs.writeFile("database/users.json", JSON.stringify(this.users), function(err){
+				if(err) trace("couldnt write file");
+				trace( "write complete");
+			});
+
 		}
 	}
+
+	/**
+	 * @method _getIdFromSessionId : string id of connect session
+	 * @param {string} sessionId
+	 */
+	 _getIdFromSessionId(sessionId) {
+ 		let id = this.sessionIds.get(sessionId);
+ 		if (id === undefined) {
+ 			id = -1;
+ 		}
+ 		return id;
+ 	}
 
 	/**
 	 * @method _getDataFromRequest : get the post data from request
 	 * @param {*} req
 	 */
 	async _getDataFromRequest(req){
-    let busboy = new Busboy({ headers: req.headers });
+    	let busboy = new Busboy({ headers: req.headers });
 		let result, prom = new Promise(resolve => result = resolve);
 		let form = new Array();
-    busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated) {
+	    busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated) {
 			form.push([fieldname, val]);
-    });
-    busboy.on('finish', function() {
+    	});
+    	busboy.on('finish', function() {
 			result(form);
-      trace('Done parsing form!');
-    });
-    req.pipe(busboy);
+      		trace('Done parsing form!');
+    	});
+    	req.pipe(busboy);
 		return prom;
 	}
 
 	/**
-	 * @method _isUsernameTaken : say if given username is taken
-	 * @param {*} username
+	 * @method _isUsernameTaken : boolean that says if given username is taken
+	 * @param {string} username
 	 */
 	_isUsernameTaken(username){
 		let taken = false;
-		this.users.map(profil => {
-			if (profil.username == username) taken = true;
+		this.users.map(profile => {
+			if (profile.username == username) taken = true;
 		});
 		return taken;
 	}
 
 	/**
-	 * @method createSessionId : create a session id
+	 * @method createSessionId : string a new session id
 	 */
 	_createSessionId() {
 		let sessionId = "" + Math.random();
@@ -532,6 +499,38 @@ class Base extends ModuleBase {
 			sessionId = "" + Math.random();
 		}
 		return sessionId;
+	}
+
+	/**
+	 * @method _returnCopyOfObject : return a copy of the given object
+	 * @param {Object} object
+	 */
+	_returnCopyOfObject(object) {
+		return JSON.parse(JSON.stringify(object));
+	}
+
+	/**
+	 * @method _sendLatestConv : string name of the latest conversation file between id1 & id2
+	 * @param {string} id1 : id of first user
+	 * @param {string} id2 : id of second user
+	 */
+	_sendLatestConv(id1, id2){
+		var fs = require("fs");
+		var regex = new RegExp(id1 + "_" +id2);
+		var dir = fs.readdirSync("database/tchats");
+		var list = [];
+		// match directory content for tag1_tag2
+		dir.forEach( i => {
+			if(regex.test(i)) // push it !
+				list.push(i);
+		})
+		// make sure the list is sorted by creation date
+		list.sort(function(a, b){
+			return fs.statSync("database/tchats/" + a).mtime.getTime() - fs.statSync("database/tchats/" + b).mtime.getTime();
+		})
+		//get the newest one
+		var mostRecent = list[list.length - 1];
+		return mostRecent;
 	}
 
 	/**

@@ -27,6 +27,7 @@ class ProfileView extends View {
 
 	initialize(mvc) {
 		super.initialize(mvc);
+
 	  this.stage.style.display = "flex";
     // axe y
     this.stage.style.alignItems = "center";
@@ -49,13 +50,11 @@ class ProfileView extends View {
 		this.mainDiv.appendChild(this.topBtnDiv);
 
 		this.topBtnDiv.style.display = "flex";
-		this.topBtnDiv.style.justifyContent = "space-between"
+		this.topBtnDiv.style.justifyContent = "space-between";
 		this.topBtnDiv.style.width ="100%";
 		// create search btn to open the conversation slide tab
 		this.menuButton = document.createElement("span");
 		this.menuButton.setAttribute("class", "icon-Menu");
-		//this.menuButton.style.fontSize = "auto";
-		//this.menuButton.innerHTML = "Menu";
 		this.menuButton.style.fontSize = "45px";
 		this.menuButton.style.marginLeft="10px";
 		this.topBtnDiv.appendChild(this.menuButton);
@@ -89,11 +88,19 @@ class ProfileView extends View {
 			// Mail
 			this.mailDiv = document.createElement("div");
 			this.mailLabel = document.createElement("h4");
+			//this.mailLabel.style.display = "flex";
+			//this.mailLabel.style.justifyContent = "space-between";
+			this.mailIcon = this.mvc.app.getElementIcon("icon-Mail", "auto");
+			this.mailIcon.style.marginRight = "5px";
+			this.mailLabel.appendChild(this.mailIcon);
+			this.mailLabel.append(" E-mail :");
 			this.mailLabel.setAttribute("class","profil-label");
-			this.mailLabel.innerHTML = "mail : ";
+			this.mailLabel.style.alignSelf = "flex-start";
+
 			this.mailDiv.appendChild(this.mailLabel);
 			this.mail = document.createElement("div");
 			this.mail.setAttribute("class","profil-element");
+			this.mail.style.alignSelf = "center";
 			this.mailDiv.appendChild(this.mail);
 			this.profileData.appendChild(this.mailDiv);
 
@@ -101,10 +108,14 @@ class ProfileView extends View {
 			this.bioDiv = document.createElement("div");
 			this.bioLabel = document.createElement("h4");
 			this.bioLabel.setAttribute("class","profil-label");
-			this.bioLabel.innerHTML = "bio : ";
+			this.bioIcon = this.mvc.app.getElementIcon("icon-Bio", "auto");
+			this.bioIcon.style.marginRight = "5px";
+			this.bioLabel.appendChild(this.bioIcon);
+			this.bioLabel.append(" Bio : ");
 			this.bioDiv.appendChild(this.bioLabel);
 			this.bio = document.createElement("div");
 			this.bio.setAttribute("class","profil-element");
+			this.bio.style.alignSelf = "center";
 			this.bioDiv.appendChild(this.bio);
 			this.profileData.appendChild(this.bioDiv);
 
@@ -112,10 +123,14 @@ class ProfileView extends View {
 			this.genderDiv = document.createElement("div");
 			this.genderLabel = document.createElement("h4");
 			this.genderLabel.setAttribute("class","profil-label");
-			this.genderLabel.innerHTML = "gender : ";
+			this.genderIcon = this.mvc.app.getElementIcon("icon-Gender", "auto");
+			this.genderIcon.style.marginRight = "5px";
+			this.genderLabel.appendChild(this.genderIcon);
+			this.genderLabel.append(" Gender : ");
 			this.genderDiv.appendChild(this.genderLabel);
 			this.gender = document.createElement("div");
 			this.gender.setAttribute("class","profil-element");
+			this.gender.style.alignSelf = "center";
 			this.genderDiv.appendChild(this.gender);
 			this.profileData.appendChild(this.genderDiv);
 
@@ -123,10 +138,14 @@ class ProfileView extends View {
 			this.ageDiv = document.createElement("div");
 			this.ageLabel = document.createElement("h4");
 			this.ageLabel.setAttribute("class","profil-label");
-			this.ageLabel.innerHTML = "age : ";
+			this.ageIcon = this.mvc.app.getElementIcon("icon-Year", "auto");
+			this.ageIcon.style.marginRight = "5px";
+			this.ageLabel.appendChild(this.ageIcon);
+			this.ageLabel.append(" Age : ");
 			this.ageDiv.appendChild(this.ageLabel);
 			this.age = document.createElement("div");
 			this.age.setAttribute("class","profil-element");
+			this.age.style.alignSelf = "center";
 			this.ageDiv.appendChild(this.age);
 			this.profileData.appendChild(this.ageDiv);
 
@@ -134,10 +153,14 @@ class ProfileView extends View {
 			this.regionDiv = document.createElement("div");
 			this.regionLabel = document.createElement("h4");
 			this.regionLabel.setAttribute("class","profil-label");
-			this.regionLabel.innerHTML = "region : ";
+			this.regionIcon = this.mvc.app.getElementIcon("icon-Region", "auto");
+			this.regionIcon.style.marginRight = "5px";
+			this.regionLabel.appendChild(this.regionIcon);
+			this.regionLabel.append(" Region : ");
 			this.regionDiv.appendChild(this.regionLabel);
 			this.region = document.createElement("div");
 			this.region.setAttribute("class","profil-element");
+			this.region.style.alignSelf = "center";
 			this.regionDiv.appendChild(this.region);
 			this.profileData.appendChild(this.regionDiv);
 
@@ -145,10 +168,14 @@ class ProfileView extends View {
 			this.countryDiv = document.createElement("div");
 			this.countryLabel = document.createElement("h4");
 			this.countryLabel.setAttribute("class","profil-label");
-			this.countryLabel.innerHTML = "country : ";
+			this.countryIcon = this.mvc.app.getElementIcon("icon-Country", "auto");
+			this.countryIcon.style.marginRight = "5px";
+			this.countryLabel.appendChild(this.countryIcon);
+			this.countryLabel.append(" Country : ");
 			this.countryDiv.appendChild(this.countryLabel);
 			this.country = document.createElement("div");
 			this.country.setAttribute("class","profil-element");
+			this.country.style.alignSelf = "center";
 			this.countryDiv.appendChild(this.country);
 			this.profileData.appendChild(this.countryDiv);
 
@@ -156,10 +183,14 @@ class ProfileView extends View {
 			this.languagesDiv = document.createElement("div");
 			this.languagesLabel = document.createElement("h4");
 			this.languagesLabel.setAttribute("class","profil-label");
-			this.languagesLabel.innerHTML = "languages : ";
+			this.languagesIcon = this.mvc.app.getElementIcon("icon-bubble", "auto");
+			this.languagesIcon.style.marginRight = "5px";
+			this.languagesLabel.appendChild(this.languagesIcon);
+			this.languagesLabel.append(" Languages : ");
 			this.languagesDiv.appendChild(this.languagesLabel);
 			this.languages = document.createElement("div");
 			this.languages.setAttribute("class","profil-element");
+			this.languages.style.alignSelf = "center";
 			this.languagesDiv.appendChild(this.languages);
 			this.profileData.appendChild(this.languagesDiv);
 
@@ -167,10 +198,14 @@ class ProfileView extends View {
 			this.gamesDiv = document.createElement("div");
 			this.gamesLabel = document.createElement("h4");
 			this.gamesLabel.setAttribute("class","profil-label");
-			this.gamesLabel.innerHTML = "games : ";
+			this.gamesIcon = this.mvc.app.getElementIcon("icon-Games", "auto");
+			this.gamesIcon.style.marginRight = "5px";
+			this.gamesLabel.appendChild(this.gamesIcon);
+			this.gamesLabel.append(" Games : ");
 			this.gamesDiv.appendChild(this.gamesLabel);
 			this.games = document.createElement("div");
 			this.games.setAttribute("class","profil-element");
+			this.games.style.alignSelf = "center";
 			this.gamesDiv.appendChild(this.games);
 			this.profileData.appendChild(this.gamesDiv);
 
@@ -178,10 +213,14 @@ class ProfileView extends View {
 			this.vocalsDiv = document.createElement("div");
 			this.vocalsLabel = document.createElement("h4");
 			this.vocalsLabel.setAttribute("class","profil-label");
-			this.vocalsLabel.innerHTML = "vocals : ";
+			this.vocalsIcon = this.mvc.app.getElementIcon("icon-Vocal", "auto");
+			this.vocalsIcon.style.marginRight = "5px";
+			this.vocalsLabel.appendChild(this.vocalsIcon);
+			this.vocalsLabel.append(" Vocals : ");
 			this.vocalsDiv.appendChild(this.vocalsLabel);
 			this.vocals = document.createElement("div");
 			this.vocals.setAttribute("class","profil-element");
+			this.vocals.style.alignSelf = "center";
 			this.vocalsDiv.appendChild(this.vocals);
 			this.profileData.appendChild(this.vocalsDiv);
 
@@ -189,7 +228,10 @@ class ProfileView extends View {
 			this.oldPswDiv = document.createElement("div");
 			this.oldPswLabel = document.createElement("h4");
 			this.oldPswLabel.setAttribute("class","profil-label");
-			this.oldPswLabel.innerHTML = "Input your old password :";
+			this.oldPswIcon = this.mvc.app.getElementIcon("icon-Password", "auto");
+			this.oldPswIcon.style.marginRight = "5px";
+			this.oldPswLabel.appendChild(this.oldPswIcon);
+			this.oldPswLabel.append(" Current Password :");
 			this.oldPswDiv.appendChild(this.oldPswLabel);
 			this.oldPsw = document.createElement("input");
 			this.oldPsw.setAttribute("type","password");
@@ -201,7 +243,10 @@ class ProfileView extends View {
 			this.newPswDiv = document.createElement("div");
 			this.newPswLabel = document.createElement("h4");
 			this.newPswLabel.setAttribute("class","profil-label");
-			this.newPswLabel.innerHTML = "Input your new password :";
+			this.newPswIcon = this.mvc.app.getElementIcon("icon-Password", "auto");
+			this.newPswIcon.style.marginRight = "5px";
+			this.newPswLabel.appendChild(this.newPswIcon);
+			this.newPswLabel.append(" New Password :");
 			this.newPswDiv.appendChild(this.newPswLabel);
 			this.newPsw = document.createElement("input");
 			this.newPsw.setAttribute("type","password");
@@ -213,7 +258,10 @@ class ProfileView extends View {
 			this.confPswDiv = document.createElement("div");
 			this.confPswLabel = document.createElement("h4");
 			this.confPswLabel.setAttribute("class","profil-label");
-			this.confPswLabel.innerHTML = "Confirm your new password :";
+			this.confPswIcon = this.mvc.app.getElementIcon("icon-Password", "auto");
+			this.confPswIcon.style.marginRight = "5px";
+			this.confPswLabel.appendChild(this.confPswIcon);
+			this.confPswLabel.append(" Confirm New Password :");
 			this.confPswDiv.appendChild(this.confPswLabel);
 			this.confPsw = document.createElement("input");
 			this.confPsw.setAttribute("type","password");
@@ -221,7 +269,7 @@ class ProfileView extends View {
 			this.confPswDiv.appendChild(this.confPsw);
 			this.profileData.appendChild(this.confPswDiv);
 
-    this.mainDiv.appendChild(this.profileData);
+    	this.mainDiv.appendChild(this.profileData);
 
 		this.footer = document.createElement("div");
 		this.footer.setAttribute("class", "footer");
@@ -265,8 +313,8 @@ class ProfileView extends View {
 	}
 
 	addListeners() {
-		this.lougoutHandler = e => this.lougoutClick(e);
-		this.logoutButton.addEventListener("click", 	this.lougoutHandler);
+		this.logoutHandler = e => this.logoutClick(e);
+		this.logoutButton.addEventListener("click", 	this.logoutHandler);
 
 		this.searchHandler = e => this.searchClick(e);
 		this.searchBtn.addEventListener("click", 	this.searchHandler);
@@ -279,6 +327,7 @@ class ProfileView extends View {
 	}
 
 	removeListeners() {
+		trace("remove profile")
 		this.logoutButton.removeEventListener("click", 	this.logoutHandler);
 		this.searchBtn.removeEventListener("click", 	this.searchHandler);
 		this.changeBtn.removeEventListener("click", 	this.applyHandler);
@@ -286,7 +335,7 @@ class ProfileView extends View {
 
 	}
 	/* ------- Calling the Controller of this MVC ------------------------- */
-	lougoutClick(event){
+	logoutClick(event){
 		this.mvc.controller.logoutClicked();	// link to the disconect part of the controller
 
 	}
@@ -307,6 +356,9 @@ class ProfileView extends View {
 
 	updateProfile(data) {
 		console.log(data);
+
+		let profileData = this.profileData.cloneNode(true);
+
 		this.mail.innerHTML = data.mail;
 		this.profileName.innerHTML = data.username;
 		this.mail.innerHTML = data.mail;
@@ -315,11 +367,24 @@ class ProfileView extends View {
 		this.age.innerHTML = new Date().getFullYear() - data.year;
 		this.region.innerHTML = data.region;
 		this.country.innerHTML = data.country;
-		data.games.forEach( game => this.addGameToDisplay(game));
-		this.vocals.innerHTML = data.vocals.join(', ');
 		this.languages.innerHTML = data.languages.join(', ');
+		data.games.forEach( game => this.addGameToDisplay(game));
+		//this.vocals.innerHTML = data.vocals.join(', ');
+		data.vocals.forEach(e => {
+			let div = document.createElement("div");
+			div.style.display = "flex";
+			div.style.flexDirection = "row";
+			let icon = this.mvc.app.getElementIcon("icon-"+e, "auto");
+			icon.style.marginLeft = "5px";
+			icon.style.marginRight = "5px";
+			div.appendChild(icon);
+			div.append(e+", ");
+			this.vocals.appendChild(div);
+		});
+
 	}
 
+	/*
 	deleteProfile() {
 		this.mail.innerHTML = "";
 		this.profileName.innerHTML = "";
@@ -333,6 +398,7 @@ class ProfileView extends View {
 		this.vocals.innerHTML = ""
 		this.languages.innerHTML = "";
 	}
+	*/
 
 	addGameToDisplay(game){
 
@@ -350,14 +416,24 @@ class ProfileView extends View {
 			//game property
 			let gameProperty = document.createElement("div");
 				gameProperty.setAttribute("class", "gameProperties");
+				gameProperty.style.display = "flex";
+				gameProperty.style.flexDirection = "column";
 
 				// platform
 				let platform = document.createElement("div");
 					platform.setAttribute("class","property");
+					platform.style.display = "flex";
+					platform.style.flexDirection ="row";
+					platform.style.justifyContent = "flex-start";
 					let labelPlatform = document.createElement("span");
-						labelPlatform.innerHTML = "platform : "
+						labelPlatform.innerHTML = "Platform : "
 					platform.appendChild(labelPlatform);
+					let icon = this.mvc.app.getElementIcon("icon-"+game.platform.split(" ").join("-"), "auto");
+					icon.style.marginLeft = "5px";
+					icon.style.marginRight = "5px";
+					platform.appendChild(icon);
 					let namePlatform = document.createElement("span");
+						namePlatform.style.marginLeft = "3px";
 						namePlatform.innerHTML = game.platform;
 					platform.appendChild(namePlatform);
 				gameProperty.appendChild(platform);
@@ -365,10 +441,14 @@ class ProfileView extends View {
 				// playstyle
 				let playstyle = document.createElement("div");
 					playstyle.setAttribute("class","property");
+					playstyle.style.display = "flex";
+					playstyle.style.flexDirection ="row";
+					playstyle.style.justifyContent = "flex-start";
 					let labelPlaystyle = document.createElement("span");
-						labelPlaystyle.innerHTML = "play style : "
+						labelPlaystyle.innerHTML = "Play style : "
 					playstyle.appendChild(labelPlaystyle);
 					let playStyleNames = document.createElement("span");
+						playStyleNames.style.marginLeft = "3px";
 						playStyleNames.innerHTML = game.playstyles.join(', ')
 					playstyle.appendChild(playStyleNames);
 				gameProperty.appendChild(playstyle);
@@ -376,10 +456,14 @@ class ProfileView extends View {
 				// level of play
 				let level = document.createElement("div");
 					level.setAttribute("class","property");
+					level.style.display = "flex";
+					level.style.flexDirection = "row";
+					level.style.justifyContent = "flex-start";
 					let labelLevel = document.createElement("span");
-						labelLevel.innerHTML = "level : "
+						labelLevel.innerHTML = "Level : "
 					level.appendChild(labelLevel);
 					let nameLevel = document.createElement("span");
+						nameLevel.style.marginLeft = "3px";
 						nameLevel.innerHTML = game.level;
 					level.appendChild(nameLevel);
 				gameProperty.appendChild(level);
@@ -404,6 +488,7 @@ class ProfileController extends Controller {
 	searchClicked(params){
 		trace("search btn click", params);
 		this.mvc.view.deactivate();
+		//this.mvc.view.deleteProfile();
 		this.mvc.view.destroy();						// destroy current view
 		this.mvc.app.mvcTest.view.attach(document.body);// attach view of search MVC
 		this.mvc.app.mvcTest.view.activate();			// activate user interface of search MVC
@@ -412,7 +497,7 @@ class ProfileController extends Controller {
 	logoutClicked(params) {
 		trace("logout btn click", params);
 		this.mvc.view.deactivate();
-		this.mvc.view.deleteProfile();
+		//this.mvc.view.deleteProfile();
 		this.mvc.view.destroy(); 						 // destroy current view
 		this.mvc.app.authenticationMVC.view.attach(document.body); // attach view of authenticate MVC
 		this.mvc.app.authenticationMVC.view.activate(); 			 // activate user interface of authenticate MVC
@@ -421,6 +506,7 @@ class ProfileController extends Controller {
 	menuClicked() {
 		trace("menu btn click");
 		this.mvc.view.deactivate();
+		//this.mvc.view.deleteProfile();
 		this.mvc.view.destroy(); 						 // destroy current view
 		this.mvc.app.menuMVC.view.attach(document.body); // attach view of menu MVC
 		this.mvc.app.menuMVC.view.activate(); 			 // activate user interface of menu MVC

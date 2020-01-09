@@ -33,7 +33,6 @@ class AutenticationView extends View {
 
 	initialize(mvc) {
 		super.initialize(mvc);
-
     this.stage.style.display = "flex";
     this.stage.style.alignItems = "center";
     this.stage.style.justifyContent = "center";
@@ -151,6 +150,7 @@ class AutenticationView extends View {
 	removeListeners() {
     this.connectBtn.removeEventListener("click", this.connectBtnHandler);
     this.createAccountBtn.removeEventListener("click", this.createAccountBtnHandler);
+		//trace("REMOVE !!!!!!!!!!!!!")
 	}
 
   connectClick(event) {

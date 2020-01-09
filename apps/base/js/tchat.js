@@ -56,9 +56,9 @@ class TchatView extends View {
         this.headDiv.style.width ="100%";
         this.headDiv.style.height = "15%";
         this.headDiv.style.borderBottom ="thick solid #303030";
-        this.menuButton = document.createElement("button");
-        this.menuButton.innerHTML = "Menu";
-		this.menuButton.style.fontSize = "15px";
+        this.menuButton = this.mvc.app.getElementIcon("icon-Menu", "45px");
+        //this.menuButton.innerHTML = "Menu";
+				//this.menuButton.style.fontSize = "15px";
         this.headDiv.appendChild(this.menuButton);
         // profile display
         this.profileDiv = document.createElement("h3");
@@ -77,19 +77,25 @@ class TchatView extends View {
         this.inputDiv = document.createElement("div");
         this.mainDiv.appendChild(this.inputDiv);
         this.inputDiv.style.display = "flex";
-        this.inputDiv.style.justifyContent = "space-between";
-        this.inputDiv.style.height = "8%";
+        this.inputDiv.style.flexDirection = "row";
+				this.inputDiv.style.marginBottom = "1px";
+        this.inputDiv.style.height = "10%";
         this.inputDiv.style.borderTop ="thick solid #303030";
         this.textInput = document.createElement("textarea");
         this.textInput.style.overflow = "true";
         this.textInput.setAttribute("placeholder", "Type your message here !");
         this.textInput.setAttribute("maxlength", "2000");
-        this.textInput.style.width = "85%";
+        this.textInput.style.width = "100%";
         this.inputDiv.appendChild(this.textInput);
-        this.sendBtn = document.createElement("button");
-        this.sendBtn.style.width = "15%";
+        //this.sendBtn = document.createElement("button");
+				this.sendBtn = this.mvc.app.getElementIcon("icon-paper-plane", "45px");
+        //this.sendBtn.style.width = "15%";
+				this.sendBtn.style.justifyContent = "center";
+				this.sendBtn.style.marginLeft = "10px";
+				this.sendBtn.style.marginRight = "10px";
+				this.sendBtn.style.marginTop = "8px";
         this.inputDiv.appendChild(this.sendBtn);
-        this.sendBtn.innerHTML = "Send";
+        //this.sendBtn.innerHTML = "Send";
     }
     // atatch the view and collects the user's ID
     attach(parent, id){
@@ -97,7 +103,6 @@ class TchatView extends View {
         this.dest = id;
         this.myId = this.mvc.app.profileMVC.model.id; // get my own id from the profile mvc
         this.src = this.myId;
-        trace(this.src, this.dest);
         this.mvc.controller.fetchConv(this.myId, this.dest); // init the controller to start getting the conv bewteen us
         super.attach(parent);
     }
@@ -168,8 +173,10 @@ class TchatView extends View {
             messageDiv.style.width = "50%";
             let messageContent = document.createElement("span");
             messageContent.style.width = "100%";
+						messageContent.style.marginLeft="5px";
             messageDiv.appendChild(messageContent);
             messageContent.style.fontSize = "15px";
+            messageContent.style.overflowWrap = "break-word";
             messageContent.innerHTML = e.Message;
             let messageHeader = document.createElement("div");
             messageDiv.appendChild(messageHeader);
@@ -178,10 +185,12 @@ class TchatView extends View {
             messageHeader.style.flexDirection = "row";
             messageHeader.style.justifyContent = "space-between";
             messageHeader.style.color = "#b5b5b5";
+            //let statusDiv = document.createElement("span");
             let statusDiv = document.createElement("div");
             messageHeader.appendChild(statusDiv);
             if(e.State == "seen" && this.src == e.Id){
-                statusDiv.innerHTML = e.State;
+                statusDiv = this.mvc.app.getElementIcon("icon-seen", "auto");// e.State;
+								messageHeader.style.marginLeft="5px";
             }
             let timeStamp = document.createElement("div");
             messageHeader.appendChild(timeStamp);
@@ -195,7 +204,7 @@ class TchatView extends View {
         trace("adding message : ", content, "from user : ", src);
         let messageDiv = document.createElement("div");
         this.convDiv.appendChild(messageDiv);
-        if(this.src == src){ 
+        if(this.src == src){
             messageDiv.style.float = "right";   // sent by us
             messageDiv.style.backgroundColor = "#598500";
         } else if (this.dest == src){
@@ -205,6 +214,7 @@ class TchatView extends View {
         messageDiv.style.margin = "5px";
         messageDiv.style.border = "medium solid #303030";
         messageDiv.style.width = "50%";
+        messageDiv.style.color = "#FFFFFF";
         let messageContent = document.createElement("div");
         messageDiv.appendChild(messageContent);
         messageContent.style.fontSize = "15px";
@@ -216,9 +226,9 @@ class TchatView extends View {
         messageDiv.appendChild(messageHeader);
         messageHeader.style.display = "flex";
         messageHeader.style.fontSize = "12px";
+        messageHeader.style.color = "#b5b5b5";
         messageHeader.style.flexDirection = "row";
         messageHeader.style.justifyContent = "space-between";
-        messageHeader.style.color = "#b5b5b5";
         let statusDiv = document.createElement("div");
         messageHeader.appendChild(statusDiv);
         messageHeader.innerHTML = state;
@@ -226,6 +236,7 @@ class TchatView extends View {
         messageHeader.appendChild(timeStamp);
         var time = new Date();
         timeStamp.innerHTML = time.getHours()+":"+ time.getMinutes();
+        //timeStamp.
         // scroll to the bottom of the conversation aka newest messages
         this.convDiv.scrollTo(0, this.convDiv.scrollHeight);
     }
@@ -289,5 +300,6 @@ class TchatController extends Controller {
     // function to link to the model that sends a message and update the view
     async sendMessage (content){
         this.mvc.view.setStatus(await this.mvc.model.pushMessage(content));
+        
     }
 }
