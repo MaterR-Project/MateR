@@ -360,6 +360,7 @@ class Base extends ModuleBase {
 
 		//trace(data);
 		let newProfile = {};
+		newProfile.vocals = [];
 		let errorMessage = "";
 		let games = [];
 		let currentGame = {};
