@@ -54,8 +54,6 @@ class ProfileView extends View {
 		// create search btn to open the conversation slide tab
 		this.menuButton = document.createElement("span");
 		this.menuButton.setAttribute("class", "icon-Menu");
-		//this.menuButton.style.fontSize = "auto";
-		//this.menuButton.innerHTML = "Menu";
 		this.menuButton.style.fontSize = "45px";
 		this.menuButton.style.marginLeft="10px";
 		this.topBtnDiv.appendChild(this.menuButton);
@@ -221,7 +219,7 @@ class ProfileView extends View {
 			this.confPswDiv.appendChild(this.confPsw);
 			this.profileData.appendChild(this.confPswDiv);
 
-    this.mainDiv.appendChild(this.profileData);
+    	this.mainDiv.appendChild(this.profileData);
 
 		this.footer = document.createElement("div");
 		this.footer.setAttribute("class", "footer");
@@ -350,14 +348,20 @@ class ProfileView extends View {
 			//game property
 			let gameProperty = document.createElement("div");
 				gameProperty.setAttribute("class", "gameProperties");
+				gameProperty.style.display = "flex";
+				gameProperty.style.flexDirection = "column";
 
 				// platform
 				let platform = document.createElement("div");
 					platform.setAttribute("class","property");
+					platform.style.display = "flex";
+					platform.style.flexDirection ="row";
+					platform.style.justifyContent = "flex-start";
 					let labelPlatform = document.createElement("span");
-						labelPlatform.innerHTML = "platform : "
+						labelPlatform.innerHTML = "Platform : "
 					platform.appendChild(labelPlatform);
 					let namePlatform = document.createElement("span");
+						namePlatform.style.marginLeft = "3px";
 						namePlatform.innerHTML = game.platform;
 					platform.appendChild(namePlatform);
 				gameProperty.appendChild(platform);
@@ -365,10 +369,14 @@ class ProfileView extends View {
 				// playstyle
 				let playstyle = document.createElement("div");
 					playstyle.setAttribute("class","property");
+					playstyle.style.display = "flex";
+					playstyle.style.flexDirection ="row";
+					playstyle.style.justifyContent = "flex-start";
 					let labelPlaystyle = document.createElement("span");
-						labelPlaystyle.innerHTML = "play style : "
+						labelPlaystyle.innerHTML = "Play style : "
 					playstyle.appendChild(labelPlaystyle);
 					let playStyleNames = document.createElement("span");
+						playStyleNames.style.marginLeft = "3px";
 						playStyleNames.innerHTML = game.playstyles.join(', ')
 					playstyle.appendChild(playStyleNames);
 				gameProperty.appendChild(playstyle);
@@ -376,10 +384,14 @@ class ProfileView extends View {
 				// level of play
 				let level = document.createElement("div");
 					level.setAttribute("class","property");
+					level.style.display = "flex";
+					level.style.flexDirection = "row";
+					level.style.justifyContent = "flex-start";
 					let labelLevel = document.createElement("span");
-						labelLevel.innerHTML = "level : "
+						labelLevel.innerHTML = "Level : "
 					level.appendChild(labelLevel);
 					let nameLevel = document.createElement("span");
+						nameLevel.style.marginLeft = "3px";
 						nameLevel.innerHTML = game.level;
 					level.appendChild(nameLevel);
 				gameProperty.appendChild(level);
