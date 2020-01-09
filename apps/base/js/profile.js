@@ -49,7 +49,7 @@ class ProfileView extends View {
 		this.mainDiv.appendChild(this.topBtnDiv);
 
 		this.topBtnDiv.style.display = "flex";
-		this.topBtnDiv.style.justifyContent = "space-between"
+		this.topBtnDiv.style.justifyContent = "space-between";
 		this.topBtnDiv.style.width ="100%";
 		// create search btn to open the conversation slide tab
 		this.menuButton = document.createElement("span");
@@ -87,11 +87,19 @@ class ProfileView extends View {
 			// Mail
 			this.mailDiv = document.createElement("div");
 			this.mailLabel = document.createElement("h4");
+			//this.mailLabel.style.display = "flex";
+			//this.mailLabel.style.justifyContent = "space-between";
+			this.mailIcon = this.mvc.app.getElementIcon("icon-Mail", "auto");
+			this.mailIcon.style.marginRight = "5px";
+			this.mailLabel.appendChild(this.mailIcon);
+			this.mailLabel.append(" E-mail :");
 			this.mailLabel.setAttribute("class","profil-label");
-			this.mailLabel.innerHTML = "mail : ";
+			this.mailLabel.style.alignSelf = "flex-start";
+
 			this.mailDiv.appendChild(this.mailLabel);
 			this.mail = document.createElement("div");
 			this.mail.setAttribute("class","profil-element");
+			this.mail.style.alignSelf = "center";
 			this.mailDiv.appendChild(this.mail);
 			this.profileData.appendChild(this.mailDiv);
 
@@ -99,10 +107,14 @@ class ProfileView extends View {
 			this.bioDiv = document.createElement("div");
 			this.bioLabel = document.createElement("h4");
 			this.bioLabel.setAttribute("class","profil-label");
-			this.bioLabel.innerHTML = "bio : ";
+			this.bioIcon = this.mvc.app.getElementIcon("icon-Bio", "auto");
+			this.bioIcon.style.marginRight = "5px";
+			this.bioLabel.appendChild(this.bioIcon);
+			this.bioLabel.append(" Bio : ");
 			this.bioDiv.appendChild(this.bioLabel);
 			this.bio = document.createElement("div");
 			this.bio.setAttribute("class","profil-element");
+			this.bio.style.alignSelf = "center";
 			this.bioDiv.appendChild(this.bio);
 			this.profileData.appendChild(this.bioDiv);
 
@@ -110,10 +122,14 @@ class ProfileView extends View {
 			this.genderDiv = document.createElement("div");
 			this.genderLabel = document.createElement("h4");
 			this.genderLabel.setAttribute("class","profil-label");
-			this.genderLabel.innerHTML = "gender : ";
+			this.genderIcon = this.mvc.app.getElementIcon("icon-Gender", "auto");
+			this.genderIcon.style.marginRight = "5px";
+			this.genderLabel.appendChild(this.genderIcon);
+			this.genderLabel.append(" Gender : ");
 			this.genderDiv.appendChild(this.genderLabel);
 			this.gender = document.createElement("div");
 			this.gender.setAttribute("class","profil-element");
+			this.gender.style.alignSelf = "center";
 			this.genderDiv.appendChild(this.gender);
 			this.profileData.appendChild(this.genderDiv);
 
@@ -121,10 +137,14 @@ class ProfileView extends View {
 			this.ageDiv = document.createElement("div");
 			this.ageLabel = document.createElement("h4");
 			this.ageLabel.setAttribute("class","profil-label");
-			this.ageLabel.innerHTML = "age : ";
+			this.ageIcon = this.mvc.app.getElementIcon("icon-Year", "auto");
+			this.ageIcon.style.marginRight = "5px";
+			this.ageLabel.appendChild(this.ageIcon);
+			this.ageLabel.append(" Age : ");
 			this.ageDiv.appendChild(this.ageLabel);
 			this.age = document.createElement("div");
 			this.age.setAttribute("class","profil-element");
+			this.age.style.alignSelf = "center";
 			this.ageDiv.appendChild(this.age);
 			this.profileData.appendChild(this.ageDiv);
 
@@ -132,10 +152,14 @@ class ProfileView extends View {
 			this.regionDiv = document.createElement("div");
 			this.regionLabel = document.createElement("h4");
 			this.regionLabel.setAttribute("class","profil-label");
-			this.regionLabel.innerHTML = "region : ";
+			this.regionIcon = this.mvc.app.getElementIcon("icon-Region", "auto");
+			this.regionIcon.style.marginRight = "5px";
+			this.regionLabel.appendChild(this.regionIcon);
+			this.regionLabel.append(" Region : ");
 			this.regionDiv.appendChild(this.regionLabel);
 			this.region = document.createElement("div");
 			this.region.setAttribute("class","profil-element");
+			this.region.style.alignSelf = "center";
 			this.regionDiv.appendChild(this.region);
 			this.profileData.appendChild(this.regionDiv);
 
@@ -143,10 +167,14 @@ class ProfileView extends View {
 			this.countryDiv = document.createElement("div");
 			this.countryLabel = document.createElement("h4");
 			this.countryLabel.setAttribute("class","profil-label");
-			this.countryLabel.innerHTML = "country : ";
+			this.countryIcon = this.mvc.app.getElementIcon("icon-Country", "auto");
+			this.countryIcon.style.marginRight = "5px";
+			this.countryLabel.appendChild(this.countryIcon);
+			this.countryLabel.append(" Country : ");
 			this.countryDiv.appendChild(this.countryLabel);
 			this.country = document.createElement("div");
 			this.country.setAttribute("class","profil-element");
+			this.country.style.alignSelf = "center";
 			this.countryDiv.appendChild(this.country);
 			this.profileData.appendChild(this.countryDiv);
 
@@ -154,10 +182,14 @@ class ProfileView extends View {
 			this.languagesDiv = document.createElement("div");
 			this.languagesLabel = document.createElement("h4");
 			this.languagesLabel.setAttribute("class","profil-label");
-			this.languagesLabel.innerHTML = "languages : ";
+			this.languagesIcon = this.mvc.app.getElementIcon("icon-bubble", "auto");
+			this.languagesIcon.style.marginRight = "5px";
+			this.languagesLabel.appendChild(this.languagesIcon);
+			this.languagesLabel.append(" Languages : ");
 			this.languagesDiv.appendChild(this.languagesLabel);
 			this.languages = document.createElement("div");
 			this.languages.setAttribute("class","profil-element");
+			this.languages.style.alignSelf = "center";
 			this.languagesDiv.appendChild(this.languages);
 			this.profileData.appendChild(this.languagesDiv);
 
@@ -165,10 +197,14 @@ class ProfileView extends View {
 			this.gamesDiv = document.createElement("div");
 			this.gamesLabel = document.createElement("h4");
 			this.gamesLabel.setAttribute("class","profil-label");
-			this.gamesLabel.innerHTML = "games : ";
+			this.gamesIcon = this.mvc.app.getElementIcon("icon-Games", "auto");
+			this.gamesIcon.style.marginRight = "5px";
+			this.gamesLabel.appendChild(this.gamesIcon);
+			this.gamesLabel.append(" Games : ");
 			this.gamesDiv.appendChild(this.gamesLabel);
 			this.games = document.createElement("div");
 			this.games.setAttribute("class","profil-element");
+			this.games.style.alignSelf = "center";
 			this.gamesDiv.appendChild(this.games);
 			this.profileData.appendChild(this.gamesDiv);
 
@@ -176,10 +212,14 @@ class ProfileView extends View {
 			this.vocalsDiv = document.createElement("div");
 			this.vocalsLabel = document.createElement("h4");
 			this.vocalsLabel.setAttribute("class","profil-label");
-			this.vocalsLabel.innerHTML = "vocals : ";
+			this.vocalsIcon = this.mvc.app.getElementIcon("icon-Vocal", "auto");
+			this.vocalsIcon.style.marginRight = "5px";
+			this.vocalsLabel.appendChild(this.vocalsIcon);
+			this.vocalsLabel.append(" Vocals : ");
 			this.vocalsDiv.appendChild(this.vocalsLabel);
 			this.vocals = document.createElement("div");
 			this.vocals.setAttribute("class","profil-element");
+			this.vocals.style.alignSelf = "center";
 			this.vocalsDiv.appendChild(this.vocals);
 			this.profileData.appendChild(this.vocalsDiv);
 
@@ -187,7 +227,10 @@ class ProfileView extends View {
 			this.oldPswDiv = document.createElement("div");
 			this.oldPswLabel = document.createElement("h4");
 			this.oldPswLabel.setAttribute("class","profil-label");
-			this.oldPswLabel.innerHTML = "Input your old password :";
+			this.oldPswIcon = this.mvc.app.getElementIcon("icon-Password", "auto");
+			this.oldPswIcon.style.marginRight = "5px";
+			this.oldPswLabel.appendChild(this.oldPswIcon);
+			this.oldPswLabel.append(" Current Password :");
 			this.oldPswDiv.appendChild(this.oldPswLabel);
 			this.oldPsw = document.createElement("input");
 			this.oldPsw.setAttribute("type","password");
@@ -199,7 +242,10 @@ class ProfileView extends View {
 			this.newPswDiv = document.createElement("div");
 			this.newPswLabel = document.createElement("h4");
 			this.newPswLabel.setAttribute("class","profil-label");
-			this.newPswLabel.innerHTML = "Input your new password :";
+			this.newPswIcon = this.mvc.app.getElementIcon("icon-Password", "auto");
+			this.newPswIcon.style.marginRight = "5px";
+			this.newPswLabel.appendChild(this.newPswIcon);
+			this.newPswLabel.append(" New Password :");
 			this.newPswDiv.appendChild(this.newPswLabel);
 			this.newPsw = document.createElement("input");
 			this.newPsw.setAttribute("type","password");
@@ -211,7 +257,10 @@ class ProfileView extends View {
 			this.confPswDiv = document.createElement("div");
 			this.confPswLabel = document.createElement("h4");
 			this.confPswLabel.setAttribute("class","profil-label");
-			this.confPswLabel.innerHTML = "Confirm your new password :";
+			this.confPswIcon = this.mvc.app.getElementIcon("icon-Password", "auto");
+			this.confPswIcon.style.marginRight = "5px";
+			this.confPswLabel.appendChild(this.confPswIcon);
+			this.confPswLabel.append(" Confirm New Password :");
 			this.confPswDiv.appendChild(this.confPswLabel);
 			this.confPsw = document.createElement("input");
 			this.confPsw.setAttribute("type","password");
