@@ -218,10 +218,13 @@
 }
 .icon-Android:before {
   content: "\eac0";
+  color: #3DDC84;
 }
 .icon-Windows:before {
   content: "\eac2";
+  color: #00CCFF;
 }
 .icon-Skype:before {
   content: "\eac5";
+  color: #00AFF0;
 }
