@@ -94,12 +94,11 @@ class TchatView extends View {
     // atatch the view and collects the user's ID
     attach(parent, id){
         //this.targetId = id; // get the id of the person you want to speak with
-        let targetId = 1;
-        this.dest = targetId;
-        //this.myId = this.mvc.profileMVC.controller.id; // get my own id from the profile mvc
-        let myId = 0;
-        this.src = myId;
-        this.mvc.controller.fetchConv(myId, targetId); // init the controller to start getting the conv bewteen us
+        this.dest = id;
+        this.myId = this.mvc.app.profileMVC.model.id; // get my own id from the profile mvc
+        this.src = this.myId;
+        trace(this.src, this.dest);
+        this.mvc.controller.fetchConv(this.myId, this.dest); // init the controller to start getting the conv bewteen us
         super.attach(parent);
     }
 	// activate UI
@@ -272,8 +271,8 @@ class TchatController extends Controller {
 	async menuClicked() {
 		this.mvc.view.destroy(); 						     // destroy current view
 		this.mvc.app.mvc = this.mvc.app.testMVC;		     // change current MVC to the target MVC : menu
-		this.mvc.app.testMVC.view.attach(document.body);     // attach view of menu MVC
-		this.mvc.app.testMVC.view.activate(); 			     // activate user interface of menu MVC
+		this.mvc.app.menuMVC.view.attach(document.body);     // attach view of menu MVC
+		this.mvc.app.menuMVC.view.activate(); 			     // activate user interface of menu MVC
     }
     // function to link to the model that gets the message history and update the view
     async fetchConv(myId, targetId){
