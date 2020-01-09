@@ -16,9 +16,8 @@ class Base extends ModuleBase {
 		this.playstyles = JSON.parse(fs.readFileSync('database/playstyles.json', 'utf8'));
 		this.users = JSON.parse(fs.readFileSync('database/users.json', 'utf8'));
 		this.vocals = JSON.parse(fs.readFileSync('database/vocals.json', 'utf8'));
-		this.sessions = new Map();
 		this.sessionIds = new Map();
-
+		this.sessions = new Map();
 		//trace(this.users,this.languages,this.levels,this.locals,this.playstyles,this.vocals);
 
 		// Create game names list
@@ -34,7 +33,7 @@ class Base extends ModuleBase {
 		// Tests
 		//this.gamesName.map(name => {trace(name,"\n")});
 		//trace(this.games[0],"\n",this.games[0].crossplay);
-		//trace(this.users.length,"\n",this.users[0]);
+		//trace(this.users.length,"\n",this.users[2]);
 		//trace(this.languages,"\n",this.languages.length);
 	}
 
@@ -153,6 +152,7 @@ class Base extends ModuleBase {
 	 * @param {*} res
 	 * @param  {...*} param : ssId name
 	 */
+	
 	getProfileFromSessionId(req, res, ...param) {
 		trace(param)
 		let ssId = [...param].join(" ");
@@ -164,6 +164,19 @@ class Base extends ModuleBase {
 		}
 		let data = profile; // object profile of user id
 		this.sendJSON(req, res, 200, {return: data}); // answer JSON
+	}
+	/**
+	 * @method getNameFrom$Id : object profile
+	 * @param {*} req
+	 * @param {*} res
+	 * @param  {...*} param : id
+	 */
+	getNameFromId(req, res, ...param){
+		let id = [...param].join(" ");
+		let name = 404; // error
+		if(id != -1) name = this.users[id].username;
+		let data = name;
+		this.sendJSON(req, res, 200, {return : data}); //send JSON
 	}
 	/**
 	 * @method getProfileFromId : object profile
@@ -194,6 +207,68 @@ class Base extends ModuleBase {
 		let data =  this.vocals;
 		this.sendJSON(req, res, 200, {return: data}); // answer JSON
 	}
+	/**
+	 * @method sendLatestConv : sends the name of the latest conversation file between id1 & id2
+	 * @param {*} id1 : id of first user
+	 * @param {*} id2 : id of second user
+	 */
+	sendLatestConv(id1, id2){
+		var fs = require("fs");
+		var regex = new RegExp(id1 + "_" +id2);
+		var dir = fs.readdirSync("database/tchats");
+		var list = [];
+		// match directory content for tag1_tag2
+		dir.forEach( i => {
+			if(regex.test(i)) // push it !
+				list.push(i);
+		})
+		// make sure the list is sorted by creation date
+		list.sort(function(a, b){
+			return fs.statSync("database/tchats/" + a).mtime.getTime() - fs.statSync("database/tchats/" + b).mtime.getTime();
+		})
+		//get the newest one
+		var mostRecent = list[list.length - 1];
+		return mostRecent;
+	}
+	/**
+	 * @method sendMessage : makes sure users can discuss and handles message sending
+	 * @param {*} req
+	 * @param {*} res
+	 */
+	async sendMessage(req, res){
+		let result = await this._getMessageFromRequest(req); 
+		let content = result[0];
+		let source = result[1];
+		let destination = result[2];
+		let test = this.users[source[1]].tchats.map(e =>{
+			if(e == destination[1])
+				return 1;
+		})
+		if(test == 1){
+			let data = "ok";
+			//send to other user TODO
+			let sock = this.sessions[source[1]]; // get the socket of the destination
+			let tosend = JSON.stringify({message : content[1], src : source[1], dest : destination[1]});
+			sock.emit('message', tosend);
+			this.sendJSON(req, res, 200, {return : data});
+		}else{
+			let data = "failed to send";
+			this.sendJSON(req, res, 200, {return : data});
+		}
+	}
+	/**
+	 * @method getConvFrom : object profile
+	 * @param {*} req
+	 * @param {*} res
+	 * @param  {...*} param : Ids of the conv to get
+	 */
+	getConvFromId(req, res, ...param){
+		let conv = 404;
+		if(param[0] != -1 && param[1] != -1) conv = this.sendLatestConv(param[0], param[1]);
+		conv = JSON.parse(fs.readFileSync('database/tchats/' + conv, 'utf8'));
+		let data = conv;
+		this.sendJSON(req, res, 200, {return: data});
+	}
 
 	/**
 	 * @method login : connect a user
@@ -217,7 +292,66 @@ class Base extends ModuleBase {
 			this.sendJSON(req, res, 401, {return: "Wrong Login or Password"});
 		}
 	}
+	/**
+	 * @method sendLatestConv : sends the name of the latest conversation file between id1 & id2
+	 * @param {*} id1 : id of first user
+	 * @param {*} id2 : id of second user
+	 */
+	sendLatestConv(id1, id2){
+		var fs = require("fs");
+		var regex = new RegExp(id1 + "_" +id2);
+		var dir = fs.readdirSync("database/tchats");
+		var list = [];
+		// match directory content for tag1_tag2
+		dir.forEach( i => {
+			if(regex.test(i)) // push it !
+				list.push(i);
+		})
+		// make sure the list is sorted by creation date
+		list.sort(function(a, b){
+			return fs.statSync("database/tchats/" + a).mtime.getTime() - fs.statSync("database/tchats/" + b).mtime.getTime();
+		})
+		//get the newest one
+		var mostRecent = list[list.length - 1];
+		return mostRecent;
+	}
 
+	getShortConvFromId(req, res, id){
+		let convLstId = this.users[id].tchats;
+		let convLstFile = [];
+		let convLstLast = [];
+		let data = [];
+		convLstId.map(e =>{
+			if(id < e){
+				convLstFile.push(this.sendLatestConv(id, e));
+			} else{
+				convLstFile.push(this.sendLatestConv(e, id));
+			}
+		})
+		convLstFile.map(f =>{
+			let fullconv = JSON.parse(fs.readFileSync("database/tchats/" + f, "utf8"));
+			convLstLast.push(fullconv[fullconv.length - 1]);
+		})
+		convLstLast.forEach((elem, index) =>{
+			let theId = parseInt(convLstId[index]);
+			data.push({id : theId, message : elem});
+		})
+		this.sendJSON(req, res, 200, {return : data});
+	}
+	/**
+	* @method getNameFromid :
+	* @param {*} req
+	* @param {*} res
+	* @param  {...*} param : id
+	*/
+   getNameFromId(req, res, ...param){
+	   let id = [...param].join(" ");
+	   let name = 404; // error
+	   trace(id);
+	   if(id != -1) name = this.users[id].username;
+	   let data = name;
+	   this.sendJSON(req, res, 200, {return : data}); //send JSON
+   }
 	/**
 	 * @method hello : world
 	 * @param {*} req
@@ -242,6 +376,23 @@ class Base extends ModuleBase {
 			{id: 2, name: "data2", value: Math.random()}
 		];
 		this.sendJSON(req, res, 200, data); // answer JSON
+	}
+	/**
+	 * @method getVocalsFromDatabase : busboy func to get message target id and source id from req
+	 * @param {*} req
+	 */
+	async _getMessageFromRequest(req){
+		let busboy = new Busboy({headers : req.headers});
+		let result, prom = new Promise(resolve => result = resolve);
+		let message = new Array();
+		busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated){
+			message.push([fieldname, val]);
+		});
+		busboy.on('finish', function(){
+			result(message);
+		});
+		req.pipe(busboy);
+		return prom;
 	}
 
 	/**

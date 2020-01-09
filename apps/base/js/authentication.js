@@ -14,11 +14,11 @@ class AutenticationModel extends Model {
 	async login(pseudo, password) {
 		trace("get session id");
 		let result = await Comm.get("login/"+pseudo+"/"+password);
-		trace(result);
+		//trace(result);
 		if (result.status == 200) {
 			this.sessionId = result.response.return;
 		}
-		trace(this.sessionId);
+		//trace(this.sessionId);
 		return result.response;
 	}
 
@@ -40,7 +40,8 @@ class AutenticationView extends View {
 
 		this.mainDiv = document.createElement("div");
 		this.mainDiv.style.display = "flex";
-		this.mainDiv.style.justifyContent = "center";
+		//this.mainDiv.style.justifyContent = "center";
+		this.mainDiv.style.alignItems = "center";
 		this.mainDiv.style.flexDirection = "column";
 
 		//logo MateR
@@ -60,6 +61,8 @@ class AutenticationView extends View {
 		//this.pseudoLabel = document.createElement("label");
 		this.pseudoLabel = this.mvc.app.getElementIcon("icon-Profile", "auto");
 		this.pseudoLabel.setAttribute("for","username");
+		this.pseudoLabel.style.fontSize = "20px";
+		this.pseudoLabel.style.marginBottom = "5px";
 		this.pseudoLabel.innerHTML = " Username :";
 		this.pseudoDiv.appendChild(this.pseudoLabel);
 
@@ -79,8 +82,16 @@ class AutenticationView extends View {
 		//this.passwordLabel = document.createElement("label");
 		this.passwordLabel = this.mvc.app.getElementIcon("icon-Password", "auto");
 		this.passwordLabel.setAttribute("for","password");
-		this.passwordLabel.innerHTML = " Password (8 - 32 characters) :";
+		this.passwordLabel.style.fontSize = "20px";
+		this.passwordLabel.style.marginBottom = "5px";
+		this.passwordLabel.innerHTML = " Password : ";
+		this.passwordLabelIntel = document.createElement("span");
+		this.passwordLabelIntel.innerHTML = "(8 - 32 characters)";
+		this.passwordLabelIntel.style.alignSelf = "flex-end";
+		this.passwordLabelIntel.style.fontSize = "10px";
+		this.passwordLabelIntel.style.marginBottom = "5px";
 		this.passwordDiv.appendChild(this.passwordLabel);
+		this.passwordDiv.appendChild(this.passwordLabelIntel);
 
     this.passwordInput = document.createElement("input");
     this.passwordInput.setAttribute("type","password");
@@ -99,12 +110,15 @@ class AutenticationView extends View {
     //button connect
     this.connectBtn = document.createElement("button");
     this.connectBtn.innerHTML = "Connect";
-		this.connectBtn.style.marginBottom = "10px";
+		this.connectBtn.style.width = "100%";
+		this.connectBtn.style.fontSize = "30px";
+		this.connectBtn.style.marginBottom = "20px";
     this.mainDiv.appendChild(this.connectBtn);
 
     //button create account
     this.createAccountBtn = document.createElement("button");
     this.createAccountBtn.innerHTML = "Create an Account";
+		this.createAccountBtn.style.fontSize = "15px";
     this.mainDiv.appendChild(this.createAccountBtn);
 
 		this.stage.appendChild(this.mainDiv);
@@ -114,6 +128,7 @@ class AutenticationView extends View {
 	// activate UI
 	activate() {
 		super.activate();
+		this.passwordInput.value = ""
 		this.addListeners(); // listen to events
 	}
 

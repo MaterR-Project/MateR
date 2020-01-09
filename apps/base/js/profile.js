@@ -10,9 +10,9 @@ class ProfileModel extends Model {
 	}
 
 	async getProfile(){
-		trace("get session id");
+		//trace("get session id");
 		let result = await Comm.get("getProfileFromSessionId/"+this.mvc.app.authenticationMVC.model.sessionId);
-		trace(result);
+		//trace(result);
 		this.id = result.response.return.id;
 		return result.response.return;
 	}
@@ -291,8 +291,9 @@ class ProfileView extends View {
 
 	}
 	searchClick(event){
-		this.mvc.controller.searchClicked();	// link for the search part of the controller
-
+		//this.mvc.view.destroy();
+		//this.mvc.app.searchMVC.view.attach(document.body);
+		//this.mvc.app.searchMVC.view.activate();
 	}
 	applyClick(event) {
 		console.log("apply");					// link to the apply part of the controller
@@ -417,12 +418,12 @@ class ProfileController extends Controller {
 		this.mvc.app.authenticationMVC.view.activate(); 			 // activate user interface of authenticate MVC
 	}
 
-	menuClicked(params) {
-		trace("menu btn click", params);
+	menuClicked() {
+		trace("menu btn click");
 		this.mvc.view.deactivate();
 		this.mvc.view.destroy(); 						 // destroy current view
-		this.mvc.app.mvcTest.view.attach(document.body); // attach view of menu MVC
-		this.mvc.app.mvcTest.view.activate(); 			 // activate user interface of menu MVC
+		this.mvc.app.menuMVC.view.attach(document.body); // attach view of menu MVC
+		this.mvc.app.menuMVC.view.activate(); 			 // activate user interface of menu MVC
 	}
 
 	async initProfile(){
