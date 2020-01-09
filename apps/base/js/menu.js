@@ -140,7 +140,7 @@ class MenuView extends View {
                 messageBody.innerHTML = "You   : ";
             }
             messageBody.innerHTML += e.message.Message;
-            shortDiv.addEventListener("click", () => this.mvc.controller.goToConv(e.message.Id));
+            shortDiv.addEventListener("click", () => this.mvc.controller.goToConv(e.id));
 
         })
     }
