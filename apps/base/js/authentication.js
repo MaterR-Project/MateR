@@ -14,11 +14,11 @@ class AutenticationModel extends Model {
 	async login(pseudo, password) {
 		trace("get session id");
 		let result = await Comm.get("login/"+pseudo+"/"+password);
-		trace(result);
+		//trace(result);
 		if (result.status == 200) {
 			this.sessionId = result.response.return;
 		}
-		trace(this.sessionId);
+		//trace(this.sessionId);
 		return result.response;
 	}
 }
@@ -32,19 +32,20 @@ class AutenticationView extends View {
 
 	initialize(mvc) {
 		super.initialize(mvc);
-
     this.stage.style.display = "flex";
     this.stage.style.alignItems = "center";
     this.stage.style.justifyContent = "center";
 
 		this.mainDiv = document.createElement("div");
 		this.mainDiv.style.display = "flex";
-		this.mainDiv.style.justifyContent = "center";
+		//this.mainDiv.style.justifyContent = "center";
+		this.mainDiv.style.alignItems = "center";
 		this.mainDiv.style.flexDirection = "column";
 
 		//logo MateR
     this.header = document.createElement("h1");
     this.header.innerHTML = "MateR";
+		this.header.style.margin = "10px";
     this.header.style.fontSize = "60px";
     this.mainDiv.appendChild(this.header);
 
@@ -53,10 +54,14 @@ class AutenticationView extends View {
 		this.pseudoDiv.style.width = "100%";
 		this.pseudoDiv.style.display = "flex";
     this.pseudoDiv.style.flexDirection = "column";
+		this.pseudoDiv.style.marginBottom = "10px";
 
-		this.pseudoLabel = document.createElement("label");
+		//this.pseudoLabel = document.createElement("label");
+		this.pseudoLabel = this.mvc.app.getElementIcon("icon-Profile", "auto");
 		this.pseudoLabel.setAttribute("for","username");
-		this.pseudoLabel.innerHTML = "Username :";
+		this.pseudoLabel.style.fontSize = "20px";
+		this.pseudoLabel.style.marginBottom = "5px";
+		this.pseudoLabel.innerHTML = " Username :";
 		this.pseudoDiv.appendChild(this.pseudoLabel);
 
 		this.pseudoInput = document.createElement("input");
@@ -72,10 +77,19 @@ class AutenticationView extends View {
 		this.passwordDiv.style.display = "flex";
     this.passwordDiv.style.flexDirection = "column";
 
-		this.passwordLabel = document.createElement("label");
+		//this.passwordLabel = document.createElement("label");
+		this.passwordLabel = this.mvc.app.getElementIcon("icon-Password", "auto");
 		this.passwordLabel.setAttribute("for","password");
-		this.passwordLabel.innerHTML = "Password (8 characters minimum) :";
+		this.passwordLabel.style.fontSize = "20px";
+		this.passwordLabel.style.marginBottom = "5px";
+		this.passwordLabel.innerHTML = " Password : ";
+		this.passwordLabelIntel = document.createElement("span");
+		this.passwordLabelIntel.innerHTML = "(8 - 32 characters)";
+		this.passwordLabelIntel.style.alignSelf = "flex-end";
+		this.passwordLabelIntel.style.fontSize = "10px";
+		this.passwordLabelIntel.style.marginBottom = "5px";
 		this.passwordDiv.appendChild(this.passwordLabel);
+		this.passwordDiv.appendChild(this.passwordLabelIntel);
 
     this.passwordInput = document.createElement("input");
     this.passwordInput.setAttribute("type","password");
@@ -93,12 +107,16 @@ class AutenticationView extends View {
 
     //button connect
     this.connectBtn = document.createElement("button");
-    this.connectBtn.innerHTML = "connect";
+    this.connectBtn.innerHTML = "Connect";
+		this.connectBtn.style.width = "100%";
+		this.connectBtn.style.fontSize = "30px";
+		this.connectBtn.style.marginBottom = "20px";
     this.mainDiv.appendChild(this.connectBtn);
 
     //button create account
     this.createAccountBtn = document.createElement("button");
-    this.createAccountBtn.innerHTML = "create an account";
+    this.createAccountBtn.innerHTML = "Create an Account";
+		this.createAccountBtn.style.fontSize = "15px";
     this.mainDiv.appendChild(this.createAccountBtn);
 
 		this.stage.appendChild(this.mainDiv);
@@ -108,6 +126,7 @@ class AutenticationView extends View {
 	// activate UI
 	activate() {
 		super.activate();
+		this.passwordInput.value = ""
 		this.addListeners(); // listen to events
 	}
 
@@ -118,16 +137,23 @@ class AutenticationView extends View {
 	}
 
 	addListeners() {
-    this.connectBtnHandler = e => this.connectClick(e);
+    this.connectBtnHandler = e => {
+			this.connectClick(e);
+			this.updateWrongPsw("");
+		}
     this.connectBtn.addEventListener("click", this.connectBtnHandler);
 
-    this.createAccountBtnHandler = e => this.createAccountClick(e);
+    this.createAccountBtnHandler = e => {
+			this.createAccountClick(e);
+			this.updateWrongPsw("");
+		}
     this.createAccountBtn.addEventListener("click", this.createAccountBtnHandler);
 	}
 
 	removeListeners() {
     this.connectBtn.removeEventListener("click", this.connectBtnHandler);
     this.createAccountBtn.removeEventListener("click", this.createAccountBtnHandler);
+		//trace("REMOVE !!!!!!!!!!!!!")
 	}
 
   connectClick(event) {
@@ -139,7 +165,7 @@ class AutenticationView extends View {
   }
 
 	updateWrongPsw(message){
-		this.erreur.innerHTML = message
+		this.erreur.innerHTML = message;
 	}
 
 }
@@ -164,18 +190,23 @@ class AutenticationController extends Controller {
 			if (this.mvc.model.sessionId == undefined) {
 				this.mvc.view.updateWrongPsw(response.return);
 			}else{
+				this.mvc.app.initSocket(this.mvc.model.sessionId);
+				this.mvc.view.deactivate();
 				this.mvc.view.destroy();
-		    this.mvc.app.profileMVC.view.attach(document.body,this.mvc.model.sessionId);
+		    this.mvc.app.profileMVC.view.attach(document.body);
 		    this.mvc.app.profileMVC.view.activate();
 			}
 		}
+		else{
+			this.mvc.view.updateWrongPsw("Incorrect Password Size");
+		}
   }
 
-	// TODO with registration.js
-  async createAccountBtnWasClicked() {
+	async createAccountBtnWasClicked() {
+		this.mvc.view.deactivate();
     this.mvc.view.destroy();
-    this.mvc.app.testMVC.view.attach(document.body);
-    this.mvc.app.testMVC.view.activate();
+    this.mvc.app.registrationMVC.view.attach(document.body);
+    this.mvc.app.registrationMVC.view.activate();
   }
 
 	verifyPassword(password){

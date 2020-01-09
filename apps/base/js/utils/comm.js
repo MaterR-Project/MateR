@@ -25,7 +25,7 @@ class Comm {
      */
     static async urlrequest(url, options) {
 		// TODO switch to new URLParams() and append keys
-		if(options.hasOwnProperty("body")) options["body"] = Object.keys(options["body"]).map(key => encodeURIComponent(key) + "=" + encodeURIComponent(options["body"][key])).join("&");
+		if(options.hasOwnProperty("body") && !(options["body"] instanceof FormData)) options["body"] = Object.keys(options["body"]).map(key => encodeURIComponent(key) + "=" + encodeURIComponent(options["body"][key])).join("&");
 		return await this.request(url, merge(options, {"headers": {"Content-Type": "application/x-www-form-urlencoded; charset=UTF-8"}}));
 	}
 
