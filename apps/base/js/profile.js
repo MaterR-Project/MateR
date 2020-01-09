@@ -362,9 +362,22 @@ class ProfileView extends View {
 		this.age.innerHTML = new Date().getFullYear() - data.year;
 		this.region.innerHTML = data.region;
 		this.country.innerHTML = data.country;
-		data.games.forEach( game => this.addGameToDisplay(game));
-		this.vocals.innerHTML = data.vocals.join(', ');
 		this.languages.innerHTML = data.languages.join(', ');
+		data.games.forEach( game => this.addGameToDisplay(game));
+		//this.vocals.innerHTML = data.vocals.join(', ');
+
+		data.vocals.forEach(e => {
+			let div = document.createElement("div");
+			div.style.display = "flex";
+			div.style.flexDirection = "row";
+			let icon = this.mvc.app.getElementIcon("icon-"+e, "auto");
+			icon.style.marginLeft = "5px";
+			icon.style.marginRight = "5px";
+			div.appendChild(icon);
+			div.append(e+", ");
+			this.vocals.appendChild(div);
+		});
+
 	}
 
 	deleteProfile() {
@@ -409,6 +422,10 @@ class ProfileView extends View {
 					let labelPlatform = document.createElement("span");
 						labelPlatform.innerHTML = "Platform : "
 					platform.appendChild(labelPlatform);
+					let icon = this.mvc.app.getElementIcon("icon-"+game.platform.split(" ").join("-"), "auto");
+					icon.style.marginLeft = "5px";
+					icon.style.marginRight = "5px";
+					platform.appendChild(icon);
 					let namePlatform = document.createElement("span");
 						namePlatform.style.marginLeft = "3px";
 						namePlatform.innerHTML = game.platform;
