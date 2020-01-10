@@ -117,8 +117,8 @@ class RegistrationView extends View {
 
 		// form
 		this.form = document.createElement("form");
-		this.form.setAttribute("action", "register/");
-		this.form.setAttribute("method", "POST");
+		//this.form.setAttribute("action", "register/");
+		//this.form.setAttribute("method", "POST");
 		this.form.style.overflow = "auto";
 		this.form.style.display = "flex";
 		this.form.style.alignItems = "center";
@@ -132,7 +132,7 @@ class RegistrationView extends View {
 		this.form.style.fontSize = "20px";
 		//this.form.style.overflow = "auto";
 		//this.form.style.marginBottom = "15%";
-		//this.form.style.width = "100%";
+		this.form.style.width = "100%";
 		//this.form.style.height = "50%";
 		// set the scroll box height depending on device resolution
 		//this.form.style.width = "70%";
@@ -306,19 +306,19 @@ class RegistrationView extends View {
 		this.comboYear = document.createElement("select");
 		this.comboYear.setAttribute("name", "year");
 		// add an entry for earch 120 year before now
-		var currentYear = new Date().getFullYear()		
+		var currentYear = new Date().getFullYear();
 		for (var i = currentYear-120 ; i <= currentYear; i++) {
-			var option = document.createElement("option");
+			let option = document.createElement("option");
 			option.text = i;
 			option.value = i;
 			//if (i == currentYear) option.setAttribute("selected", "");
 			this.comboYear.appendChild(option);
 		}
-		var option = document.createElement("option");
-		option.text = "Undefined";
-		option.value = -1;
-		option.setAttribute("selected", "");
-		this.comboYear.appendChild(option);
+		let optionUnfefined = document.createElement("option");
+		optionUnfefined.text = "Undefined";
+		optionUnfefined.value = -1;
+		optionUnfefined.setAttribute("selected", "");
+		this.comboYear.appendChild(optionUnfefined);
 		this.yearDiv.appendChild(this.yearLabel);
 		this.yearDiv.appendChild(this.comboYear);
 		this.form.appendChild(this.yearDiv);

@@ -195,6 +195,7 @@ class MenuController extends Controller{
     }
     goSearch(){
         //trace("uncomment the lines below me !!");
+        this.mvc.view.convDiv.innerHTML = "";
         this.mvc.view.deactivate();
         this.mvc.view.destroy();
         this.mvc.app.searchMVC.view.attach(document.body);
