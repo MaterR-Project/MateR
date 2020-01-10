@@ -445,67 +445,103 @@ class Base extends ModuleBase {
 
 		}
 	}
-
-	async getMatchingProfiles(req, res, obj){
-		let data = await this._getDataFromRequest(req);
+	/**
+	 * @method getMatchingProfile : array of compatible users
+	 * @param {*} req
+	 * @param {*} res
+	 */
+	async getMatchingProfiles(req, res){
+		let data = await this._getDataFromSearch(req);
 		trace(data);
+		let matchingArray = [];
 		this.users.map(u =>{
+			let maxTotal = 0;
 			let userWeight = 0;
-			if (u.id == data[0][1]){
-				trace("disqualified - self");
+			if (u.id == data[0][1][0]){
+				//trace("disqualified - self");
 				return false; // dont match yourself
 			}	
-			// give it user candidate user, taget game and target level
-			// game level
-			userWeight += (2 * this._getLevelWeight(u, data[1][1], data[2][1])); // 2* to set the importance of the level
+			//platform
+			if(this._getPlatformWeight(u, data[1][1][0], data[2][1][0]) == 0){
+				trace("desqualified - platform");
+				return false;
+			}
 			// play style 
-			if (this._getStyleWeight(u, data[1][1], data[3][1]) == 0){
+			if (data[4][1][0] != "" &&  data[4][2][0] != "-1" && this._getStyleWeight(u, data[1][1][0], data[4][1][0]) == 0){ // user cares about playstyle, filled up the field but styles dont match
 				trace("disqualified - playstyle");
 				return false; //skip the user if playstyles dont match
-
-			} 
+			} 			
+			// game level
+			if(data[3][2][0] != "-1"){		// user cares about level
+				userWeight += parseInt(data[3][2][0] * (2 * this._getLevelWeight(u, data[1][1][0], data[3][1][0]))); // 2* to set the importance of the level and multiply by priority
+				maxTotal += parseInt(data[3][2][0]) * 10;
+			}
 			// country
-			userWeight += (6* this._getCountryWeight(u, data[4][1]));
+			if(data[6][2][0] != "-1"){		// user cares about country
+				userWeight += parseInt(data[6][2][0] * 6 * this._getCountryWeight(u, data[6][1][0]));
+				maxTotal += parseInt(data[6][2][0]) * 6;
+			}
 			//region
-			userWeight += (4 * this._getRegionWeight(u, data[5][1]));
+			if(data[5][2][0] != "-1"){		// user cares about region
+				userWeight += parseInt(data[5][2][0] * 4 * this._getRegionWeight(u, data[5][1][0]));
+				maxTotal += parseInt(data[5][2][0]) * 4;
+			}
 			//languages
-			let tmp;
-			if(data[6][1] == ""){
-				tmp = this._getLanguagesWeight(u, this.users[data[0][1].languages]);	// use user's languages by default
-			} else{													// else use the data provided by search
-				let langArray = data[6][1].split(",");			
-				tmp = this._getLanguagesWeight(u, langArray);
-			}
-			if (tmp == -1){
-				trace("disqualified - language")
-				return false;
-			} else {
-				userWeight += tmp * 0.75	
-			}
-			// ages
-			let date = new Date();
-			let year = date.getFullYear();
-			if(data[7][1] == ""){
-				userWeight += 0.8 * this._getAgeWeight(u, year - this.users[data[0][1].year], year);
-			} else{
-				userWeight += 0.8 * this._getAgeWeight(u, data[7][1], year);
-			}
-			// gender
-			if(data[8][1] != ""){			// if a gender was given in search
-				if(u.gender != data[8][1]){
-					trace("disqualified - gender")
-					return false;			// if gender is different, skip the user
+			if(data[7][2][0] != "-1"){		// user cares about languages
+				let tmp;
+				if(data[7][1].length == 0){													// empty array, aka no language given
+					tmp = parseInt(this._getLanguagesWeight(u, this.users[data[0][1[0]].languages]));	// use user's languages by default
+				} else{													// else use the data provided by search			
+					tmp = parseInt(this._getLanguagesWeight(u, data[7][1]));
+				}
+				if (tmp == -1){
+					trace("disqualified - language")
+					return false;
+				} else {
+					userWeight += parseInt(data[7][2][0] * tmp * 0.75)
+					maxTotal += parseInt(data[7][2][0]) * 3;
 				}
 			}
-			// vocals
-			if(data[9][1] != ""){			// if vocals were given
-				let vocalArray = data[9][1].split(",");
-				userWeight += this._getVocalsWeght(u, vocalArray);
+			// ages
+			if(data[10][2][0] != "-1"){		// user cares about age
+				let date = new Date();
+				let year = date.getFullYear();
+				if(data[10][1].length == 0){		// empty array, aka no age given
+					userWeight += parseInt(data[10][2][0] * 0.8 * this._getAgeWeight(u, year - this.users[data[0][1][0].year], year));	// use user's age by default
+				} else{
+					userWeight += parseInt(data[10][2][0] * 0.8 * this._getAgeWeight(u, data[10][1][0], year));
+				}
+				maxTotal += parseInt(data[10][2][0]) * 4;
 			}
-
-			trace("the user ", u.id, " has weight ", userWeight);
+			// gender
+			if(parseInt(data[9][2][0]) != "-1") {		// if the user gives importance to the gender of his mate
+				if(u.gender != data[9][1][0] && u.gender != "Gamer"){	// if candidate doesnt have the specified gender
+					trace("disqualified - gender")
+					return false;			// if gender is different, skip the user
+				}	
+			}
+			// vocals
+			if(data[8][2][0] != "-1"){		// user cares about vocals
+				if(data[8][1].length != 0){								// if vocals were given
+					userWeight += parseInt(data[8][2][0] * 0.75 * this._getVocalsWeight(u, data[8][1]));
+					maxTotal += parseInt(data[8][2][0]) * 3;
+				}
+			}
+			trace("max score is : ",maxTotal);
+			let compatibility = (userWeight * 100) / maxTotal;
+			trace(compatibility, "%");
+			matchingArray.push({score : compatibility, user : u.id});	// create objetcs with score and id
+			matchingArray.sort((a, b) => (a.score > b.score) ? -1 : 1);	// sort the array of matching users biggest value first
 		})
+		trace(matchingArray);
+		this.sendJSON(req, res, 200, {return : matchingArray}); // send to user
 	}
+	/**
+	 * @method _getLevelWeight : weight of the candidate's level at a given game relative to the required one
+	 * @param {*} candidate : user object we are calcultaing the weight of
+	 * @param {*} targetGame : required game
+	 * @param {*} targetLevel : required level
+	 */
 	_getLevelWeight(candidate, targetGame, targetLevel){
 		let weight = 0;
 		candidate.games.map(g =>{
@@ -525,8 +561,31 @@ class Base extends ModuleBase {
 				weight = -1;			// user doesnt play the same game, elimination case
 			}
 		})
-		return weight;
+		return parseInt(weight);
 	}
+	/**
+	 * @method _getPlatformWeight : weight of the user from the platform he plays the game on
+	 * @param {*} candidate : user object we are calcultaing the weight of
+	 * @param {*} targetGame : required game
+	 * @param {*} targetLevel : required platform
+	 */
+	_getPlatformWeight(candidate, targetGame, targetPlatform){
+		let weight = 0;
+		candidate.games.map(g =>{
+			if(g.name == targetGame){	// if user plays the desired game
+				if(g.platform == targetPlatform){
+					weight = 1;		// user has a mathing playstyle
+				}
+			}
+		})
+		return parseInt(weight);		// 1 if plays game and same playstyle, 0 otherwise
+	}
+	/**
+	 * @method _getStyleWeight : weight of the candidate's playstyle on a given game relative to the required one
+	 * @param {*} candidate : user object we are calcultaing the weight of
+	 * @param {*} targetGame : required game
+	 * @param {*} targetStyle : required playstyle
+	 */
 	_getStyleWeight(candidate, targetGame, targetstyle){
 		let weight = 0;
 		candidate.games.map(g =>{
@@ -538,21 +597,36 @@ class Base extends ModuleBase {
 				})
 			}
 		})
-		return weight;	// 1 if plays game and same playstyle, 0 otherwise
+		return parseInt(weight);		// 1 if plays game and same playstyle, 0 otherwise
 	}
+	/**
+	 * @method _getCountryWeight : weight of the candidate's country relative to the required one
+	 * @param {*} candidate : user object we are calcultaing the weight of
+	 * @param {*} targetCountry : required country
+	 */
 	_getCountryWeight(candidate, targetCountry){
 		let weight = 0;
 		if(candidate.country == targetCountry)
 			weight = 1;
-		return weight;
+		return parseInt(weight);
+
 	}
+	/**
+	 * @method _getRegionWeight : weight of the candidate's region relative to the required one
+	 * @param {*} candidate : user object we are calcultaing the weight of
+	 * @param {*} targetRegion : required region
+	 */
 	_getRegionWeight(candidate, targetRegion){
 		let weight = 0;
 		if(candidate.region == targetRegion)
 			weight = 1;
-		return weight;
-		
+		return parseInt(weight);
 	}
+	/**
+	 * @method _getlanguagesWeight : weight of the candidate's spoken languages relative to the required ones
+	 * @param {*} candidate : user object we are calcultaing the weight of
+	 * @param {*} targetLanguage : list of languages wanted
+	 */
 	_getLanguagesWeight(candidate, targetLanguage){
 		let count = 0;
 		candidate.languages.map(l =>{
@@ -572,8 +646,14 @@ class Base extends ModuleBase {
 		} else{							// no language, skip user
 			weight = -1;
 		}
-		return weight;
+		return parseInt(weight);
 	}
+	/**
+	 * @method _getAgeWeight : weight of the candidate's Age relative to the required one
+	 * @param {*} candidate : user object we are calcultaing the weight of
+	 * @param {*} targetAge : required Age
+	 * @param {*} year : current year
+	 */
 	_getAgeWeight(candidate, targetAge, year){
 		if(candidate.year == -1)	// if the user didnt give any birth year, set the weight to 0
 			return 0;
@@ -592,6 +672,10 @@ class Base extends ModuleBase {
 			case (delta >= 4) : return 1;
 		}
 	}
+	/**
+	 * @method _getAgeRange : index of the age area the candidate fits in (see database/ages.json)
+	 * @param {*} age : age of the candidate
+	 */
 	_getAgeRange(age){
 		let candidateRange;
 		for(var i = 0; i < this.ages.length; i++){
@@ -602,7 +686,12 @@ class Base extends ModuleBase {
 		}
 		return candidateRange;
 	}
-	_getVocalsWeght(candidate, vocals){
+	/**
+	 * @method _getVocalsWeight : weight of the candidate's used vocals relative to the required ones
+	 * @param {*} candidate : user object we are calcultaing the weight of
+	 * @param {*} vocals : list of vocal plateforms wanted
+	 */
+	_getVocalsWeight(candidate, vocals){
 		let count = 0;
 		candidate.vocals.map(v =>{
 			if(vocals.includes(v)){
@@ -622,7 +711,7 @@ class Base extends ModuleBase {
 		} else{
 			weight = 0;
 		}
-		return weight;
+		return parseInt(weight);
 	}
 	/**
 	 * @method _getIdFromSessionId : string id of connect session
@@ -640,12 +729,19 @@ class Base extends ModuleBase {
 	 * @method _getDataFromRequest : get the post data from request
 	 * @param {*} req
 	 */
-	async _getDataFromRequest(req){
+	async _getDataFromSearch(req){
     	let busboy = new Busboy({ headers: req.headers });
 		let result, prom = new Promise(resolve => result = resolve);
 		let form = new Array();
 	    busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated) {
-			form.push([fieldname, val]);
+			// val is a string of the values and the weight, split the ","" to get an array
+			let valcpy = val.split(",");
+			// get the weight and save it by grabbing last element
+			var customWeight = valcpy.slice(valcpy.length - 1, valcpy.length);
+			// remove last element from values
+			valcpy.pop();
+			//send all formated data
+			form.push([fieldname, valcpy, customWeight]);
     	});
     	busboy.on('finish', function() {
 			result(form);
