@@ -25,6 +25,25 @@ class ProfileModel extends Model {
 		trace(this.id, result.response.return);
 		return result.response.return;
 	}
+
+	async dummyRequest(){
+		//let data = {OriginId : "0", Game :"Apex Legends", Level : "Pro Player", Playstyle : "Try Hard", Country : "France", Region: "Western Europe", Languages: ["French", "English", "Arabic"], Age : "25", Genre : "", Vocals : ["Discord", "Skype"]}
+		let data = {
+			"originId" : ["0", "suppr"],
+			"game": ["Apex Legends", "suppr"],
+			"platform": ["Windows", "suppr"],
+			"level": ["Pro Player", "4"],
+			"playstyle": [["Try Hard"], "2"],
+			"region" : ["Northern America", "4"],
+			"pays" : ["Canada", "4"],
+			"languages": [["French", "English"], "4"],
+			"vocals": [["Discord", "Skype"], "-1"],
+			"genre": ["Male", "-1"],
+			"age": ["34", "-1"]
+		  }
+		let result = await Comm.post("getMatchingProfiles/", data);
+		trace(result.response.return);
+	}
 }
 
 class ProfileView extends View {

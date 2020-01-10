@@ -59,8 +59,10 @@ class Base {
         this.io.on('authConfirm', data =>{
           console.log("authentication : "+data);
           if (data == "ok") {
+						trace("you can receive something");
             this.io.on('msg', data => {
-							// todo afficher les message dans tchat
+							trace(data);
+
             });
           }
         });
