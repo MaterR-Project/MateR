@@ -12,7 +12,7 @@ class MVC {
 	}
 	
 	async initialize() {
-		trace("init MVC");
+		//trace("init MVC");
 		await this.model.initialize(this);
 		await this.view.initialize(this);
 		await this.controller.initialize(this);
@@ -71,7 +71,7 @@ class ViewBase {
 	}
 	
 	create() {
-		trace("create", this.name);
+		//trace("create", this.name);
 		this.stage = document.createElement("div");
 		this.stage.style.position = "absolute";
 		this.stage.style.left = "0px";
@@ -84,7 +84,7 @@ class ViewBase {
 	}
 	
 	draw() {
-		trace("draw", this.name);
+		//trace("draw", this.name);
 	}
 	
 	resize() {
@@ -92,13 +92,13 @@ class ViewBase {
 	}
 	
 	destroy() {
-		trace("destroy", this.name);
+		//trace("destroy", this.name);
 		if(this.attached) this.detach();
 	}
 	
 	attach(parent) {
 		if(this.attached) return;
-		trace("attach", this.name);
+		//trace("attach", this.name);
 		this.parent = parent;
 		this.parent.appendChild(this.stage);
 		this.attached = true;
@@ -108,20 +108,20 @@ class ViewBase {
 	
 	detach() {
 		if(!this.attached) return;
-		trace("detach", this.name);
+		//trace("detach", this.name);
 		this.parent.removeChild(this.stage);
 		this.attached = false;
 		this.mvc.controller.detached();
 	}
 	
 	activate() {
-		trace("activate", this.name);
+		//trace("activate", this.name);
 		this.activated = true;
 		this.mvc.controller.activated();
 	}
 	
 	deactivate() {
-		trace("deactivate", this.name);
+		//trace("deactivate", this.name);
 		this.activated = false;
 		this.mvc.controller.deactivated();
 	}
@@ -215,19 +215,19 @@ class ControllerBase {
 	}
 	
 	attached() {
-		trace(this.name, "attached");
+		//trace(this.name, "attached");
 	}
 	
 	detached() {
-		trace(this.name, "detached");
+		//trace(this.name, "detached");
 	}
 	
 	activated() {
-		trace(this.name, "activated");
+		//trace(this.name, "activated");
 	}
 	
 	deactivated() {
-		trace(this.name, "deactivated");
+		//trace(this.name, "deactivated");
 	}
 }
 

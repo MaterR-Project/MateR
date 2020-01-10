@@ -8,7 +8,6 @@ const http = 		require("http"); 		// http server
 const path = 		require("path"); 		// path
 const fs = 			require("fs");			// file system
 
-
 global._root = __dirname; // keep root directory ref
 global.load = name => require(path.join(_root, path.sep, name)); // hack require.main.require()
 global.outload = name => require(`${name}`); // load modules from outside node app root directory
@@ -37,7 +36,27 @@ class Server {
 
 		this._server = http.createServer(this._connect).listen(this._port); // start http server
 
-		this._io = SocketIO(this._server);
+		this._io = SocketIO(this._server); //todo
+
+		this._io.on('connection', socket => {
+		  console.log('a user connected');
+			socket.emit('connectSession', "ok");
+		  console.log("emit connectSession : ok");
+		  socket.on('auth', data => {
+		    console.log("ssid : " + data);
+		    if(this._app.sessions.has(data)){
+					console.log("chaussette ouverte");
+					this._app.sessions.set(data, [this._app.sessions.get(data)[0],socket]);
+		    }else{
+					console.log("access denied");
+		      socket.emit('authConfirm', "not ok");
+		    }
+		  });
+			socket.on('logout', ssid => {
+		    trace('a user log out');
+				this._app.sessions.delete(ssid);
+		  });
+		});
 
 		this._app = new App(this, new Map()); // load app
 

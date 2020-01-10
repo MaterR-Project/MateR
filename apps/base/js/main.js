@@ -1,5 +1,7 @@
 window.addEventListener("load", event => new Base());
 
+trace("cookie : ", document.cookie);
+
 class Base {
 
 	constructor() {
@@ -10,6 +12,7 @@ class Base {
 
 	async initialize() {
 
+<<<<<<< HEAD
 		this.iospace = "baseapp"; // IO namespace for this app
 		this.io = io.connect("http://localhost/" + this.iospace); // connect socket.io
 		this.io.on("connect", () => this.onIOConnect()); // listen connect event
@@ -37,151 +40,92 @@ class Base {
 		console.log("result", result);
 		console.log("response", result.response);
 	}
+=======
+		this.registrationMVC = new MVC("registrationMVC", this, new RegistrationModel(), new RegistrationView(), new RegistrationControler());
+		await this.registrationMVC.initialize(); // run init async tasks
+
+		this.tchatMVC = new MVC("tchatMVC", this, new TchatModel(), new TchatView(), new TchatController());
+		await this.tchatMVC.initialize();
+
+		this.menuMVC = new MVC("menuMVC", this, new MenuModel(), new MenuView(), new MenuController());
+		await this.menuMVC.initialize();
+
+		this.searchMVC = new MVC("searchMVC", this, new SearchModel(), new SearchView(), new SearchController());
+		await this.searchMVC.initialize();
+
+		this.profileMVC = new MVC("profileMVC", this, new ProfileModel(), new ProfileView(), new ProfileController());
+		await this.profileMVC.initialize();
+
+		this.authenticationMVC = new MVC("authenticationMVC", this, new AutenticationModel(), new AutenticationView(), new AutenticationController()); // init app MVC
+		await this.authenticationMVC.initialize(); // run init async tasks
+
+		if (document.cookie != ""){
+			trace("connect direct gros")
+			let cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)ssid\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+			//trace(typeof cookieValue);
+			this.authenticationMVC.model.sessionId = cookieValue;
+			this.initSocket(cookieValue);
+			this.profileMVC.view.attach(document.body);
+			this.profileMVC.view.activate();
+		}
+		else{
+			this.authenticationMVC.view.attach(document.body);
+			this.authenticationMVC.view.activate();
+		}
+
+	}
+
+		/**
+		 * @method initSocket : connect socket
+		 */
+		initSocket(sessionId) {
+			trace("init socket with : "+sessionId);
+			this.io = io();
+      this.io.on('connectSession', data => {
+        console.log("connection : " + data);
+        this.io.emit('auth', sessionId);
+        console.log("emit ping with session : ", sessionId);
+        this.io.on('authConfirm', data =>{
+          console.log("authentication : "+data);
+          if (data == "not ok") {
+						alert("authentication failed plz reload your browser");
+          }
+        });
+				this.io.on('msg', data => {
+					trace('msg a notifier : ', data);
+					alert("incoming transmission !! " + JSON.parse(data).message);
+				});
+      });
+		}
+
+		/**
+		 * @method getElementIcon : return element for required icon
+		 * @param {string} iconName
+     * @param {string} size
+		 */
+		getElementIcon(iconName, size){
+			let iconSpan = document.createElement("span");
+			iconSpan.setAttribute("class", iconName);
+			iconSpan.style.fontSize = size;
+			return iconSpan;
+		}
+>>>>>>> origin/master
 
 	/**
 	 * @method onIOConnect : socket is connected
 	 */
-	onIOConnect() {
+	/*onIOConnect() {
 		trace("yay IO connected");
 		this.io.on("dummy", packet => this.onDummyData(packet)); // listen to "dummy" messages
 		this.io.emit("dummy", {value: "dummy data from client"}) // send test message
-	}
+	}*/
 
 	/**
 	 * @method onDummyData : dummy data received from io server
 	 * @param {Object} data
 	 */
-	onDummyData(data) {
+	/*onDummyData(data) {
 		trace("IO data", data);
 		this.testMVC.controller.ioDummy(data); // send it to controller
-	}
-}
-
-class MyModel extends Model {
-
-	constructor() {
-		super();
-	}
-
-	async initialize(mvc) {
-		super.initialize(mvc);
-
-	}
-
-	async data() {
-		trace("get data");
-		// keep data in class variable ? refresh rate ?
-		let result = await Comm.get("data"); // wait data from server
-		return result.response; // return it to controller
-	}
-
-}
-
-class MyView extends View {
-
-	constructor() {
-		super();
-		this.table = null;
-	}
-
-	initialize(mvc) {
-		super.initialize(mvc);
-
-		// create get test btn
-		this.btn = document.createElement("button");
-		this.btn.innerHTML = "get test";
-		this.stage.appendChild(this.btn);
-
-		// create io test btn
-		this.iobtn = document.createElement("button");
-		this.iobtn.innerHTML = "io test";
-		this.stage.appendChild(this.iobtn);
-
-		// io random value display
-		this.iovalue = document.createElement("div");
-		this.iovalue.innerHTML = "no value";
-		this.stage.appendChild(this.iovalue);
-
-		// get dataset display
-		this.table = document.createElement("table");
-		this.stage.appendChild(this.table);
-	}
-
-	// activate UI
-	activate() {
-		super.activate();
-		this.addListeners(); // listen to events
-	}
-
-	// deactivate
-	deactivate() {
-		super.deactivate();
-		this.removeListeners();
-	}
-
-	addListeners() {
-		this.getBtnHandler = e => this.btnClick(e);
-		this.btn.addEventListener("click", this.getBtnHandler);
-
-		this.ioBtnHandler = e => this.ioBtnClick(e);
-		this.iobtn.addEventListener("click", this.ioBtnHandler);
-	}
-
-	removeListeners() {
-		this.btn.removeEventListener("click", this.getBtnHandler);
-		this.iobtn.removeEventListener("click", this.ioBtnHandler);
-	}
-
-	btnClick(event) {
-		this.mvc.controller.btnWasClicked("more parameters"); // dispatch
-	}
-
-	ioBtnClick(event) {
-		this.mvc.controller.ioBtnWasClicked("io parameters"); // dispatch
-	}
-
-	update(data) {
-		while(this.table.firstChild) this.table.removeChild(this.table.firstChild); // empty table
-		data.forEach(el => { // loop data
-			let line = document.createElement("tr"); // create line
-			Object.keys(el).forEach(key => { // loop object keys
-				let cell = document.createElement("td"); // create cell
-				cell.innerHTML = el[key]; // display
-				line.appendChild(cell); // add cell
-			});
-			this.table.appendChild(line); // add line
-		});
-	}
-
-	updateIO(value) {
-		this.iovalue.innerHTML = value.toString(); // update io display
-	}
-
-}
-
-class MyController extends Controller {
-
-	constructor() {
-		super();
-	}
-
-	initialize(mvc) {
-		super.initialize(mvc);
-
-	}
-
-	async btnWasClicked(params) {
-		trace("btn click", params);
-		this.mvc.view.update(await this.mvc.model.data()); // wait async request > response from server and update view table values
-	}
-
-	async ioBtnWasClicked(params) {
-		trace("io btn click", params);
-		this.mvc.app.io.emit("dummy", {message: "dummy io click"}); // send socket.io packet
-	}
-
-	ioDummy(data) {
-		this.mvc.view.updateIO(data.value); // io dummy data received from main app
-	}
-
+	}*/
 }
