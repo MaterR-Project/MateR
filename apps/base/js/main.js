@@ -64,7 +64,7 @@ class Base {
         });
 				this.io.on('msg', data => {
 					trace('msg a notifier : ', data);
-					alert("incoming transmission !! " + data.message);
+					alert("incoming transmission !! " + JSON.parse(data).message);
 				});
       });
 		}
