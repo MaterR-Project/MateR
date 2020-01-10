@@ -1,5 +1,7 @@
 window.addEventListener("load", event => new Base());
 
+trace("cookie : ", document.cookie);
+
 class Base {
 
 	constructor() {
@@ -13,12 +15,6 @@ class Base {
 		this.registrationMVC = new MVC("registrationMVC", this, new RegistrationModel(), new RegistrationView(), new RegistrationControler());
 		await this.registrationMVC.initialize(); // run init async tasks
 
-		this.authenticationMVC = new MVC("authenticationMVC", this, new AutenticationModel(), new AutenticationView(), new AutenticationController()); // init app MVC
-		await this.authenticationMVC.initialize(); // run init async tasks
-
-		this.profileMVC = new MVC("profileMVC", this, new ProfileModel(), new ProfileView(), new ProfileController());
-		await this.profileMVC.initialize();
-
 		this.tchatMVC = new MVC("tchatMVC", this, new TchatModel(), new TchatView(), new TchatController());
 		await this.tchatMVC.initialize();
 
@@ -28,8 +24,25 @@ class Base {
 		this.searchMVC = new MVC("searchMVC", this, new SearchModel(), new SearchView(), new SearchController());
 		await this.searchMVC.initialize();
 
-		this.authenticationMVC.view.attach(document.body);
-		this.authenticationMVC.view.activate();
+		this.profileMVC = new MVC("profileMVC", this, new ProfileModel(), new ProfileView(), new ProfileController());
+		await this.profileMVC.initialize();
+
+		this.authenticationMVC = new MVC("authenticationMVC", this, new AutenticationModel(), new AutenticationView(), new AutenticationController()); // init app MVC
+		await this.authenticationMVC.initialize(); // run init async tasks
+
+		if (document.cookie != ""){
+			trace("connect direct gros")
+			let cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)ssid\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+			//trace(typeof cookieValue);
+			this.authenticationMVC.model.sessionId = cookieValue;
+			this.initSocket(cookieValue);
+			this.profileMVC.view.attach(document.body);
+			this.profileMVC.view.activate();
+		}
+		else{
+			this.authenticationMVC.view.attach(document.body);
+			this.authenticationMVC.view.activate();
+		}
 
 	}
 

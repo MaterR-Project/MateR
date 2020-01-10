@@ -12,8 +12,14 @@ class ProfileModel extends Model {
 	async getProfile(){
 		//trace("get session id");
 		let result = await Comm.get("getProfileFromSessionId/"+this.mvc.app.authenticationMVC.model.sessionId);
-		//trace(result);
+
 		this.id = result.response.return.id;
+
+		if (this.id == undefined){
+			alert("Invalid Cookie - You'll need to reconnect");
+    	location.reload();
+		}
+		trace(this.id, result.response.return);
 		return result.response.return;
 	}
 }
@@ -514,11 +520,13 @@ class ProfileController extends Controller {
 
 	logoutClicked(params) {
 		trace("logout btn click", params);
-		this.mvc.app.io.disconnect();
+		//this.mvc.app.io.disconnect();
+		this.mvc.app.io.emit('logout', this.mvc.app.authenticationMVC.model.sessionId);
 		this.mvc.app.authenticationMVC.model.sessionId = undefined;
 		//trace(this.mvc.app.authenticationMVC.model.sessionId);
 		this.mvc.view.deactivate();
 		//this.mvc.view.deleteProfile();
+		document.cookie = "ssid=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
 		this.mvc.view.destroy(); 						 // destroy current view
 		this.mvc.app.authenticationMVC.view.attach(document.body); // attach view of authenticate MVC
 		this.mvc.app.authenticationMVC.view.activate(); 			 // activate user interface of authenticate MVC
