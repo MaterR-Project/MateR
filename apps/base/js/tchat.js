@@ -18,6 +18,7 @@ class TchatModel extends Model {
         let request = "sendMessage/";
         let data = {message : content, src : this.mvc.view.src, dest : this.mvc.view.dest};
         let result = await Comm.post(request, data);
+				trace("retour server : ", result.response);
         return result.response.return;
     }
     // gets the name of a user from his id
@@ -255,34 +256,33 @@ class TchatView extends View {
     setName(name){
         this.profileDiv.innerHTML = name;
     }
-    // updates the latest sent message to set the message status
+
+		// updates the latest sent message to set the message status
     setStatus(data){
+				trace("data setStatus : ",data);
         var lastMessage = document.getElementById("latest");
-        if(data == "ok"){
-            lastMessage.innerHTML = "";        // remove the sending status : it was sent
-            lastMessage.removeAttribute("id"); // clear the id
-            let timeStamp = document.createElement("div");  //set time to sent time
-            lastMessage.appendChild(timeStamp);
-            var time = new Date();
-						let minutes = time.getMinutes();
-						let hours = time.getHours();
-						if (minutes < 10) minutes = "0"+minutes;
-						if (hours < 10) hours = "0"+hours;
-            timeStamp.innerHTML = hours+":"+ minutes;
-            lastMessage.style.float = "right";
-        } else {
-            lastMessage.innerHTML = "FAILED TO SEND";
-            lastMessage.removeAttribute("id");
-            let timeStamp = document.createElement("div");  //set time to sent time
-            lastMessage.appendChild(timeStamp);
-            var time = new Date();
-						let minutes = time.getMinutes();
-						let hours = time.getHours();
-						if (minutes < 10) minutes = "0"+minutes;
-						if (hours < 10) hours = "0"+hours;
-            timeStamp.innerHTML = hours+":"+ minutes;
-        }
+				if (data != "failed to send") {
+					lastMessage.removeAttribute("id"); // clear the id
+				}
+				lastMessage.innerHTML = "";
+				let statusDiv = document.createElement("span");
+				if(data == "seen"){
+						statusDiv = this.mvc.app.getElementIcon("icon-seen", "auto");// e.State;
+						lastMessage.style.marginLeft="5px";
+				}
+				lastMessage.appendChild(statusDiv);
+
+				let timeStamp = document.createElement("span");
+				var time = new Date();
+				let minutes = time.getMinutes();
+				let hours = time.getHours();
+				if (minutes < 10) minutes = "0"+minutes;
+				if (hours < 10) hours = "0"+hours;
+				timeStamp.innerHTML = hours+":"+ minutes;
+				timeStamp.style.justifyContent = "flex-end";
+				lastMessage.appendChild(timeStamp);
     }
+
 }
 
 class TchatController extends Controller {

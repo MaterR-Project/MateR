@@ -17,7 +17,6 @@ class Base extends ModuleBase {
 		this.users = JSON.parse(fs.readFileSync('database/users.json', 'utf8'));
 		this.vocals = JSON.parse(fs.readFileSync('database/vocals.json', 'utf8'));
 		this.ages = JSON.parse(fs.readFileSync('database/ages.json', 'utf-8'));
-		this.sessionIds = new Map();
 		this.sessions = new Map();
 		//trace(this.users,this.languages,this.levels,this.locals,this.playstyles,this.vocals);
 
@@ -186,7 +185,7 @@ class Base extends ModuleBase {
 	 */
 	async sendMessage(req, res){
 		let result = await this._getDataFromFormDataPost(req);
-		trace(result)
+		trace("message", result)
 		let content = result[0];						// extract message from data
 		let source = result[1];							// extract sender id from data
 		let destination = result[2];					// extract destination id from data
@@ -204,23 +203,25 @@ class Base extends ModuleBase {
 					break;
 				}
 			}
+			let state = "not seen";
 			let tosend = JSON.stringify({message : content[1], src : source[1], dest : destination[1]}); // generate object to be sent to both users
-			trace("sessions : ", this.sessions);
-			trace("id : ", destination[1]);
+			//trace("sessions : ", this.sessions);
+			//trace("id : ", destination[1]);
 			if(sock != undefined){
 				trace("emit message");
 				sock.emit('msg', tosend);						// emit it on the destination socket
+				state = "seen";
 			}
-			this.sendJSON(req, res, 200, {return : data}); 		// and send message confirmation to the sender
+			this.sendJSON(req, res, 200, {return : state}); 		// and send message confirmation to the sender
 
 			let file;
-			if(parseInt(source[1] < parseInt(destination[1]))){ // get the conversation file of the users using format lowesTag_higherTag 
-				file = this._sendLatestConv(source[1], destination[1]);	
+			if(parseInt(source[1] < parseInt(destination[1]))){ // get the conversation file of the users using format lowesTag_higherTag
+				file = this._sendLatestConv(source[1], destination[1]);
 			} else {
 				file = this._sendLatestConv(destination[1], source[1]);
 			}
 			file = "database/tchats/" + file;					// get path to this file
-			fs.readFile(file, "utf-8", function(err, data){		// read it
+			fs.readFile(file, "utf-8", (err, data) => {		// read it
 				if(err) trace("error reading file, ", file, " : ", err);
 				var convText = JSON.parse(data);
 				let temp = new Date();
@@ -230,15 +231,15 @@ class Base extends ModuleBase {
 				if (hours < 10) hours = "0"+hours;
 				let time = hours + ":" + minutes;
 				let date = temp.getDate() + "-" + (temp.getMonth() + 1) + "-" + temp.getFullYear();
-				convText.push({Id : source[1], Message : content[1], State : "not seen", Time : time, Date : date})	// add the message to it along with timestamp
-				fs.writeFile(file, JSON.stringify(convText), "utf-8", function(err){								// re write the fil
+				convText.push({Id : source[1], Message : content[1], State : state, Time : time, Date : date})	// add the message to it along with timestamp
+				fs.writeFile(file, JSON.stringify(convText), "utf-8", (err) => {								// re write the fil
 					if(err) trace("could not rewrite the file");
 				})
 			})
 		}else{
 			let data = "failed to send";					// error case
-			this.sendJSON(req, res, 200, {return : data});	// return an error to the sender
 		}
+		this.sendJSON(req, res, 200, {return : data});	// return an error to the sender
 	}
 
 	/**
@@ -443,7 +444,7 @@ class Base extends ModuleBase {
 			let userWeight = 0;
 			if (u.id == data[0][1][0]){					// if the candidate is the requesting user, dont match him
 				trace("disqualified - self");
-				return false; 
+				return false;
 			}
 			// platform
 			if(this._getPlatformWeight(u, data[1][1][0], data[2][1][0]) == 0){	// if candidate plays the same game but not on the same platform dont match him
@@ -647,7 +648,7 @@ class Base extends ModuleBase {
 			weight = 1;
 		return parseInt(weight);
 	}
-	
+
 	/**
 	 * @method _getlanguagesWeight : weight of the candidate's spoken languages relative to the required ones
 	 * @param {*} candidate : user object we are calcultaing the weight of
@@ -825,7 +826,7 @@ class Base extends ModuleBase {
 		dir.forEach( i => {								// for each file in directory
 			if(regex.test(i)) 							// if file matches the regexp
 				list.push(i);							// push it in list of conv files for the users
-		})
+		});
 		list.sort(function(a, b){						// sort it by date of creation to get the newest versin of the conv history
 			return fs.statSync("database/tchats/" + a).mtime.getTime() - fs.statSync("database/tchats/" + b).mtime.getTime();
 		})
