@@ -491,7 +491,7 @@ class Base extends ModuleBase {
 				let date = new Date();
 				let year = date.getFullYear();			// grab current year
 				if(data[10][1].length == 0){			// empty array, aka no age given, user user's age by default
-					userWeight += parseInt(data[10][2][0] * 0.8 * this._getAgeWeight(u, year - this.users[data[0][1][0].year], year));
+					userWeight += parseInt(data[10][2][0] * 0.8 * this._getAgeWeight(u, year - this.users[data[0][1][0]].year, year));
 				} else{									// else use the provided age
 					userWeight += parseInt(data[10][2][0] * 0.8 * this._getAgeWeight(u, data[10][1][0], year));
 				}
