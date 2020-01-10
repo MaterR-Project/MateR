@@ -55,7 +55,7 @@ class Base {
       this.io.on('connectSession', data => {
         console.log("connection : " + data);
         this.io.emit('auth', sessionId);
-        console.log("emit ping with session = 0");
+        console.log("emit ping with session : ", sessionId);
         this.io.on('authConfirm', data =>{
           console.log("authentication : "+data);
           if (data == "not ok") {
