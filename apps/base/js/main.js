@@ -12,35 +12,6 @@ class Base {
 
 	async initialize() {
 
-<<<<<<< HEAD
-		this.iospace = "baseapp"; // IO namespace for this app
-		this.io = io.connect("http://localhost/" + this.iospace); // connect socket.io
-		this.io.on("connect", () => this.onIOConnect()); // listen connect event
-
-		this.testMVC = new MVC("myMVC", this, new MyModel(), new MyView(), new MyController()); // init app MVC
-		await this.testMVC.initialize(); // run init async tasks
-
-		this.authenticationMVC = new MVC("authenticationMVC", this, new AutenticationModel(), new AutenticationView(), new AutenticationController());
-		await this.authenticationMVC.initialize();
-
-		this.resultMVC = new MVC("resultMVC", this, new ResultModel(), new ResultView(), new ResultController()); // init app MVC
-		await this.resultMVC.initialize(); // run init async tasks
-
-		this.authenticationMVC.view.attach(document.body); // attach view
-		this.authenticationMVC.view.activate(); // activate user interface
-
-	}
-
-	/**
-	 * @method test : test server GET fetch
-	 */
-	async test() {
-		console.log("test server hello method");
-		let result = await Comm.get("hello/everyone"); // call server hello method with argument "everyone"
-		console.log("result", result);
-		console.log("response", result.response);
-	}
-=======
 		this.registrationMVC = new MVC("registrationMVC", this, new RegistrationModel(), new RegistrationView(), new RegistrationControler());
 		await this.registrationMVC.initialize(); // run init async tasks
 
@@ -109,7 +80,6 @@ class Base {
 			iconSpan.style.fontSize = size;
 			return iconSpan;
 		}
->>>>>>> origin/master
 
 	/**
 	 * @method onIOConnect : socket is connected

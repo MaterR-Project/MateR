@@ -195,13 +195,8 @@ class AutenticationController extends Controller {
 				this.mvc.app.initSocket(this.mvc.model.sessionId);
 				this.mvc.view.deactivate();
 				this.mvc.view.destroy();
-<<<<<<< HEAD
-		    this.mvc.app.resultMVC.view.attach(document.body,this.mvc.model.sessionId);
-		    this.mvc.app.resultMVC.view.activate();
-=======
 		    this.mvc.app.profileMVC.view.attach(document.body);
 		    this.mvc.app.profileMVC.view.activate();
->>>>>>> origin/master
 			}
 		}
 		else{
