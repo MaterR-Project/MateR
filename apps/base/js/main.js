@@ -58,14 +58,14 @@ class Base {
         console.log("emit ping with session = 0");
         this.io.on('authConfirm', data =>{
           console.log("authentication : "+data);
-          if (data == "ok") {
-						trace("you can receive something");
-            this.io.on('msg', data => {
-							trace(data);
-
-            });
+          if (data == "not ok") {
+						alert("authentication failed plz reload your browser");
           }
         });
+				this.io.on('msg', data => {
+					trace('msg a notifier : ', data);
+					alert("incoming transmission !! " + data.message);
+				});
       });
 		}
 
