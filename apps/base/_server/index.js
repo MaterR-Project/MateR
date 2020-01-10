@@ -215,9 +215,17 @@ class Base extends ModuleBase {
 		if(canSend == 1){
 			let data = "ok";
 			//send to other user TODO
-			let sock = this.sessions.get(source[1]); // get the socket of the destination
+			trace("id", source[1]);
+			let sock = undefined;
+			for (element of this.sessions.values()) {
+				if (element[0] == source[1]) {
+					sock = element[1];
+					break;
+				}
+			}
 			let tosend = JSON.stringify({message : content[1], src : source[1], dest : destination[1]});
-			trace(sock);
+			//trace(sock);
+			trace("sessions : ", this.sessions);
 			if(sock != undefined){
 				trace("emit message");
 				sock.emit('msg', tosend);
@@ -276,13 +284,13 @@ class Base extends ModuleBase {
 	login(req, res, username, password){
 		trace(username, password);
 		let profile = this.users.find(profile => profile.username == username && profile.password == password);
-		trace("profile", profile);
-		trace('map', this.sessions);
-		trace('users', this.users);
+		//trace("profile", profile);
+		//trace('users', this.users);
 		if (profile != undefined) {
 			let sessionId = this._createSessionId();
 			this.sessions.set(sessionId, [profile.id, undefined]);
-			trace(sessionId);
+			//trace(sessionId);
+			trace('session : ', this.sessions);
 			this.sendJSON(req, res, 200, {return: sessionId});
 		}else{
 			this.sendJSON(req, res, 401, {return: "Wrong Login or Password"});

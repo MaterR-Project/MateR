@@ -36,7 +36,7 @@ class Server {
 
 		this._server = http.createServer(this._connect).listen(this._port); // start http server
 
-		this._io = SocketIO(this._server);
+		this._io = SocketIO(this._server, {'pingTimeout': 7000, 'pingInterval': 3000}); //todo
 
 		this._io.on('connection', socket => {
 		  console.log('a user connected');
