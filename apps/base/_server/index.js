@@ -144,15 +144,16 @@ class Base extends ModuleBase {
 	getProfileFromSessionId(req, res, ...param) {
 		trace(param)
 		let ssId = [...param].join(" ");
-		let id = this._getIdFromSessionId(ssId); // profile id of session id
-		let profile = 404; // error case
+		let id = this._getIdFromSessionId(ssId); 		// profile id of session id
+		let profile = 404; 								// error case
 		if (id != undefined) {
 			profile = this._returnCopyOfObject(this.users[id]);
 			delete profile["password"];
 		}
-		let data = profile; // object profile of user id
-		this.sendJSON(req, res, 200, {return: data}); // answer JSON
+		let data = profile; 							// object profile of user id
+		this.sendJSON(req, res, 200, {return: data}); 	// answer JSON
 	}
+
 	/**
 	 * @method getNameFrom$Id : string username
 	 * @param {*} req
@@ -161,27 +162,10 @@ class Base extends ModuleBase {
 	 */
 	getNameFromId(req, res, ...param){
 		let id = [...param].join(" ");
-		let name = 404; // error
+		let name = 404; 								// error
 		if(id != -1) name = this.users[id].username;
 		let data = name;
-		this.sendJSON(req, res, 200, {return : data}); //send JSON
-	}
-	/**
-	 * @method getProfileFromId : object profile
-	 * @param {*} req
-	 * @param {*} res
-	 * @param  {...*} param : Id name
-	 */
-	_getProfileFromId(req, res, ...param) {
-		trace(param)
-		let id = [...param].join(" ");
-		let profile = 404; // error case
-		if (id != -1) {
-			profile = this._returnCopyOfObject(this.users[id]);
-			delete profile["password"];
-		}
-		let data = profile; // object profile of user id
-		this.sendJSON(req, res, 200, {return: data}); // answer JSON
+		this.sendJSON(req, res, 200, {return : data});  //send JSON
 	}
 
 	/**
@@ -192,7 +176,7 @@ class Base extends ModuleBase {
 	getVocalsFromDatabase(req, res) {
 		// list of vocal from vocals database
 		let data =  this.vocals;
-		this.sendJSON(req, res, 200, {return: data}); // answer JSON
+		this.sendJSON(req, res, 200, {return: data});   // answer JSON
 	}
 
 	/**
@@ -203,45 +187,40 @@ class Base extends ModuleBase {
 	async sendMessage(req, res){
 		let result = await this._getDataFromFormDataPost(req);
 		trace(result)
-		let content = result[0];
-		let source = result[1];
-		let destination = result[2];
+		let content = result[0];						// extract message from data
+		let source = result[1];							// extract sender id from data
+		let destination = result[2];					// extract destination id from data
 		let canSend;
-		this.users[source[1]].tchats.map(e =>{
+		this.users[source[1]].tchats.map(e =>{		    // make sure the source can talk with dest
 			if(e == destination[1])
 				canSend = 1;
 		});
-		trace(canSend);
 		if(canSend == 1){
 			let data = "ok";
-			//send to other user TODO
-			trace("id", destination);
 			let sock = undefined;
-			for (let session of this.sessions.values()) {
+			for (let session of this.sessions.values()){
 				if (session[0] == destination[1]) {
 					sock = session[1];
 					break;
 				}
 			}
-			let tosend = JSON.stringify({message : content[1], src : source[1], dest : destination[1]});
-			//trace(sock);
+			let tosend = JSON.stringify({message : content[1], src : source[1], dest : destination[1]}); // generate object to be sent to both users
 			trace("sessions : ", this.sessions);
 			trace("id : ", destination[1]);
 			if(sock != undefined){
 				trace("emit message");
-				sock.emit('msg', tosend);
+				sock.emit('msg', tosend);						// emit it on the destination socket
 			}
-			this.sendJSON(req, res, 200, {return : data});
+			this.sendJSON(req, res, 200, {return : data}); 		// and send message confirmation to the sender
 
 			let file;
-			if(parseInt(source[1] < parseInt(destination[1]))){
-				file = this._sendLatestConv(source[1], destination[1]);
+			if(parseInt(source[1] < parseInt(destination[1]))){ // get the conversation file of the users using format lowesTag_higherTag 
+				file = this._sendLatestConv(source[1], destination[1]);	
 			} else {
 				file = this._sendLatestConv(destination[1], source[1]);
 			}
-			file = "database/tchats/" + file;
-			trace(file);
-			fs.readFile(file, "utf-8", function(err, data){
+			file = "database/tchats/" + file;					// get path to this file
+			fs.readFile(file, "utf-8", function(err, data){		// read it
 				if(err) trace("error reading file, ", file, " : ", err);
 				var convText = JSON.parse(data);
 				let temp = new Date();
@@ -251,16 +230,17 @@ class Base extends ModuleBase {
 				if (hours < 10) hours = "0"+hours;
 				let time = hours + ":" + minutes;
 				let date = temp.getDate() + "-" + (temp.getMonth() + 1) + "-" + temp.getFullYear();
-				convText.push({Id : source[1], Message : content[1], State : "not seen", Time : time, Date : date})
-				fs.writeFile(file, JSON.stringify(convText), "utf-8", function(err){
+				convText.push({Id : source[1], Message : content[1], State : "not seen", Time : time, Date : date})	// add the message to it along with timestamp
+				fs.writeFile(file, JSON.stringify(convText), "utf-8", function(err){								// re write the fil
 					if(err) trace("could not rewrite the file");
 				})
 			})
 		}else{
-			let data = "failed to send";
-			this.sendJSON(req, res, 200, {return : data});
+			let data = "failed to send";					// error case
+			this.sendJSON(req, res, 200, {return : data});	// return an error to the sender
 		}
 	}
+
 	/**
 	 * @method getConvFromId : object tchats
 	 * @param {*} req
@@ -272,7 +252,7 @@ class Base extends ModuleBase {
 		if(param[0] != -1 && param[1] != -1) conv = this._sendLatestConv(param[0], param[1]);
 		conv = JSON.parse(fs.readFileSync('database/tchats/' + conv, 'utf8'));
 		let data = conv;
-		this.sendJSON(req, res, 200, {return: data});
+		this.sendJSON(req, res, 200, {return: data});	// send the conversation file to the user
 	}
 
 	/**
@@ -284,47 +264,47 @@ class Base extends ModuleBase {
 	 */
 	login(req, res, username, password){
 		trace(username, password);
-		let profile = this.users.find(profile => profile.username == username && profile.password == password);
+		let profile = this.users.find(profile => profile.username == username && profile.password == password);	// get corresponding profile based on password and username
 		//trace("profile", profile);
 		//trace('users', this.users);
 		if (profile != undefined) {
-			let sessionId = this._createSessionId();
+			let sessionId = this._createSessionId();			// generate a SSID and assign it to the user
 			this.sessions.set(sessionId, [profile.id, undefined]);
 			//trace(sessionId);
 			trace('session : ', this.sessions);
-			this.sendJSON(req, res, 200, {return: sessionId});
+			this.sendJSON(req, res, 200, {return: sessionId});	// return the SSID to the user or an error
 		}else{
 			this.sendJSON(req, res, 401, {return: "Wrong Login or Password"});
 		}
 	}
 
 	/**
-	 * @method getShortConvFromID : object short message - sends a mini conv with the specified
+	 * @method getShortConvFromID : object short message - sends a mini conv with the specified user
 	 * @param {*} req
 	 * @param {*} res
 	 * @param {string} id : id of user you want the conv with
 	 */
 	getShortConvFromId(req, res, id){
-		let convLstId = this.users[id].tchats;
+		let convLstId = this.users[id].tchats;			// get this list of ID the user has conversations with
 		let convLstFile = [];
 		let convLstLast = [];
 		let data = [];
-		convLstId.map(e =>{
+		convLstId.map(e =>{								// get a ist of the latest conversation files for each of these users
 			if(id < e){
 				convLstFile.push(this._sendLatestConv(id, e));
 			} else{
 				convLstFile.push(this._sendLatestConv(e, id));
 			}
 		})
-		convLstFile.map(f =>{
+		convLstFile.map(f =>{							// parse each of the files obtained and get the last message object
 			let fullconv = JSON.parse(fs.readFileSync("database/tchats/" + f, "utf8"));
 			convLstLast.push(fullconv[fullconv.length - 1]);
 		})
 		convLstLast.forEach((elem, index) =>{
 			let theId = parseInt(convLstId[index]);
-			data.push({id : theId, message : elem});
+			data.push({id : theId, message : elem});	// format return as an {id, message} object for display
 		})
-		this.sendJSON(req, res, 200, {return : data});
+		this.sendJSON(req, res, 200, {return : data});	// send to user
 	}
 
 	/**
@@ -333,7 +313,7 @@ class Base extends ModuleBase {
 	 * @param {*} res
  	 * @param  {...*} param : id
 	 */
-  	getNameFromId(req, res, ...param){
+  	getNameFromId(req, res, ...param){					// get name field from user ID
 	  let id = [...param].join(" ");
 	  let name = 404; // error
 	  trace(id);
@@ -341,24 +321,6 @@ class Base extends ModuleBase {
 	  let data = name;
 	  this.sendJSON(req, res, 200, {return : data}); //send JSON
   	}
-
-	/**
-	 * @method _getDataFromDataPost : get post data from request
-	 * @param {*} req
-	 */
-	async _getDataFromFormDataPost(req){
-		let busboy = new Busboy({headers : req.headers});
-		let result, prom = new Promise(resolve => result = resolve);
-		let form = new Array();
-		busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated){
-			form.push([fieldname, val]);
-		});
-		busboy.on('finish', function(){
-			result(form);
-		});
-		req.pipe(busboy);
-		return prom;
-	}
 
 	/**
 	 * @method register : handle creation account
@@ -465,24 +427,26 @@ class Base extends ModuleBase {
 
 		}
 	}
+
 	/**
 	 * @method getMatchingProfile : array of compatible users
 	 * @param {*} req
 	 * @param {*} res
 	 */
-	async getMatchingProfiles(req, res){
-		let data = await this._getDataFromSearch(req);
+	async getMatchingProfiles(req, res){				// get a list of matching users to a specific search
+		trace("---- algo start ----");
+		let data = await this._getDataFromSearch(req);	// collect data from post request
 		trace(data);
 		let matchingArray = [];
-		this.users.map(u =>{
+		this.users.map(u =>{							// for each existing user, generate a matching score
 			let maxTotal = 0;
 			let userWeight = 0;
-			if (u.id == data[0][1][0]){
-				//trace("disqualified - self");
-				return false; // dont match yourself
+			if (u.id == data[0][1][0]){					// if the candidate is the requesting user, dont match him
+				trace("disqualified - self");
+				return false; 
 			}
-			//platform
-			if(this._getPlatformWeight(u, data[1][1][0], data[2][1][0]) == 0){
+			// platform
+			if(this._getPlatformWeight(u, data[1][1][0], data[2][1][0]) == 0){	// if candidate plays the same game but not on the same platform dont match him
 				trace("desqualified - platform");
 				return false;
 			}
@@ -497,38 +461,38 @@ class Base extends ModuleBase {
 				maxTotal += parseInt(data[3][2][0]) * 10;
 			}
 			// country
-			if(data[6][2][0] != "-1"){		// user cares about country
+			if(data[6][2][0] != "-1"){		// user cares about country, get the wight of the candidate's country
 				userWeight += parseInt(data[6][2][0] * 6 * this._getCountryWeight(u, data[6][1][0]));
 				maxTotal += parseInt(data[6][2][0]) * 6;
 			}
 			//region
-			if(data[5][2][0] != "-1"){		// user cares about region
+			if(data[5][2][0] != "-1"){		// user cares about region, get the weight of the candidate's region
 				userWeight += parseInt(data[5][2][0] * 4 * this._getRegionWeight(u, data[5][1][0]));
 				maxTotal += parseInt(data[5][2][0]) * 4;
 			}
 			//languages
-			if(data[7][2][0] != "-1"){		// user cares about languages
+			if(data[7][2][0] != "-1"){		// user cares about languages, get the weight of candidate's languages
 				let tmp;
-				if(data[7][1].length == 0){													// empty array, aka no language given
+				if(data[7][1].length == 0){																// empty array, aka no language given
 					tmp = parseInt(this._getLanguagesWeight(u, this.users[data[0][1[0]].languages]));	// use user's languages by default
-				} else{													// else use the data provided by search
+				} else{																					// else use the data provided by search
 					tmp = parseInt(this._getLanguagesWeight(u, data[7][1]));
 				}
-				if (tmp == -1){
+				if (tmp == -1){							// if candidate has no language in common, dont match him
 					trace("disqualified - language")
 					return false;
-				} else {
+				} else {								// else, append the weight
 					userWeight += parseInt(data[7][2][0] * tmp * 0.75)
 					maxTotal += parseInt(data[7][2][0]) * 3;
 				}
 			}
 			// ages
-			if(data[10][2][0] != "-1"){		// user cares about age
+			if(data[10][2][0] != "-1"){					// user cares about age, get the weight of the candidate's age
 				let date = new Date();
-				let year = date.getFullYear();
-				if(data[10][1].length == 0){		// empty array, aka no age given
-					userWeight += parseInt(data[10][2][0] * 0.8 * this._getAgeWeight(u, year - this.users[data[0][1][0].year], year));	// use user's age by default
-				} else{
+				let year = date.getFullYear();			// grab current year
+				if(data[10][1].length == 0){			// empty array, aka no age given, user user's age by default
+					userWeight += parseInt(data[10][2][0] * 0.8 * this._getAgeWeight(u, year - this.users[data[0][1][0].year], year));
+				} else{									// else use the provided age
 					userWeight += parseInt(data[10][2][0] * 0.8 * this._getAgeWeight(u, data[10][1][0], year));
 				}
 				maxTotal += parseInt(data[10][2][0]) * 4;
@@ -537,25 +501,62 @@ class Base extends ModuleBase {
 			if(parseInt(data[9][2][0]) != "-1") {		// if the user gives importance to the gender of his mate
 				if(u.gender != data[9][1][0] && u.gender != "Gamer"){	// if candidate doesnt have the specified gender
 					trace("disqualified - gender")
-					return false;			// if gender is different, skip the user
+					return false;										// if gender is different, skip the user
 				}
 			}
 			// vocals
-			if(data[8][2][0] != "-1"){		// user cares about vocals
-				if(data[8][1].length != 0){								// if vocals were given
+			if(data[8][2][0] != "-1"){					// user cares about vocals, get wieght of candidate's vocals
+				if(data[8][1].length != 0){				// if vocals were given
 					userWeight += parseInt(data[8][2][0] * 0.75 * this._getVocalsWeight(u, data[8][1]));
 					maxTotal += parseInt(data[8][2][0]) * 3;
 				}
 			}
-			trace("max score is : ",maxTotal);
+			trace("max score is : ",maxTotal);							// maximum of points avalaible with provided importances
 			let compatibility = (userWeight * 100) / maxTotal;
-			trace(compatibility, "%");
+			trace(compatibility, "%");									// percentage compatibility with the request
 			matchingArray.push({score : compatibility, user : u.id});	// create objetcs with score and id
 			matchingArray.sort((a, b) => (a.score > b.score) ? -1 : 1);	// sort the array of matching users biggest value first
 		})
 		trace(matchingArray);
-		this.sendJSON(req, res, 200, {return : matchingArray}); // send to user
+		this.sendJSON(req, res, 200, {return : matchingArray}); 		// send array to user
 	}
+
+	/**
+	 * @method getProfileFromId : object profile
+	 * @param {*} req
+	 * @param {*} res
+	 * @param  {...*} param : Id name
+	 */
+	_getProfileFromId(req, res, ...param) {
+		trace(param)
+		let id = [...param].join(" ");
+		let profile = 404; 								// error case
+		if (id != -1) {
+			profile = this._returnCopyOfObject(this.users[id]);
+			delete profile["password"];
+		}
+		let data = profile; 							// object profile of user id
+		this.sendJSON(req, res, 200, {return: data});	// answer JSON
+	}
+
+	/**
+	 * @method _getDataFromDataPost : get post data from request
+	 * @param {*} req
+	 */
+	async _getDataFromFormDataPost(req){
+		let busboy = new Busboy({headers : req.headers});
+		let result, prom = new Promise(resolve => result = resolve);
+		let form = new Array();
+		busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated){
+			form.push([fieldname, val]);
+		});
+		busboy.on('finish', function(){
+			result(form);
+		});
+		req.pipe(busboy);
+		return prom;
+	}
+
 	/**
 	 * @method _getLevelWeight : weight of the candidate's level at a given game relative to the required one
 	 * @param {*} candidate : user object we are calcultaing the weight of
@@ -564,10 +565,10 @@ class Base extends ModuleBase {
 	 */
 	_getLevelWeight(candidate, targetGame, targetLevel){
 		let weight = 0;
-		candidate.games.map(g =>{
+		candidate.games.map(g =>{		// for each games of the candidate
 			if(g.name == targetGame){	// if user plays the desired game
 				let delta = this.levels.indexOf(g.level) - this.levels.indexOf(targetLevel);
-				delta = Math.abs(delta);
+				delta = Math.abs(delta);// difference of level
 				if (delta == 0){		// same levels
 					weight = 5;
 				}else if(delta == 1 ){	// almost same level
@@ -583,6 +584,7 @@ class Base extends ModuleBase {
 		})
 		return parseInt(weight);
 	}
+
 	/**
 	 * @method _getPlatformWeight : weight of the user from the platform he plays the game on
 	 * @param {*} candidate : user object we are calcultaing the weight of
@@ -591,15 +593,16 @@ class Base extends ModuleBase {
 	 */
 	_getPlatformWeight(candidate, targetGame, targetPlatform){
 		let weight = 0;
-		candidate.games.map(g =>{
-			if(g.name == targetGame){	// if user plays the desired game
-				if(g.platform == targetPlatform){
-					weight = 1;		// user has a mathing playstyle
+		candidate.games.map(g =>{						// for earch game the candidate plays
+			if(g.name == targetGame){					// if user plays the desired game
+				if(g.platform == targetPlatform){		// and on the correct platform
+					weight = 1;							// user has a mathing platform
 				}
 			}
 		})
-		return parseInt(weight);		// 1 if plays game and same playstyle, 0 otherwise
+		return parseInt(weight);						// 1 if plays game and same platform, 0 otherwise
 	}
+
 	/**
 	 * @method _getStyleWeight : weight of the candidate's playstyle on a given game relative to the required one
 	 * @param {*} candidate : user object we are calcultaing the weight of
@@ -608,17 +611,18 @@ class Base extends ModuleBase {
 	 */
 	_getStyleWeight(candidate, targetGame, targetstyle){
 		let weight = 0;
-		candidate.games.map(g =>{
-			if(g.name == targetGame){	// if user plays the desired game
-				g.playstyles.map(p =>{
-					if(p == targetstyle){
-						weight = 1;		// user has a mathing playstyle
+		candidate.games.map(g =>{						// for each game the candidate plays
+			if(g.name == targetGame){					// if user plays the desired game
+				g.playstyles.map(p =>{					// for each of candidate's playstyles on this game
+					if(p == targetstyle){				// if same as required playstyle
+						weight = 1;						// user has a mathing playstyle
 					}
 				})
 			}
 		})
-		return parseInt(weight);		// 1 if plays game and same playstyle, 0 otherwise
+		return parseInt(weight);						// 1 if plays game and same playstyle, 0 otherwise
 	}
+
 	/**
 	 * @method _getCountryWeight : weight of the candidate's country relative to the required one
 	 * @param {*} candidate : user object we are calcultaing the weight of
@@ -626,11 +630,12 @@ class Base extends ModuleBase {
 	 */
 	_getCountryWeight(candidate, targetCountry){
 		let weight = 0;
-		if(candidate.country == targetCountry)
+		if(candidate.country == targetCountry)			// if the country of the candidate is the same as required one
 			weight = 1;
 		return parseInt(weight);
 
 	}
+
 	/**
 	 * @method _getRegionWeight : weight of the candidate's region relative to the required one
 	 * @param {*} candidate : user object we are calcultaing the weight of
@@ -638,10 +643,11 @@ class Base extends ModuleBase {
 	 */
 	_getRegionWeight(candidate, targetRegion){
 		let weight = 0;
-		if(candidate.region == targetRegion)
+		if(candidate.region == targetRegion)			// if the candidate's region is the same as the required one
 			weight = 1;
 		return parseInt(weight);
 	}
+	
 	/**
 	 * @method _getlanguagesWeight : weight of the candidate's spoken languages relative to the required ones
 	 * @param {*} candidate : user object we are calcultaing the weight of
@@ -649,11 +655,11 @@ class Base extends ModuleBase {
 	 */
 	_getLanguagesWeight(candidate, targetLanguage){
 		let count = 0;
-		candidate.languages.map(l =>{
+		candidate.languages.map(l =>{							// count the amount of languages the candidate has in commun with the request
 			if(targetLanguage.includes(l))
 			count ++;
 		})
-		let percentage = (count * 100) / targetLanguage.length;
+		let percentage = (count * 100) / targetLanguage.length;	// extract the percentage this value represents
 		let weight = 0;
 		if(percentage == 100){			// all in commun !
 			weight = 4;
@@ -668,6 +674,7 @@ class Base extends ModuleBase {
 		}
 		return parseInt(weight);
 	}
+
 	/**
 	 * @method _getAgeWeight : weight of the candidate's Age relative to the required one
 	 * @param {*} candidate : user object we are calcultaing the weight of
@@ -675,23 +682,24 @@ class Base extends ModuleBase {
 	 * @param {*} year : current year
 	 */
 	_getAgeWeight(candidate, targetAge, year){
-		if(candidate.year == -1)	// if the user didnt give any birth year, set the weight to 0
+		if(candidate.year == -1)						// if the user didnt give any birth year, set the weight to 0
 			return 0;
-		let candidateAge =  year - candidate.year;
+		let candidateAge =  year - candidate.year;			  // extract the age of the candidate using his birth year and curent year
 		let candidateRange = this._getAgeRange(candidateAge); // get the candicate's age area
-		let targetRange = this._getAgeRange(targetAge);		  // get user's age area
+		let targetRange = this._getAgeRange(targetAge);		  // get target age area
 		let delta = candidateRange - targetRange;			  // get delta of this
 		switch (delta){
-			case 0 : return 5;
-			case 1 : return 4;
-			case -1 : return 3;
-			case 2 : return 3;
-			case -2 : return 2;
-			case 3 : return 2;
-			case (delta <= -3) : return 1;
-			case (delta >= 4) : return 1;
+			case 0 : return 5;							// same age area
+			case 1 : return 4;							// candidate is slightly older
+			case -1 : return 3;							// candidate is slightly younger
+			case 2 : return 3;							// candidate is older
+			case -2 : return 2;							// candidate is younger
+			case 3 : return 2;							// candidate is really older
+			case (delta <= -3) : return 1;				// candidate is extremely younger
+			case (delta >= 4) : return 1;				// candidate is extremely older
 		}
 	}
+
 	/**
 	 * @method _getAgeRange : index of the age area the candidate fits in (see database/ages.json)
 	 * @param {*} age : age of the candidate
@@ -700,12 +708,13 @@ class Base extends ModuleBase {
 		let candidateRange;
 		for(var i = 0; i < this.ages.length; i++){
 			if(this.ages[i] > age){
-				candidateRange =  this.ages.indexOf(this.ages[i]) - 1;
+				candidateRange =  this.ages.indexOf(this.ages[i]) - 1; // grab the age area the candidate fits in
 				break;
 			}
 		}
 		return candidateRange;
 	}
+
 	/**
 	 * @method _getVocalsWeight : weight of the candidate's used vocals relative to the required ones
 	 * @param {*} candidate : user object we are calcultaing the weight of
@@ -713,26 +722,27 @@ class Base extends ModuleBase {
 	 */
 	_getVocalsWeight(candidate, vocals){
 		let count = 0;
-		candidate.vocals.map(v =>{
-			if(vocals.includes(v)){
+		candidate.vocals.map(v =>{						// for each vocal platform the candidate uses
+			if(vocals.includes(v)){						// if its one of the required ones
 				count++;
 			}
 		})
-		let percentage = (count * 100) / vocals.length;
+		let percentage = (count * 100) / vocals.length; // extract percentage of vocals in commun
 		let weight = 0;
 		if(percentage == 100){
-			weight = 4;
-		} else if (percentage > 66){
+			weight = 4;									// all the same vocals
+		} else if (percentage > 66){					// 66% - 99% percent of list in commun
 			weight = 3;
-		}else if (percentage > 33){
+		}else if (percentage > 33){						// 33% - 65% percent of list in commun
 			weight = 2;
-		}else if (percentage > 0){
+		}else if (percentage > 0){						// 1% - 32% percent of list in commun
 			weight = 1;
-		} else{
+		} else{											// nothing in commun
 			weight = 0;
 		}
 		return parseInt(weight);
 	}
+
 	/**
 	 * @method _getIdFromSessionId : string id of connect session
 	 * @param {string} sessionId
@@ -777,7 +787,7 @@ class Base extends ModuleBase {
 	 */
 	_isUsernameTaken(username){
 		let taken = false;
-		this.users.map(profile => {
+		this.users.map(profile => {						// for each user in database, check if providded name exists
 			if (profile.username == username) taken = true;
 		});
 		return taken;
@@ -788,7 +798,7 @@ class Base extends ModuleBase {
 	 */
 	_createSessionId() {
 		let sessionId = "" + Math.random();
-		while (this.sessions.has(sessionId)) {
+		while (this.sessions.has(sessionId)) {			// generate unique SSID
 			sessionId = "" + Math.random();
 		}
 		return sessionId;
@@ -809,35 +819,18 @@ class Base extends ModuleBase {
 	 */
 	_sendLatestConv(id1, id2){
 		var fs = require("fs");
-		var regex = new RegExp(id1 + "_" +id2);
-		var dir = fs.readdirSync("database/tchats");
+		var regex = new RegExp(id1 + "_" +id2);			// create regexp with the two ID (sorted with format smallestID_biggestId)
+		var dir = fs.readdirSync("database/tchats");	// parse the chat directory
 		var list = [];
-		// match directory content for tag1_tag2
-		dir.forEach( i => {
-			if(regex.test(i)) // push it !
-				list.push(i);
+		dir.forEach( i => {								// for each file in directory
+			if(regex.test(i)) 							// if file matches the regexp
+				list.push(i);							// push it in list of conv files for the users
 		})
-		// make sure the list is sorted by creation date
-		list.sort(function(a, b){
+		list.sort(function(a, b){						// sort it by date of creation to get the newest versin of the conv history
 			return fs.statSync("database/tchats/" + a).mtime.getTime() - fs.statSync("database/tchats/" + b).mtime.getTime();
 		})
-		//get the newest one
-		var mostRecent = list[list.length - 1];
+		var mostRecent = list[list.length - 1];			// return last element of the list AKA the newest one
 		return mostRecent;
-	}
-
-	/**
-	 * @method _onIOConnect : new IO client connected
-	 * @param {*} socket
-	 */
-	_onIOConnect(socket) {
-		super._onIOConnect(socket); // do not remove super call
-		socket.on("dummy", packet => this._onDummyData(socket, packet)); // listen to "dummy" messages
-	}
-
-	_onDummyData(socket, packet) { // dummy message received
-		trace(socket.id, "dummy", packet); // say it
-		socket.emit("dummy", {message: "dummy indeed", value: Math.random()}); // answer dummy random message
 	}
 
 }
