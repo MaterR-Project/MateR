@@ -20,6 +20,10 @@ class SearchView extends View {
 	initialize(mvc) {
 		super.initialize(mvc);
 
+		this.gamePlatformChoice = document.createElement("select");
+		this.gamePlatformChoice.setAttribute("name", "platform");
+		this.stage.appendChild(this.gamePlatformChoice);
+
 	}
 
 	// activate UI
@@ -60,7 +64,7 @@ class SearchView extends View {
             option.value = data.indexOf(element);
             this.gamePlatformChoice.appendChild(option);
         });
-        combo.selectedIndex = -1;
+        this.gamePlatformChoice.selectedIndex = -1;
     }
 
 }

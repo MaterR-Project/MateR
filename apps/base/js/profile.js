@@ -21,6 +21,7 @@ class ProfileModel extends Model {
 			//alert("Invalid Cookie - You'll need to reconnect");
     	location.reload();
 		}
+		this.games = result.response.return.games;
 		trace(this.id, result.response.return);
 		return result.response.return;
 	}
@@ -349,9 +350,7 @@ class ProfileView extends View {
 
 	}
 	searchClick(event){
-		//this.mvc.view.destroy();
-		//this.mvc.app.searchMVC.view.attach(document.body);
-		//this.mvc.app.searchMVC.view.activate();
+		this.mvc.controller.searchClicked();
 	}
 	applyClick(event) {
 		console.log("apply");					// link to the apply part of the controller
@@ -516,8 +515,8 @@ class ProfileController extends Controller {
 		this.mvc.view.deactivate();
 		//this.mvc.view.deleteProfile();
 		this.mvc.view.destroy();						// destroy current view
-		this.mvc.app.mvcTest.view.attach(document.body);// attach view of search MVC
-		this.mvc.app.mvcTest.view.activate();			// activate user interface of search MVC
+		this.mvc.app.searchMVC.view.attach(document.body);// attach view of search MVC
+		this.mvc.app.searchMVC.view.activate();			// activate user interface of search MVC
 	}
 
 	logoutClicked(params) {
