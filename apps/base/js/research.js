@@ -20,9 +20,27 @@ class SearchView extends View {
 	initialize(mvc) {
 		super.initialize(mvc);
 
+		this.stage.style.display = "flex";
+    // axe y
+    this.stage.style.alignItems = "center";
+    // axe x
+    this.stage.style.justifyContent = "center";
+
+    // View main div
+    this.mainDiv = document.createElement("div");
+
+    this.mainDiv.style.alignItems = "center";
+    this.mainDiv.style.justifyContent = "center";
+		this.mainDiv.style.display = "flex";
+		this.mainDiv.style.justifyContent = "space-between";
+		this.mainDiv.style.height = "90%";
+		this.mainDiv.style.width = "100%";
+    this.mainDiv.style.flexDirection = "column";
+    this.stage.appendChild(this.mainDiv);
+
 		this.gamePlatformChoice = document.createElement("select");
 		this.gamePlatformChoice.setAttribute("name", "platform");
-		this.stage.appendChild(this.gamePlatformChoice);
+		this.mainDiv.appendChild(this.gamePlatformChoice);
 
 	}
 
@@ -45,8 +63,8 @@ class SearchView extends View {
 	}
 
 	addListeners() {
-		this.getGameSelectorHandler = e => this.selectChose(e);
-		this.btn.addEventListener("click", this.getGameSelectorHandler);
+		//this.getGameSelectorHandler = e => this.selectChose(e);
+		//this.btn.addEventListener("change", this.getGameSelectorHandler);
 	}
 
 	removeListeners() {
