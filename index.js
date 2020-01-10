@@ -54,7 +54,7 @@ class Server {
 		  });
 			socket.on('logout', ssid => {
 		    trace('a user log out');
-				this._app.sessions.remove(ssid);
+				this._app.sessions.delete(ssid);
 		  });
 		});
 
