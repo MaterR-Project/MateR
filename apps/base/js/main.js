@@ -30,6 +30,9 @@ class Base {
 		this.authenticationMVC = new MVC("authenticationMVC", this, new AutenticationModel(), new AutenticationView(), new AutenticationController()); // init app MVC
 		await this.authenticationMVC.initialize(); // run init async tasks
 
+		this.resultMVC = new MVC("resultMVC", this, new ResultModel(), new ResultView(), new ResultController());
+		await this.resultMVC.initialize();
+
 		if (document.cookie != ""){
 			trace("connect direct gros")
 			let cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)ssid\s*\=\s*([^;]*).*$)|^.*$/, "$1");
