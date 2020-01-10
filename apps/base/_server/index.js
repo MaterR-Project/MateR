@@ -331,18 +331,18 @@ class Base extends ModuleBase {
   	}
 
 	/**
-	 * @method _getMessageFromRequest : busboy func to get message target id and source id from req
+	 * @method _getDataFromDataPost : get post data from request
 	 * @param {*} req
 	 */
-	async _getMessageFromForDataPost(req){
+	async _getDataFromFormDataPost(req){
 		let busboy = new Busboy({headers : req.headers});
 		let result, prom = new Promise(resolve => result = resolve);
-		let message = new Array();
+		let form = new Array();
 		busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated){
-			message.push([fieldname, val]);
+			form.push([fieldname, val]);
 		});
 		busboy.on('finish', function(){
-			result(message);
+			result(form);
 		});
 		req.pipe(busboy);
 		return prom;
@@ -734,14 +734,14 @@ class Base extends ModuleBase {
  	}
 
 	/**
-	 * @method _getDataFromFormDataPost : get the post data from request
+	 * @method _getDataFromsearch : get data from posted object
 	 * @param {*} req
 	 */
 	async _getDataFromSearch(req){
     	let busboy = new Busboy({ headers: req.headers });
 		let result, prom = new Promise(resolve => result = resolve);
 		let form = new Array();
-	    busboy.on('field', function(fieldname, val, fieldnameTruncated, valTruncated) {
+	    busboy.on('field', function(fieldname, val) {
 			// val is a string of the values and the weight, split the ","" to get an array
 			let valcpy = val.split(",");
 			// get the weight and save it by grabbing last element
@@ -753,7 +753,7 @@ class Base extends ModuleBase {
     	});
     	busboy.on('finish', function() {
 			result(form);
-      		trace('Done parsing form!');
+      		trace('Done parsing data!');
     	});
     	req.pipe(busboy);
 		return prom;
