@@ -195,7 +195,6 @@ class Base extends ModuleBase {
 				canSend = 1;
 		});
 		if(canSend == 1){
-			let data = "ok";
 			let sock = undefined;
 			for (let session of this.sessions.values()){
 				if (session[0] == destination[1]) {
@@ -237,9 +236,9 @@ class Base extends ModuleBase {
 				})
 			})
 		}else{
-			let data = "failed to send";					// error case
+			this.sendJSON(req, res, 200, {return : "failed to send"});	// return an error to the sender
 		}
-		this.sendJSON(req, res, 200, {return : data});	// return an error to the sender
+
 	}
 
 	/**

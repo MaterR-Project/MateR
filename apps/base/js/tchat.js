@@ -210,6 +210,12 @@ class TchatView extends View {
     // adds a message to the view
     addMessage(content, src, state){
         trace("adding message : ", content, "from user : ", src);
+
+				let lastMessage = document.getElementById("latest");
+				if (lastMessage){
+					lastMessage.removeAttribute("id"); // clear the id
+				}
+
         let messageDiv = document.createElement("div");
         this.convDiv.appendChild(messageDiv);
         if(this.src == src){
@@ -260,10 +266,9 @@ class TchatView extends View {
 		// updates the latest sent message to set the message status
     setStatus(data){
 				trace("data setStatus : ",data);
-        var lastMessage = document.getElementById("latest");
-				if (data != "failed to send") {
-					lastMessage.removeAttribute("id"); // clear the id
-				}
+        let lastMessage = document.getElementById("latest");
+				trace("lasr message : ", lastMessage);
+				lastMessage.removeAttribute("id"); // clear the id
 				lastMessage.innerHTML = "";
 				let statusDiv = document.createElement("span");
 				if(data == "seen"){
