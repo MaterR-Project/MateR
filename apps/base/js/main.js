@@ -67,7 +67,8 @@ class Base {
         });
 				this.io.on('msg', data => {
 					trace('msg a notifier : ', data);
-					alert("incoming transmission !! " + JSON.parse(data).message);
+					let message =  JSON.parse(data);
+					this.tchatMVC.view.addMessage(message.message,message.src," ");
 				});
       });
 		}
