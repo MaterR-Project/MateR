@@ -55,17 +55,17 @@ class Base {
       this.io.on('connectSession', data => {
         console.log("connection : " + data);
         this.io.emit('auth', sessionId);
-        console.log("emit ping with session = 0");
+        console.log("emit ping with session : ", sessionId);
         this.io.on('authConfirm', data =>{
           console.log("authentication : "+data);
-          if (data == "ok") {
-						trace("you can receive something");
-            this.io.on('msg', data => {
-							trace(data);
-
-            });
+          if (data == "not ok") {
+						alert("authentication failed plz reload your browser");
           }
         });
+				this.io.on('msg', data => {
+					trace('msg a notifier : ', data);
+					alert("incoming transmission !! " + data.message);
+				});
       });
 		}
 

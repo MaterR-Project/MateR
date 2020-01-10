@@ -201,7 +201,7 @@ class Base extends ModuleBase {
 	 * @param {*} res
 	 */
 	async sendMessage(req, res){
-		let result = await this._getMessageFromRequest(req);
+		let result = await this._getDataFromFormDataPost(req);
 		trace(result)
 		let content = result[0];
 		let source = result[1];
@@ -215,17 +215,18 @@ class Base extends ModuleBase {
 		if(canSend == 1){
 			let data = "ok";
 			//send to other user TODO
-			trace("id", source[1]);
+			trace("id", destination);
 			let sock = undefined;
-			for (element of this.sessions.values()) {
-				if (element[0] == source[1]) {
-					sock = element[1];
+			for (let session of this.sessions.values()) {
+				if (session[0] == destination[1]) {
+					sock = session[1];
 					break;
 				}
 			}
 			let tosend = JSON.stringify({message : content[1], src : source[1], dest : destination[1]});
 			//trace(sock);
 			trace("sessions : ", this.sessions);
+			trace("id : ", destination[1]);
 			if(sock != undefined){
 				trace("emit message");
 				sock.emit('msg', tosend);
