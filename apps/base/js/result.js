@@ -558,8 +558,12 @@ class ResultController extends Controller {
  
     async startTalk(id){
         trace("engaging conversation with : ", id);
-        // todo : pop
-        this.mvc.view.moveLeft();
+        let a = await this.mvc.view.searchResults[this.mvc.view.curIndex - 1].user
+        trace(a -1)
+        await this.mvc.view.searchResults.splice(a-1, 1)
+        this.mvc.view.curIndex--;
+        this.mvc.view.moveRight();
+        //TODO : call server for notification sending to the other user and adding conv
     }
 
     async fetchProfile(it){
@@ -574,12 +578,12 @@ class ResultController extends Controller {
         if(it == 0){                                                                                                                       // move right : only ftech the next one (...[a, b, C]...), a and b are reused, C is newly fetched
             this.mvc.view.displayProfile(2, 
                                         await this.mvc.model.getProfile(this.mvc.view.searchResults[this.mvc.view.curIndex + 1].user),
-                                        this.mvc.view.searchResults[this.mvc.view.curIndex+1].score)                                     // put C on the right, ready for display at next swipe right
+                                        this.mvc.view.searchResults[this.mvc.view.curIndex].score)                                     // put C on the right, ready for display at next swipe right
         }
         if(it == 1){          
             this.mvc.view.displayProfile(0, 
                                         await this.mvc.model.getProfile(this.mvc.view.searchResults[this.mvc.view.curIndex-2].user),
-                                        this.mvc.view.searchResults[this.mvc.view.curIndex-2].score);                                        // put A on visible div
+                                        this.mvc.view.searchResults[this.mvc.view.curIndex].score);                                        // put A on visible div
             if(this.mvc.view.curIndex > 0){
                this.mvc.view.displayProfile(1, 
                                            await this.mvc.model.getProfile(this.mvc.view.searchResults[this.mvc.view.curIndex-1].user),
