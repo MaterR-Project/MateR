@@ -188,7 +188,7 @@ class SearchView extends View {
 		this.customSearchField.appendChild(this.regionsLabel);
 
 		this.comboRegions = document.createElement("select");
-		this.comboRegions.setAttribute("name", "region");
+		this.comboRegions.setAttribute("name", "regions");
 		this.comboRegions.setAttribute("id", "regions");
 		this.customSearchField.appendChild(this.comboRegions);
 
@@ -408,6 +408,7 @@ class SearchView extends View {
 
 	searchButtonClick(){
 		const FD = new FormData(this.form);
+		FD.append("originId", this.mvc.app.profileMVC.model.id)
 		this.mvc.controller.searchButtonWasClicked(FD);
 	}
 
@@ -519,7 +520,7 @@ class SearchController extends Controller {
 	}
 
 	async searchButtonWasClicked(FD){
-		let result = await fetch('research/', {
+		let result = await fetch('getMatchingProfiles/', {
 		  method: 'POST',
 		  body: FD
 		});

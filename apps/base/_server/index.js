@@ -481,10 +481,81 @@ class Base extends ModuleBase {
 	 * @param {*} req
 	 * @param {*} res
 	 */
-	async research(req, res) {
+	async _research(req, res) {
 
 		let data = await this._getDataFromFormDataPost(req);
 		trace(data);
+		/*
+		[
+			[ 'game', 'Apex Legends' ],
+			[ 'platform', 'Windows' ],
+			[ 'levels', 'Casual' ],
+			[ 'levels', 'Experienced' ],
+			[ 'levelsPrio', '2' ],
+			[ 'playstyles', 'Serious Business' ],
+			[ 'playstylesPrio', '1' ],
+			[ 'region', 'Northern America' ],
+			[ 'regionsPrio', '3' ],
+			[ 'countries', 'Mexico' ],
+			[ 'countriesPrio', '2' ],
+			[ 'languages', 'English' ],
+			[ 'languagesPrio', '4' ],
+			[ 'vocals', 'Discord' ],
+			[ 'vocalsPrio', '3' ],
+			[ 'age', '14' ],
+			[ 'agePrio', '1' ]
+		] 		::index:487
+
+		[
+		  [ 'game', 'Apex Legends' ],
+		  [ 'platform', 'Windows' ],
+		  [ 'levelsPrio', '-1' ],
+		  [ 'playstylesPrio', '-1' ],
+		  [ 'regionsPrio', '-1' ],
+		  [ 'countriesPrio', '-1' ],
+		  [ 'languagesPrio', '-1' ],
+		  [ 'vocalsPrio', '-1' ],
+		  [ 'agePrio', '-1' ],
+		  [ 'originId', '1' ]
+		]
+		*/
+		let researchObject = {};
+		data.forEach(elem => {
+			let addValue = (prop, value) => {
+				if(researchObject.hasOwnProperty(prop)){
+					researchObject[prop][0].push(value);
+				}
+				else{
+					researchObject[prop] = [[value]];
+				}
+			}
+			let addPrio = (prio, value) =>{
+				let prop = prio.substring(0, prio.length-4);
+				if(researchObject.hasOwnProperty(prop)){
+					researchObject[prop].push(value);
+				}
+				else{
+					researchObject[prop] = [[], value];
+				}
+			}
+			if (elem[0] == "game"){
+				researchObject.game = [elem[1], "suppr"]
+			}
+			else if (elem[0] == "platform"){
+				researchObject.platform = [elem[1], "suppr"]
+			}
+			else if (elem[0] == "originId"){
+				researchObject.originId = [elem[1], "suppr"]
+			}
+			else if (elem[0].includes("Prio")){
+				addPrio(elem[0], elem[1]);
+			}
+			else {
+				addValue(elem[0], elem[1]);
+			}
+		});
+		trace(researchObject)
+		// Call algo with object
 		this.sendJSON(req, res, 200, {return: 500, message: "C'est normal"});
 	}
 	/**
