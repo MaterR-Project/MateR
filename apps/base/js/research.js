@@ -6,6 +6,8 @@ class SearchModel extends Model {
 
 	async initialize(mvc) {
 		super.initialize(mvc);
+		let agesResult = await Comm.get("getAgesFromDatabase"); // call server method to get regions
+		this.ages = agesResult.response.return;
 	}
 
 }
@@ -263,7 +265,7 @@ class SearchView extends View {
 		this.updateComboWithList(this.comboRegions, this.mvc.app.registrationMVC.model.regions);
 		this.updateComboWithList(this.comboLanguages, this.mvc.app.registrationMVC.model.languages);
 		this.updateComboWithList(this.comboVocals, this.mvc.app.registrationMVC.model.vocals);
-		//this.updateComboWithList(this.comboName, this.gamesPlaformsList[0]);
+		this.updateComboWithList(this.comboAge, this.mvc.model.ages);
 
 	}
 
@@ -355,10 +357,17 @@ class SearchView extends View {
 		}
 		*/
 		if (data != 404){
-			data.map(element => {
+			data.map((element, index) => {
 				let option = document.createElement("option");
-				option.text = element;
-				option.value = element;// data.indexOf(element);
+				if (combo == this.comboAge){
+					let nextAge = (data[index+1]-1);
+					if (isNaN(nextAge)) nextAge = "+∞";
+					option.text = element + " - " + nextAge;
+					option.value = element;
+				}else {
+					option.text = element;
+					option.value = element;// data.indexOf(element);
+				}
 				combo.appendChild(option);
 			});
 		}

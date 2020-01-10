@@ -39,6 +39,17 @@ class Base extends ModuleBase {
 	}
 
 	/**
+	 * @method getAgesFromDatabase : array of age
+	 * @param {*} req
+	 * @param {*} res
+	 */
+	getAgesFromDatabase(req, res) {
+		// list of game names from games database
+		let data =  this.ages;
+		this.sendJSON(req, res, 200, {return: data}); // answer JSON
+	}
+
+	/**
 	 * @method getGameNamesFromDatabase : array of game names
 	 * @param {*} req
 	 * @param {*} res
