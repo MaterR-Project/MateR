@@ -514,7 +514,7 @@ class Base extends ModuleBase {
 			trace("max score is : ",maxTotal);							// maximum of points avalaible with provided importances
 			let compatibility = (userWeight * 100) / maxTotal;
 			trace(compatibility, "%");									// percentage compatibility with the request
-			matchingArray.push({score : compatibility, user : u.id});	// create objetcs with score and id
+			matchingArray.push({score : Math.round(compatibility), user : u.id});	// create objetcs with score and id
 			matchingArray.sort((a, b) => (a.score > b.score) ? -1 : 1);	// sort the array of matching users biggest value first
 		})
 		trace(matchingArray);
@@ -527,7 +527,7 @@ class Base extends ModuleBase {
 	 * @param {*} res
 	 * @param  {...*} param : Id name
 	 */
-	_getProfileFromId(req, res, ...param) {
+	getProfileFromId(req, res, ...param) {
 		trace(param)
 		let id = [...param].join(" ");
 		let profile = 404; 								// error case
