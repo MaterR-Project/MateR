@@ -16,7 +16,6 @@ class Base extends ModuleBase {
 		this.playstyles = JSON.parse(fs.readFileSync('database/playstyles.json', 'utf8'));
 		this.users = JSON.parse(fs.readFileSync('database/users.json', 'utf8'));
 		this.vocals = JSON.parse(fs.readFileSync('database/vocals.json', 'utf8'));
-		this.sessionIds = new Map();
 		this.sessions = new Map();
 		//trace(this.users,this.languages,this.levels,this.locals,this.playstyles,this.vocals);
 
@@ -146,7 +145,7 @@ class Base extends ModuleBase {
 		let ssId = [...param].join(" ");
 		let id = this._getIdFromSessionId(ssId); // profile id of session id
 		let profile = 404; // error case
-		if (id != -1) {
+		if (id != undefined) {
 			profile = this._returnCopyOfObject(this.users[id]);
 			delete profile["password"];
 		}
@@ -211,15 +210,18 @@ class Base extends ModuleBase {
 		this.users[source[1]].tchats.map(e =>{
 			if(e == destination[1])
 				canSend = 1;
-		})
+		});
 		trace(canSend);
 		if(canSend == 1){
 			let data = "ok";
 			//send to other user TODO
-			let sock = this.sessions[source[1]]; // get the socket of the destination
+			let sock = this.sessions.get(source[1]); // get the socket of the destination
 			let tosend = JSON.stringify({message : content[1], src : source[1], dest : destination[1]});
-			if(sock)
-				sock.emit('message', tosend);
+			trace(sock);
+			if(sock != undefined){
+				trace("emit message");
+				sock.emit('msg', tosend);
+			}
 			this.sendJSON(req, res, 200, {return : data});
 
 			let file;
@@ -275,11 +277,11 @@ class Base extends ModuleBase {
 		trace(username, password);
 		let profile = this.users.find(profile => profile.username == username && profile.password == password);
 		trace("profile", profile);
-		trace('map', this.sessionIds);
+		trace('map', this.sessions);
 		trace('users', this.users);
 		if (profile != undefined) {
 			let sessionId = this._createSessionId();
-			this.sessionIds.set(sessionId, profile.id);
+			this.sessions.set(sessionId, [profile.id, undefined]);
 			trace(sessionId);
 			this.sendJSON(req, res, 200, {return: sessionId});
 		}else{
@@ -459,12 +461,12 @@ class Base extends ModuleBase {
 	 * @method _getIdFromSessionId : string id of connect session
 	 * @param {string} sessionId
 	 */
-	 _getIdFromSessionId(sessionId) {
- 		let id = this.sessionIds.get(sessionId);
- 		if (id === undefined) {
- 			id = -1;
+	_getIdFromSessionId(sessionId) {
+ 		let session = this.sessions.get(sessionId);
+ 		if (session === undefined) {
+ 			return
  		}
- 		return id;
+ 		return session[0];
  	}
 
 	/**
@@ -503,7 +505,7 @@ class Base extends ModuleBase {
 	 */
 	_createSessionId() {
 		let sessionId = "" + Math.random();
-		while (this.sessionIds.get(sessionId) != undefined) {
+		while (this.sessions.has(sessionId)) {
 			sessionId = "" + Math.random();
 		}
 		return sessionId;

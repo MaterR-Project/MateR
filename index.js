@@ -44,40 +44,17 @@ class Server {
 		  console.log("emit connectSession : ok");
 		  socket.on('auth', data => {
 		    console.log("ssid : " + data);
-				let session = this._app.sessionIds.get(data);
-		    if(session != undefined){
+		    if(this._app.sessions.has(data)){
 					console.log("chaussette ouverte");
-		      this._app.sessions.set(session, socket);
-
-					trace("map socket : ", this._app.sessions.keys());
-					trace("map session : ", this._app.sessionIds);
-
-		      socket.emit('authConfirm', "ok");
-		      socket.on('msg', data =>{
-		        console.log("id : "+data.id+"\nmessage : "+data.message);
-						//todo conserver les messages sur le server
-						//complete data avec info date et heure
-		        this._app.sessions.get(data.id).emit('msg', data);
-		      });
+					this._app.sessions.set(data, [this._app.sessions.get(data)[0],socket]);
 		    }else{
 					console.log("access denied");
 		      socket.emit('authConfirm', "not ok");
 		    }
 		  });
-			socket.on('disconnect', () => {
-		    trace('a user deconnected');
-				for (let [sessionId,soc] of this._app.sessions.entries()) {
-					if (soc == socket) {
-						for (let [id,ssid] of this._app.sessionIds.entries()) {
-							if (ssid == sessionId) {
-								this._app.sessionIds.delete(id);
-								break ;
-							}
-						}
-						this._app.sessions.delete(soc);
-						break ;
-					}
-				}
+			socket.on('logout', ssid => {
+		    trace('a user log out');
+				this._app.sessions.remove(ssid);
 		  });
 		});
 
