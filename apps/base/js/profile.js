@@ -12,8 +12,16 @@ class ProfileModel extends Model {
 	async getProfile(){
 		//trace("get session id");
 		let result = await Comm.get("getProfileFromSessionId/"+this.mvc.app.authenticationMVC.model.sessionId);
-		//trace(result);
+
 		this.id = result.response.return.id;
+
+		if (this.id == undefined){
+			this.mvc.view.stage.innerHTML = "";
+			document.cookie = "ssid=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+			//alert("Invalid Cookie - You'll need to reconnect");
+    	location.reload();
+		}
+		trace(this.id, result.response.return);
 		return result.response.return;
 	}
 
@@ -95,6 +103,7 @@ class ProfileView extends View {
 		// profile name
 		this.profileName = document.createElement("h1");
 		this.profileName.innerHTML = "My Name";
+		this.profileName.style.fontSize = "40px";
 		this.profileName.setAttribute("class","profil- name");
 
 		this.mainDiv.appendChild(this.profileName);
@@ -367,19 +376,19 @@ class ProfileView extends View {
 	}
 	menuClick(event) {
 		this.mvc.controller.menuClicked();		// link to the menu part of the controller
-
 	}
 	/* -------------------------------------------------------------------- */
 
 	updateProfile(data) {
-		console.log(data);
-
+		//console.log(data);
 		this.mail.innerHTML = data.mail;
 		this.profileName.innerHTML = data.username;
 		this.mail.innerHTML = data.mail;
 		this.bio.innerHTML = data.bio;
 		this.gender.innerHTML = data.gender;
-		this.age.innerHTML = new Date().getFullYear() - data.year;
+		if (data.year != -1){
+			this.age.innerHTML = new Date().getFullYear() - data.year;
+		}else{ this.age.innerHTML = "Undefined";}
 		this.region.innerHTML = data.region;
 		this.country.innerHTML = data.country;
 		this.languages.innerHTML = data.languages.join(', ');
@@ -389,7 +398,6 @@ class ProfileView extends View {
 
 		this.vocals.innerHTML = "";
 		data.vocals.forEach((e, _, vocals) => {
-			trace(vocals)
 			let div = document.createElement("div");
 			div.style.display = "flex";
 			div.style.flexDirection = "row";
@@ -432,6 +440,8 @@ class ProfileView extends View {
 			// game title
 			let gameName = document.createElement("span");
 				gameName.innerHTML = game.name;
+				gameName.style.textDecoration = "underline";
+				gameName.style.marginBottom = "5px";
 			gameDiv.appendChild(gameName);
 
 			//game property
@@ -463,15 +473,27 @@ class ProfileView extends View {
 				let playstyle = document.createElement("div");
 					playstyle.setAttribute("class","property");
 					playstyle.style.display = "flex";
-					playstyle.style.flexDirection ="row";
+					playstyle.style.flexDirection ="column";
 					playstyle.style.justifyContent = "flex-start";
 					let labelPlaystyle = document.createElement("span");
-						labelPlaystyle.innerHTML = "Play style : "
+						labelPlaystyle.innerHTML = "Playstyles : "
 					playstyle.appendChild(labelPlaystyle);
-					let playStyleNames = document.createElement("span");
-						playStyleNames.style.marginLeft = "3px";
-						playStyleNames.innerHTML = game.playstyles.join(', ')
+
+					let playStyleNames = document.createElement("div");
+					game.playstyles.forEach((ps, _, psArray) => {
+						let playStyleSpan = document.createElement("span");
+						if (ps == psArray[psArray.length-1]) {
+							playStyleSpan.append(ps);
+						}else playStyleSpan.append(ps+", ");
+						//playStyleSpan.style.marginRight = "3px";
+						//playStyleSpan.style.alignSelf = "flex-end";
+						playStyleNames.appendChild(playStyleSpan);
+					});
+						playStyleNames.style.marginLeft = "10px";
+						playStyleNames.style.alignSelf = "flex-end";
+						//playStyleNames.innerHTML = game.playstyles.join(', ')
 					playstyle.appendChild(playStyleNames);
+
 				gameProperty.appendChild(playstyle);
 
 				// level of play
@@ -517,8 +539,13 @@ class ProfileController extends Controller {
 
 	logoutClicked(params) {
 		trace("logout btn click", params);
+		//this.mvc.app.io.disconnect();
+		this.mvc.app.io.emit('logout', this.mvc.app.authenticationMVC.model.sessionId);
+		this.mvc.app.authenticationMVC.model.sessionId = undefined;
+		//trace(this.mvc.app.authenticationMVC.model.sessionId);
 		this.mvc.view.deactivate();
 		//this.mvc.view.deleteProfile();
+		document.cookie = "ssid=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
 		this.mvc.view.destroy(); 						 // destroy current view
 		this.mvc.app.authenticationMVC.view.attach(document.body); // attach view of authenticate MVC
 		this.mvc.app.authenticationMVC.view.activate(); 			 // activate user interface of authenticate MVC

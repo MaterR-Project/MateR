@@ -21,7 +21,6 @@ class AutenticationModel extends Model {
 		//trace(this.sessionId);
 		return result.response;
 	}
-
 }
 
 class AutenticationView extends View {
@@ -140,10 +139,14 @@ class AutenticationView extends View {
 	addListeners() {
     this.connectBtnHandler = e => {
 			this.connectClick(e);
+			this.updateWrongPsw("");
 		}
     this.connectBtn.addEventListener("click", this.connectBtnHandler);
 
-    this.createAccountBtnHandler = e => this.createAccountClick(e);
+    this.createAccountBtnHandler = e => {
+			this.createAccountClick(e);
+			this.updateWrongPsw("");
+		}
     this.createAccountBtn.addEventListener("click", this.createAccountBtnHandler);
 	}
 
@@ -175,7 +178,7 @@ class AutenticationController extends Controller {
 
 	initialize(mvc) {
 		super.initialize(mvc);
-
+		trace(["truc",2,{"bidule":"chouette"}]);
 	}
 
 	// TODO with profile.js
@@ -187,10 +190,12 @@ class AutenticationController extends Controller {
 			if (this.mvc.model.sessionId == undefined) {
 				this.mvc.view.updateWrongPsw(response.return);
 			}else{
+				document.cookie = "ssid="+this.mvc.model.sessionId+";";
+				trace("cookie : ", document.cookie);
+				this.mvc.app.initSocket(this.mvc.model.sessionId);
 				this.mvc.view.deactivate();
 				this.mvc.view.destroy();
 		    this.mvc.app.profileMVC.view.attach(document.body);
-				this.mvc.app.initSocket(this.mvc.app.profileMVC.model.id);
 		    this.mvc.app.profileMVC.view.activate();
 			}
 		}
@@ -212,5 +217,4 @@ class AutenticationController extends Controller {
 		}
 		return true
 	}
-
 }

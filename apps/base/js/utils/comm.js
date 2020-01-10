@@ -16,7 +16,7 @@ class Comm {
 		result["response"] = await result[options["type"]]();
 		//trace("result", result);
 		return result;
-    }
+  }
 
     /**
      * @method urlrequest:

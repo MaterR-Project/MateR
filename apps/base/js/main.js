@@ -1,5 +1,7 @@
 window.addEventListener("load", event => new Base());
 
+trace("cookie : ", document.cookie);
+
 class Base {
 
 	constructor() {
@@ -13,33 +15,56 @@ class Base {
 		this.registrationMVC = new MVC("registrationMVC", this, new RegistrationModel(), new RegistrationView(), new RegistrationControler());
 		await this.registrationMVC.initialize(); // run init async tasks
 
-		this.authenticationMVC = new MVC("authenticationMVC", this, new AutenticationModel(), new AutenticationView(), new AutenticationController()); // init app MVC
-		await this.authenticationMVC.initialize(); // run init async tasks
+		this.tchatMVC = new MVC("tchatMVC", this, new TchatModel(), new TchatView(), new TchatController());
+		await this.tchatMVC.initialize();
+
+		this.menuMVC = new MVC("menuMVC", this, new MenuModel(), new MenuView(), new MenuController());
+		await this.menuMVC.initialize();
+
+		this.searchMVC = new MVC("searchMVC", this, new SearchModel(), new SearchView(), new SearchController());
+		await this.searchMVC.initialize();
 
 		this.profileMVC = new MVC("profileMVC", this, new ProfileModel(), new ProfileView(), new ProfileController());
 		await this.profileMVC.initialize();
 
-		this.tchatMVC = new MVC("tchatMVC", this, new TchatModel(), new TchatView(), new TchatController());
-		await this.tchatMVC.initialize();
-		
-		this.menuMVC = new MVC("menuMVC", this, new MenuModel(), new MenuView(), new MenuController());
-		await this.menuMVC.initialize();
+		this.authenticationMVC = new MVC("authenticationMVC", this, new AutenticationModel(), new AutenticationView(), new AutenticationController()); // init app MVC
+		await this.authenticationMVC.initialize(); // run init async tasks
 
-		this.authenticationMVC.view.attach(document.body);
-		this.authenticationMVC.view.activate();
+		if (document.cookie != ""){
+			trace("connect direct gros")
+			let cookieValue = document.cookie.replace(/(?:(?:^|.*;\s*)ssid\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+			//trace(typeof cookieValue);
+			this.authenticationMVC.model.sessionId = cookieValue;
+			this.initSocket(cookieValue);
+			this.profileMVC.view.attach(document.body);
+			this.profileMVC.view.activate();
+		}
+		else{
+			this.authenticationMVC.view.attach(document.body);
+			this.authenticationMVC.view.activate();
+		}
 
 	}
 
 		/**
 		 * @method initSocket : connect socket
 		 */
-		initSocket(id) {
-			//trace("init socket");
+		initSocket(sessionId) {
+			trace("init socket with : "+sessionId);
 			this.io = io();
-			this.io.emit('authentication', id);
-			this.io.on('message', msg => {
-				this.conversationMVC.model.updateConversation();	// TODO remplacer par fonction qui gere les message recu
-			});
+      this.io.on('connectSession', data => {
+        console.log("connection : " + data);
+        this.io.emit('auth', sessionId);
+        console.log("emit ping with session = 0");
+        this.io.on('authConfirm', data =>{
+          console.log("authentication : "+data);
+          if (data == "ok") {
+            this.io.on('msg', data => {
+							// todo afficher les message dans tchat
+            });
+          }
+        });
+      });
 		}
 
 		/**
