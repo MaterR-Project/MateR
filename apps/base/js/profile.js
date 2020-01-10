@@ -41,7 +41,7 @@ class ProfileModel extends Model {
 			"age": ["34", "-1"]
 		  }
 		let result = await Comm.post("getMatchingProfiles/", data);
-		trace(result.response.return);
+		return result.response.return;
 	}
 }
 
@@ -413,22 +413,6 @@ class ProfileView extends View {
 
 	}
 
-	/*
-	deleteProfile() {
-		this.mail.innerHTML = "";
-		this.profileName.innerHTML = "";
-		this.mail.innerHTML = "";
-		this.bio.innerHTML = "";
-		this.gender.innerHTML = "";
-		this.age.innerHTML = "";
-		this.region.innerHTML = "";
-		this.country.innerHTML = "";
-		this.games.innerHTML = ""
-		this.vocals.innerHTML = ""
-		this.languages.innerHTML = "";
-	}
-	*/
-
 	addGameToDisplay(game){
 
 		trace(game);
@@ -529,12 +513,12 @@ class ProfileController extends Controller {
 	}
 
 	async searchClicked(params){
-		trace(await this.mvc.model.dummyRequest());
-		//this.mvc.view.deactivate();
-		//trace("search btn click", params);
-		//this.mvc.view.destroy();						// destroy current view
-		//this.mvc.app.searchMVC.view.attach(document.body);// attach view of search MVC
-		//this.mvc.app.searchMVC.view.activate();			// activate user interface of search MVC
+		this.searchResult = await this.mvc.model.dummyRequest();
+		trace(this.searchResult);
+		this.mvc.view.deactivate();
+		this.mvc.view.destroy();						// destroy current view
+		this.mvc.app.resultMVC.view.attach(document.body);// attach view of search MVC
+		this.mvc.app.resultMVC.view.activate();			// activate user interface of search MVC
 	}
 
 	logoutClicked(params) {
