@@ -535,7 +535,7 @@ class RegistrationView extends View {
 
 	addListeners() {
 		this.createButtonHandler = e => {
-			// form action
+			// prevent form action
 			e.preventDefault();
 			// I dit it My Way
 	    this.createAccountButtonClick();

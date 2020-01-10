@@ -22,6 +22,8 @@ class SearchView extends View {
 	initialize(mvc) {
 		super.initialize(mvc);
 
+		this.comboPrioList = [];
+
 		this.stage.style.display = "flex";
     // axe y
     this.stage.style.alignItems = "center";
@@ -99,7 +101,7 @@ class SearchView extends View {
 		this.gamesDiv.appendChild(this.gameNames);
 
 		this.comboName = document.createElement("select");
-		this.comboName.setAttribute("name", "name");
+		this.comboName.setAttribute("name", "game");
 		this.comboName.setAttribute("required", "");
 		this.gamesDiv.appendChild(this.comboName);
 
@@ -127,7 +129,7 @@ class SearchView extends View {
 		this.customSearchField.style.display = "none";
 		this.customSearchField.style.flexDirection = "column";
 		this.customSearchField.style.alignItems = "center";
-		this.customSearchField.style.marginBottom = "3%";
+		this.customSearchField.style.marginBottom = "5px";
 		this.form.appendChild(this.customSearchField);
 
 		this.gameLevel = document.createElement("span");
@@ -144,6 +146,17 @@ class SearchView extends View {
 		//this.comboLevels.style.display = "none";
 		this.customSearchField.appendChild(this.comboLevels);
 
+		this.labelLevelPrio = document.createElement("span");
+		this.labelLevelPrio.style.marginTop = "6px";
+		this.labelLevelPrio.style.width = "100%";
+		this.labelLevelPrio.innerHTML = "Priority :";
+		this.labelLevelPrio.style.fontSize = "small";
+		this.customSearchField.appendChild(this.labelLevelPrio);
+		this.comboLevelsPrio = document.createElement("select");
+		this.comboPrioList.push(this.comboLevelsPrio);
+		this.comboLevelsPrio.setAttribute("name", "levelsPrio");
+		this.customSearchField.appendChild(this.comboLevelsPrio);
+
 		this.playstylesLabel = document.createElement("span");
 		this.playstylesLabel.style.width = "100%";
 		this.playstylesLabel.innerHTML = "Playstyles :";
@@ -154,7 +167,17 @@ class SearchView extends View {
 		this.comboPlaystyles.setAttribute("name", "playstyles");
 		this.comboPlaystyles.setAttribute("multiple", "multiple");
 		this.customSearchField.appendChild(this.comboPlaystyles);
-		//this.comboPlaystyles.style.display = "none";
+
+		this.labelPlaystylesPrio = document.createElement("span");
+		this.labelPlaystylesPrio.style.marginTop = "6px";
+		this.labelPlaystylesPrio.style.width = "100%";
+		this.labelPlaystylesPrio.innerHTML = "Priority :";
+		this.labelPlaystylesPrio.style.fontSize = "small";
+		this.customSearchField.appendChild(this.labelPlaystylesPrio);
+		this.comboPlaystylesPrio = document.createElement("select");
+		this.comboPrioList.push(this.comboPlaystylesPrio);
+		this.comboPlaystylesPrio.setAttribute("name", "playstylesPrio");
+		this.customSearchField.appendChild(this.comboPlaystylesPrio);
 
 		// Regions section
 		this.regionsLabel = this.mvc.app.getElementIcon("icon-Region", "auto");
@@ -169,6 +192,17 @@ class SearchView extends View {
 		this.comboRegions.setAttribute("id", "regions");
 		this.customSearchField.appendChild(this.comboRegions);
 
+		this.labelRegionsPrio = document.createElement("span");
+		this.labelRegionsPrio.style.marginTop = "6px";
+		this.labelRegionsPrio.style.width = "100%";
+		this.labelRegionsPrio.innerHTML = "Priority :";
+		this.labelRegionsPrio.style.fontSize = "small";
+		this.customSearchField.appendChild(this.labelRegionsPrio);
+		this.comboRegionsPrio = document.createElement("select");
+		this.comboPrioList.push(this.comboRegionsPrio);
+		this.comboRegionsPrio.setAttribute("name", "regionsPrio");
+		this.customSearchField.appendChild(this.comboRegionsPrio);
+
 		// Country section
 		this.countriesLabel = this.mvc.app.getElementIcon("icon-Country", "auto");
 		this.countriesLabel.style.width = "100%";
@@ -182,6 +216,17 @@ class SearchView extends View {
 		this.comboCountries.setAttribute("name", "countries");
 		this.customSearchField.appendChild(this.comboCountries);
 
+		this.labelCountriesPrio = document.createElement("span");
+		this.labelCountriesPrio.style.marginTop = "6px";
+		this.labelCountriesPrio.style.width = "100%";
+		this.labelCountriesPrio.innerHTML = "Priority :";
+		this.labelCountriesPrio.style.fontSize = "small";
+		this.customSearchField.appendChild(this.labelCountriesPrio);
+		this.comboCountriesPrio = document.createElement("select");
+		this.comboPrioList.push(this.comboCountriesPrio);
+		this.comboCountriesPrio.setAttribute("name", "countriesPrio");
+		this.customSearchField.appendChild(this.comboCountriesPrio);
+
 		this.langLabel = this.mvc.app.getElementIcon("icon-bubble", "auto");
 		this.langLabel.style.width = "100%";
 		this.langLabel.style.marginTop = "6px";
@@ -193,6 +238,17 @@ class SearchView extends View {
 		this.comboLanguages.setAttribute("name", "languages");
 		this.comboLanguages.setAttribute("multiple", "multiple");
 		this.customSearchField.appendChild(this.comboLanguages);
+
+		this.labelLanguagesPrio = document.createElement("span");
+		this.labelLanguagesPrio.style.marginTop = "6px";
+		this.labelLanguagesPrio.style.width = "100%";
+		this.labelLanguagesPrio.innerHTML = "Priority :";
+		this.labelLanguagesPrio.style.fontSize = "small";
+		this.customSearchField.appendChild(this.labelLanguagesPrio);
+		this.comboLanguagesPrio = document.createElement("select");
+		this.comboPrioList.push(this.comboLanguagesPrio);
+		this.comboLanguagesPrio.setAttribute("name", "languagesPrio");
+		this.customSearchField.appendChild(this.comboLanguagesPrio);
 
 		this.vocalsLabel = this.mvc.app.getElementIcon("icon-Vocal", "auto");
 		this.vocalsLabel.style.width = "100%";
@@ -206,6 +262,17 @@ class SearchView extends View {
 		this.comboVocals.setAttribute("multiple", "multiple");
 		this.customSearchField.appendChild(this.comboVocals);
 
+		this.labelVocalsPrio = document.createElement("span");
+		this.labelVocalsPrio.style.marginTop = "6px";
+		this.labelVocalsPrio.style.width = "100%";
+		this.labelVocalsPrio.innerHTML = "Priority :";
+		this.labelVocalsPrio.style.fontSize = "small";
+		this.customSearchField.appendChild(this.labelVocalsPrio);
+		this.comboVocalsPrio = document.createElement("select");
+		this.comboPrioList.push(this.comboVocalsPrio);
+		this.comboVocalsPrio.setAttribute("name", "vocalsPrio");
+		this.customSearchField.appendChild(this.comboVocalsPrio);
+
 		this.ageLabel = this.mvc.app.getElementIcon("icon-Year", "auto");
 		this.ageLabel.style.width = "100%";
 		this.ageLabel.style.marginTop = "6px";
@@ -218,6 +285,17 @@ class SearchView extends View {
 		this.comboAge.setAttribute("multiple", "multiple");
 		this.customSearchField.appendChild(this.comboAge);
 
+		this.labelAgePrio = document.createElement("span");
+		this.labelAgePrio.style.marginTop = "6px";
+		this.labelAgePrio.style.width = "100%";
+		this.labelAgePrio.innerHTML = "Priority :";
+		this.labelAgePrio.style.fontSize = "small";
+		this.customSearchField.appendChild(this.labelAgePrio);
+		this.comboAgePrio = document.createElement("select");
+		this.comboPrioList.push(this.comboAgePrio);
+		this.comboAgePrio.setAttribute("name", "agePrio");
+		this.customSearchField.appendChild(this.comboAgePrio);
+
 
 		// --------------------	Footer	-------------------------------
 
@@ -229,7 +307,8 @@ class SearchView extends View {
 		this.footer.appendChild(tmpSpan);
 
 		//button for search
-		this.searchBtn = document.createElement("span");
+		this.searchBtn = document.createElement("button");
+		this.searchBtn.setAttribute("type", "submit");
 		this.searchBtn.setAttribute("class", "icon-Search");
 		//this.searchBtn.style.alignSelf = "flex-end";
 		this.searchBtn.style.fontSize = "45px";
@@ -237,7 +316,7 @@ class SearchView extends View {
 		//this.searchBtn.innerHTML = "Search";
 		this.footer.appendChild(this.searchBtn);
 
-		this.mainDiv.appendChild(this.footer);
+		this.form.appendChild(this.footer);
 
 	}
 
@@ -256,6 +335,7 @@ class SearchView extends View {
 	// attach
 	attach(parent){
 		super.attach(parent);
+		this.prioList = ["Very Low", "Low", "Hight", "Very Hight"];
 		//this.updategamePlatformWithGames(this.mvc.app.profileMVC.model.games);
 		this.gamesPlaformsList = this.getGamesPlaformsList(this.mvc.app.profileMVC.model.games);
 		this.updateComboWithList(this.comboName, this.gamesPlaformsList[0]);
@@ -266,10 +346,22 @@ class SearchView extends View {
 		this.updateComboWithList(this.comboLanguages, this.mvc.app.registrationMVC.model.languages);
 		this.updateComboWithList(this.comboVocals, this.mvc.app.registrationMVC.model.vocals);
 		this.updateComboWithList(this.comboAge, this.mvc.model.ages);
+		this.comboPrioList.forEach(e => {
+			this.updateComboWithList(e, this.prioList);
+		});
 
 	}
 
 	addListeners() {
+
+		this.searchButtonHandler = e => {
+			// prevent form action
+			e.preventDefault();
+			// I dit it My Way
+	    this.searchButtonClick();
+		}
+		this.form.addEventListener("submit", this.searchButtonHandler);
+
 		this.menuHandler = e => this.menuClick();
 		this.menuButton.addEventListener("click", this.menuHandler);
 
@@ -279,6 +371,16 @@ class SearchView extends View {
 		this.displayCustomFields = e => this.customSearchButtonClick();
 		this.customSearchButton.addEventListener("click", this.displayCustomFields);
 
+		this.prioSelectorHandler = (e) => {
+			trace(e)
+			trace(e.target.previousSibling.previousSibling)
+			this.prioRequiredHandler(e.target.selectedIndex, e.target.previousSibling.previousSibling)
+		};
+		this.comboPrioList.forEach((elem, index) => {
+			//this.indexPrio = index;
+			elem.addEventListener("change", this.prioSelectorHandler);
+		});
+
 		this.getRegionSelector = e => this.displayCountriesForRegions();
 		this.comboRegions.addEventListener("change", this.getRegionSelector);
 
@@ -287,15 +389,26 @@ class SearchView extends View {
 	}
 
 	removeListeners() {
+		this.form.removeEventListener("submit", this.searchButtonHandler);
+
 		this.menuButton.removeEventListener("click", 	this.menuHandler);
 
 		this.comboName.removeEventListener("change", this.getGameSelectorHandler);
+
+		this.comboPrioList.forEach(elem => {
+			elem.removeEventListener("change", this.prioSelectorHandler());
+		});
 
 		this.comboRegions.removeEventListener("change", this.getRegionSelector);
 
 		this.customSearchButton.removeEventListener("click", this.displayCustomFields);
 
 		this.searchBtn.removeEventListener("click", 	this.searchHandler);
+	}
+
+	searchButtonClick(){
+		const FD = new FormData(this.form);
+		this.mvc.controller.searchButtonWasClicked(FD);
 	}
 
 	menuClick() {
@@ -305,6 +418,17 @@ class SearchView extends View {
 	customSearchButtonClick(){
 		this.gamesDiv.removeChild(this.customSearchButton);
 		this.customSearchField.style.display = "flex";
+	}
+
+	prioRequiredHandler(index, elem){
+		trace("selectedIndex : ", elem.selectedIndex)
+		if(index != 0){
+			elem.setAttribute("required", "");
+			trace("add : ")//,this.comboPrioList, this.comboLevels, index)
+		}else{
+			elem.removeAttribute("required", "");
+			trace("remove : ")//, this.comboPrioList, index)
+		}
 	}
 
 	searchClick(){
@@ -326,7 +450,7 @@ class SearchView extends View {
   }
 
 	displayPlatformsForGame(){
-		this.updateComboWithList(this.comboPlatform, this.gamesPlaformsList[1][this.comboName.selectedIndex-1]);
+		this.updateComboWithList(this.comboPlatform, this.gamesPlaformsList[1][this.comboName.selectedIndex]);
 	}
 
 	async displayCountriesForRegions(){
@@ -342,20 +466,17 @@ class SearchView extends View {
 		// Remove all children of countries combobox
 		[...combo.childNodes].map(child => {combo.removeChild(child)});
 
-		//
+		let isPrio = false;
+		if (this.comboPrioList.indexOf(combo) != -1) isPrio = true;
 		let optionEmpty = document.createElement("option");
-		optionEmpty.value = "Undefined";
-		optionEmpty.text = "Undefined";
-		combo.appendChild(optionEmpty);
-
-		/*
-		if (combo.getAttribute("name") == "game" && combo != this.firstComboGames){
-			let optionEmpty = document.createElement("option");
-			optionEmpty.value = -1;
-			optionEmpty.text = "Undefined";
+		if (isPrio){
+			optionEmpty.value = "-1";
+			optionEmpty.text = "Default";
+		}
+		if (this.comboPrioList.indexOf(combo) != -1){
 			combo.appendChild(optionEmpty);
 		}
-		*/
+
 		if (data != 404){
 			data.map((element, index) => {
 				let option = document.createElement("option");
@@ -365,18 +486,23 @@ class SearchView extends View {
 					option.text = element + " - " + nextAge;
 					option.value = element;
 				}else {
-					option.text = element;
-					option.value = element;// data.indexOf(element);
+					if (isPrio){
+						option.text = element;
+						option.value = index+1;
+					}else{
+						option.text = element;
+						option.value = element;// data.indexOf(element);
+					}
 				}
 				combo.appendChild(option);
 			});
 		}
-		//if(combo == this.comboCountries){
+		if(this.comboPrioList.indexOf(combo) != -1){
 			combo.selectedIndex = 0;
-		//}
-		//else{
-		//	combo.selectedIndex = -1;
-		//}
+		}
+		else{
+			combo.selectedIndex = -1;
+		}
 	}
 
 }
@@ -390,6 +516,32 @@ class SearchController extends Controller {
 	initialize(mvc) {
 		super.initialize(mvc);
 
+	}
+
+	async searchButtonWasClicked(FD){
+		let result = await fetch('research/', {
+		  method: 'POST',
+		  body: FD
+		});
+		result["response"] = await result["json"]();
+
+		if(result.response.return == 500){
+			trace("error: "+result.response.message);
+			//this.mvc.view.fillErrorDisplay(result.response.message);
+		}
+		else {
+			trace(result.response);
+			//this.mvc.view.fillErrorDisplay(result.response.message);
+			// Go to result
+			trace("go to result");
+			/*
+			this.mvc.view.deactivate();
+			this.mvc.view.destroy();
+			this.mvc.app.resultMVC.view.updateWrongPsw(result.response.message);
+			this.mvc.app.resultMVC.view.attach(document.body); // attach view
+			this.mvc.app.resultMVC.view.activate(); // activate result interface
+			*/
+		}
 	}
 
 	menuClicked() {

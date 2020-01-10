@@ -477,6 +477,17 @@ class Base extends ModuleBase {
 		}
 	}
 	/**
+	 * @method search : handle search
+	 * @param {*} req
+	 * @param {*} res
+	 */
+	async research(req, res) {
+
+		let data = await this._getDataFromFormDataPost(req);
+		trace(data);
+		this.sendJSON(req, res, 200, {return: 500, message: "C'est normal"});
+	}
+	/**
 	 * @method getMatchingProfile : array of compatible users
 	 * @param {*} req
 	 * @param {*} res
