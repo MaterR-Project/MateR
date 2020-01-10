@@ -16,6 +16,7 @@ class ProfileModel extends Model {
 		this.id = result.response.return.id;
 
 		if (this.id == undefined){
+			document.cookie = "ssid=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
 			alert("Invalid Cookie - You'll need to reconnect");
     	location.reload();
 		}
