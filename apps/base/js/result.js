@@ -9,16 +9,13 @@ class ResultModel extends Model {
 
 	}
 
-	async getProfile(ssid) {
+	async getProfile(id) {
         this.profileList = [];
-        this.ssidList = [ssid];
-        /*this.ssidList.map(async e =>{
-            let request = "getProfileFromSessionId/" + e;
-            let result = await Comm.get(request);
-            this.profileList.push(result.response.return);
-        })*/
-        for(var i = 0; i < this.ssidList.length; i++){
-            let request = "getProfileFromSessionId/" + this.ssidList[i];
+        id = id.toString();
+        this.idList = id.split(",");
+        for(var i = 0; i < this.idList.length; i++){
+            let request = "getProfileFromId/" + this.idList[i];
+            trace(request);
             let result = await Comm.get(request);
             this.profileList.push(result.response.return);
         }
@@ -53,22 +50,13 @@ class ResultView extends View {
         // menu button
         this.btnDiv = document.createElement("div");
         this.btnDiv.style.display = "flex";
-		//this.btnDiv.style.justifyContent = "space-between"
         this.btnDiv.style.width ="100%";
-        //this.btnDiv.style.height = "100%";
-        this.menuButton = document.createElement("button");
-		this.menuButton.innerHTML = "Menu";
-		this.menuButton.style.fontSize = "15px";
+		this.menuButton = document.createElement("span");
+		this.menuButton.setAttribute("class", "icon-Menu");
+		this.menuButton.style.fontSize = "45px";
+		this.menuButton.style.marginLeft="10px";
         this.btnDiv.appendChild(this.menuButton);
         this.mainDiv.appendChild(this.btnDiv);
-        // name div
-        this.nameDiv = document.createElement("h1");
-		this.nameDiv.style.display = "flex";
-		this.nameDiv.style.alignItems = "center";
-		this.nameDiv.style.justifyContent = "space-evenly";
-        this.nameDiv.style.marginTop = "15%";
-        this.nameDiv.innerHTML = "His profile";
-		this.mainDiv.appendChild(this.nameDiv);
         //div to contain the reult profile part
         this.profileDiv = document.createElement("div");
         this.profileDiv.style.display = "flex";
@@ -80,12 +68,10 @@ class ResultView extends View {
         // div displayed on the left of the dislayed div
         this.prevDiv = document.createElement("div");
         this.prevDiv.style.display = "none";
-        this.prevDiv.innerHTML = "1Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
         this.profileDiv.appendChild(this.prevDiv);
         //left btn
         this.leftBtn = document.createElement("a");
         this.leftBtn.style.padding = "5%";
-        this.leftBtn.onclick = ("plusProfile(-1");
         this.leftBtn.innerHTML =("&#10094");
         this.profileDiv.appendChild(this.leftBtn);
         // displayed div
@@ -93,25 +79,31 @@ class ResultView extends View {
         this.curDiv.style.overflow = "auto";
         this.curDiv.style.width = "100%";
         this.curDiv.style.height = "90%";
-        //this.curDiv.innerHTML = "2Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
         this.profileDiv.appendChild(this.curDiv);
         //right btn
         this.rightBtn = document.createElement("a");
         this.rightBtn.style.padding = "5%";
-        this.rightBtn.onclick = ("plusProfile(1");
         this.rightBtn.innerHTML =("&#10095");
         this.profileDiv.appendChild(this.rightBtn);
         // div displayed on the right of the displayed div
         this.nextDiv = document.createElement("div");
         this.nextDiv.style.display = "none";
-        this.nextDiv.innerHTML = "3Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
         this.profileDiv.appendChild(this.nextDiv);
 	}
 
 	// activate UI
 	activate() {
         super.activate();
-        this.mvc.controller.fetchProfile(this.mvc.app.authenticationMVC.model.sessionId);
+        //this.mvc.controller.fetchProfile(this.mvc.app.searchMVC.model.searchResults);
+        this.last = 0;
+        this.curIndex = 1;
+        this.searchResults = [
+            { score: 100, user: 1 },
+            { score: 56.52173913043478, user: 2 },
+            { score: 23.91304347826087, user: 3 },
+            { score: 15.217391304347826, user: 4 }
+          ] 
+        this.mvc.controller.fetchProfile(-1);
 		this.addListeners(); // listen to events
 	}
 
@@ -184,9 +176,9 @@ class ResultView extends View {
     
     handleswipe(isrightswipe){
         if (isrightswipe == 0){
-            this.moveRight();
-        } else {
             this.moveLeft();
+        } else {
+            this.moveRight();
         }
     }
 
@@ -221,23 +213,35 @@ class ResultView extends View {
      * @method moveRight : Updates the view to the right user
      */
     moveRight(){
-        let tmp1 = this.curDiv.innerHTML;
-        let tmp2 = this.prevDiv.innerHTML;
-        let tmp3 = this.nextDiv.innerHTML;
-        this.curDiv.innerHTML = tmp2;
-        this.prevDiv.innerHTML = tmp3;
-        this.nextDiv.innerHTML = tmp1;
-    }
+        if(this.curIndex < this.searchResults.length){
+            let tmp1 = this.curDiv.innerHTML;
+            let tmp2 = this.nextDiv.innerHTML;
+            this.curDiv.innerHTML = tmp2;
+            this.prevDiv.innerHTML = tmp1;
+            if(this.curIndex + 1 != this.searchResults.length){
+                this.mvc.controller.fetchProfile(0);
+
+            }
+            this.curIndex ++;
+
+        }
+        if(this.last == 1 && this.curIndex != this.searchResults.length)
+            this.curIndex++
+        if(this.curIndex == this.searchResults.length- 1)
+            this.last = 1;
+
+        }
     /**
      * @method moveLeft : Updates the view to the left user
      */
     moveLeft(){
-        let tmp1 = this.curDiv.innerHTML;
-        let tmp2 = this.prevDiv.innerHTML;
-        let tmp3 = this.nextDiv.innerHTML;
-        this.curDiv.innerHTML = tmp3;
-        this.prevDiv.innerHTML = tmp1;
-        this.nextDiv.innerHTML = tmp2;
+        if(this.curIndex > 1){
+            let tmp1 = this.curDiv.innerHTML;
+            this.nextDiv.innerHTML = tmp1;
+            this.mvc.controller.fetchProfile(1);
+            this.curIndex--;
+            this.last = 0;
+        }
     }
     /**
      * @method doubleTaoed : triggers the controller for a double tap
@@ -246,170 +250,282 @@ class ResultView extends View {
         trace("was double tapped");
         this.mvc.controller.startTalk("id");
     }
-    /**
-     * @method swipedLeft : triggers the controller left swipe wichich is similar
-     *                      to a press on the left button
-     */
-    swipedLeft(){
-        trace("swipe left");
-        this.mvc.controller.leftClicked();
-    }
-    /**
-     * @method swipeRight : triggers the controller right swipe wichich is similar
-     *                      to a press on the right button
-     */
-    swipedRight(){
-        trace("swipe right");
-        this.mvc.controller.rightClicked();
-    }
+
     //build profiles
-    displayProfiles(profilesList){
-        profilesList.map(e =>{
-            // set name
-            this.nameDiv.innerHTML = e.username;
-            // add bio
-            let bio = document.createElement("div");
-            bio.style.display = "flex";
-            bio.style.width = "100%";
-            bio.style.justifyContent = "space-between";
-            bio.style.alignItems = "center";
-            let bioHead = document.createElement("h4");
-            bioHead.innerHTML= "Bio :"
-            bio.appendChild(bioHead);
-            let bioContent = document.createElement("div");
-            bioContent.overflow = "true";
-            bioContent.style.width = "65%";
-            bioContent.innerHTML = e.bio;
-            bio.appendChild(bioContent);
-            this.curDiv.appendChild(bio);
-            // add age
-            let age = document.createElement("div");
-            age.style.display = "flex";
-            age.style.justifyContent = "space-between";
-            age.style.alignItems = "center";
-            let ageHead = document.createElement("h4");
-            ageHead.innerHTML= "Age :"
-            age.appendChild(ageHead);
-            let ageContent = document.createElement("div");
-            ageContent.style.width = "65%";
-            let year = new Date().getFullYear();
-            if(e.year != "undefined"){
-                ageContent.innerHTML = year - parseInt(e.year);
-            }else{
-                ageContent.innerHTML = "undefined";
-            }
-            age.appendChild(ageContent);
-            this.curDiv.appendChild(age);
-            // add gender
-            let gender = document.createElement("div");
-            gender.style.display = "flex";
-            gender.style.justifyContent = "space-between";
-            gender.style.alignItems = "center";
-            let genderHead = document.createElement("h4");
-            genderHead.innerHTML= "Gender :"
-            gender.appendChild(genderHead);
-            let genderContent = document.createElement("div");
-            genderContent.style.width = "65%";
-            let genderString;
-            genderContent.innerHTML = e.gender;
-            gender.appendChild(genderContent);
-            this.curDiv.appendChild(gender); 
-            // add Country
-            let country = document.createElement("div");
-            country.style.display = "flex";
-            country.style.justifyContent = "space-between";
-            country.style.alignItems = "center";
-            let countryHead = document.createElement("h4");
-            countryHead.innerHTML= "Country :"
-            country.appendChild(countryHead);
-            let countryContent = document.createElement("div");
-            countryContent.style.width = "65%";
-            countryContent.innerHTML = e.country;
-            country.appendChild(countryContent);
-            this.curDiv.appendChild(country);  
-            //  add region
-            let region = document.createElement("div");
-            region.style.display = "flex";
-            region.style.justifyContent = "space-between";
-            region.style.alignItems = "center";
-            let regionHead = document.createElement("h4");
-            regionHead.innerHTML= "Region :"
-            region.appendChild(regionHead);
-            let regionContent = document.createElement("div");
-            regionContent.style.width = "65%";
-            regionContent.innerHTML = e.region;
-            region.appendChild(regionContent);
-            this.curDiv.appendChild(region);
-            // add languages
-            let languages = document.createElement("div");
-            languages.style.display = "flex";
-            languages.style.justifyContent = "space-between";
-            languages.style.alignItems = "center";
-            let languagesHead = document.createElement("h4");
-            languagesHead.innerHTML= "Languages :"
-            languages.appendChild(languagesHead);
-            let languagesContent = document.createElement("div");
-            languagesContent.style.width = "65%";
-            let languagesStr = "";
-            e.languages.map(f =>{
-                languagesStr = languagesStr.concat(f);
-                languagesStr = languagesStr.concat(", ");
-            })
-            languagesStr = languagesStr.substring(0, languagesStr.length - 2);
-            languagesContent.innerHTML = languagesStr;
-            languages.appendChild(languagesContent);
-            this.curDiv.appendChild(languages);  
-            // add games
-            let games = document.createElement("div");
-            games.style.display = "flex";
-            games.style.justifyContent = "flex-end";
-            games.style.alignItems = "flex-start";
-            games.style.flexDirection = "column"
-            let gamesHead = document.createElement("h4");
-            gamesHead.innerHTML= "Games :"
-            games.appendChild(gamesHead);
-            let gamesContent = document.createElement("div");
-            gamesContent.style.display = "flex";
-            gamesContent.style.justifyContent = "flex-end";
-            gamesContent.style.width = "65%";
-            let gamesStr = "";
-            e.games.map(f =>{
-                gamesStr = gamesStr.concat(f.name);
-                gamesStr = gamesStr.concat(" : <br/>&emsp; - ");
-                gamesStr = gamesStr.concat(f.platform); 
-                gamesStr = gamesStr.concat("<br/>&emsp; - ");
-                gamesStr = gamesStr.concat(f.level); 
-                f.playstyles.map(p =>{
-                    gamesStr = gamesStr.concat("<br/>&emsp;&emsp;- ");
-                    gamesStr = gamesStr.concat(p);
-                })      
-                gamesStr = gamesStr.concat("<br/><br/>")
-            })
-            gamesContent.innerHTML = gamesStr;
-            games.appendChild(gamesContent);
-            this.curDiv.appendChild(games); 
-            // add vocals
-            let vocals = document.createElement("div");
-            vocals.style.display = "flex";
-            vocals.style.justifyContent = "space-between";
-            vocals.style.alignItems = "center";
-            let vocalsHead = document.createElement("h4");
-            vocalsHead.innerHTML= "Vocals :"
-            vocals.appendChild(vocalsHead);
-            let vocalsContent = document.createElement("div");
-            vocalsContent.style.width = "65%";
-            let vocalsStr = "";
-            e.vocals.map(f =>{
-                vocalsStr = vocalsStr.concat(f);
-                vocalsStr = vocalsStr.concat(", ");
-            })
-            vocalsStr = vocalsStr.substring(0, vocalsStr.length - 2);
-            vocalsContent.innerHTML = vocalsStr;
-            vocals.appendChild(vocalsContent);
-            this.curDiv.appendChild(vocals); 
+    displayProfile(index, profile, score){
+        trace(profile)
+        let posIndex;
+        profile = profile[0];
+        if(index == 0){
+            posIndex = this.prevDiv;
+        } else if(index == 1){
+            posIndex = this.curDiv;
+        } else{
+            posIndex = this.nextDiv;
+        }
+        posIndex.innerHTML = "";
+        // set name
+        let nameDiv = document.createElement("div");
+        nameDiv.style.display = "flex";
+		nameDiv.style.alignItems = "center";
+        nameDiv.style.justifyContent = "space-evenly";
+        nameDiv.style.flexDirection = "column";
+        nameDiv.style.marginTop = "15%";
+        let usernameSpan = document.createElement("h1");
+        usernameSpan.innerHTML = profile.username;
+        nameDiv.appendChild(usernameSpan);
+        let compSpan = document.createElement("span");
+        nameDiv.appendChild(compSpan);
+        compSpan.style.fontStyle = "italic";
+        compSpan.innerHTML = "This user matches the request at " + Math.round(score) + "%"
+        posIndex.appendChild(nameDiv);
+        // add bio
+        let bio = document.createElement("div");
+        let bioIco = this.mvc.app.getElementIcon("icon-Bio", "auto");
+        bioIco.style.fontSize = "15px";
+        bio.appendChild(bioIco);
+        bio.style.display = "flex";
+        bio.style.width = "100%";
+        bio.style.justifyContent = "space-between";
+        bio.style.alignItems = "center";
+        let bioHead = document.createElement("h4");
+        bioHead.innerHTML= "Bio :"
+        bio.appendChild(bioHead);
+        let bioContent = document.createElement("div");
+        bioContent.style.marginTop ="4px"
+        bioContent.style.overflow = "auto"
+        bioContent.overflow = "true";
+        bioContent.style.width = "65%";
+        bioContent.innerHTML = profile.bio;
+        bio.appendChild(bioContent);
+        posIndex.appendChild(bio);
+        // add age
+        let age = document.createElement("div");
+        let ageIco = this.mvc.app.getElementIcon("icon-Year", "auto");
+        ageIco.style.fontSize = "15px";
+        age.appendChild(ageIco);
+        age.style.display = "flex";
+        age.style.justifyContent = "space-between";
+        age.style.alignItems = "center";
+        let ageHead = document.createElement("h4");
+        ageHead.innerHTML= "Age :"
+        age.appendChild(ageHead);
+        let ageContent = document.createElement("div");
+        ageContent.style.width = "65%";
+        let year = new Date().getFullYear();
+        if(profile.year != "undefined"){
+            ageContent.innerHTML = year - parseInt(profile.year);
+        }else{
+            ageContent.innerHTML = "undefined";
+        }
+        age.appendChild(ageContent);
+        posIndex.appendChild(age);
+        // add gender
+        let gender = document.createElement("div");
+        let genderIco = this.mvc.app.getElementIcon("icon-Gender", "auto");
+        genderIco.style.fontSize = "15px";
+        gender.appendChild(genderIco);
+        gender.style.display = "flex";
+        gender.style.justifyContent = "space-between";
+        gender.style.alignItems = "center";
+        let genderHead = document.createElement("h4");
+        genderHead.innerHTML= "Gender :"
+        gender.appendChild(genderHead);
+        let genderContent = document.createElement("div");
+        genderContent.style.width = "65%";
+        genderContent.innerHTML = profile.gender;
+        gender.appendChild(genderContent);
+        posIndex.appendChild(gender); 
+        // add Country
+        let country = document.createElement("div");
+        let countryIco = this.mvc.app.getElementIcon("icon-Country", "auto");
+        countryIco.style.fontSize = "15px";
+        country.appendChild(countryIco);
+        country.style.display = "flex";
+        country.style.justifyContent = "space-between";
+        country.style.alignItems = "center";
+        let countryHead = document.createElement("h4");
+        countryHead.innerHTML= "Country :"
+        country.appendChild(countryHead);
+        let countryContent = document.createElement("div");
+        countryContent.style.width = "65%";
+        countryContent.innerHTML = profile.country;
+        country.appendChild(countryContent);
+        posIndex.appendChild(country);  
+        //  add region
+        let region = document.createElement("div");
+        let regionIco = this.mvc.app.getElementIcon("icon-Region", "auto");
+        regionIco.style.fontSize = "15px";
+        region.appendChild(regionIco);
+        region.style.display = "flex";
+        region.style.justifyContent = "space-between";
+        region.style.alignItems = "center";
+        let regionHead = document.createElement("h4");
+        regionHead.innerHTML= "Region :"
+        region.appendChild(regionHead);
+        let regionContent = document.createElement("div");
+        regionContent.style.width = "65%";
+        regionContent.innerHTML = profile.region;
+        region.appendChild(regionContent);
+        posIndex.appendChild(region);
+        // add languages
+        let languages = document.createElement("div");
+        let languageIco = this.mvc.app.getElementIcon("icon-bubble", "auto");
+        languageIco.style.fontSize = "15px";
+        languages.appendChild(languageIco);
+        languages.style.display = "flex";
+        languages.style.justifyContent = "space-between";
+        languages.style.alignItems = "center";
+        let languagesHead = document.createElement("h4");
+        languagesHead.innerHTML= "Languages :"
+        languages.appendChild(languagesHead);
+        let languagesContent = document.createElement("div");
+        languagesContent.style.width = "65%";
+        let languagesStr = "";
+        profile.languages.map(f =>{
+            languagesStr = languagesStr.concat(f);
+            languagesStr = languagesStr.concat(", ");
         })
+        languagesStr = languagesStr.substring(0, languagesStr.length - 2);
+        languagesContent.innerHTML = languagesStr;
+        languages.appendChild(languagesContent);
+        posIndex.appendChild(languages);  
+        // add games
+        let games = document.createElement("div");
+        let gamesIco = this.mvc.app.getElementIcon("icon-Games", "auto");
+        gamesIco.style.fontSize = "15px";
+        games.style.display = "flex";
+        games.style.justifyContent = "flex-end";
+        games.style.alignItems = "flex-start";
+        games.style.flexDirection = "column"
+        let gameHeader = document.createElement("div");
+        gameHeader.style.display = "flex";
+        gameHeader.style.alignItems = "center"
+        gameHeader.style.flexDirection = "row";
+        let gamesHead = document.createElement("h4");
+        gamesHead.innerHTML= "&nbsp;&nbsp;Games :"
+        let gamesContent = document.createElement("div");
+        gamesContent.style.display = "flex";
+        gamesContent.style.flexDirection = "column"
+        gamesContent.style.justifyContent = "flex-end";
+        gamesContent.style.width = "65%";
+        gameHeader.appendChild(gamesIco);
+        gameHeader.appendChild(gamesHead);
+        games.appendChild(gameHeader)
+        profile.games.forEach( game => this.addGameToDisplay(game, gamesContent));
+
+        games.appendChild(gamesContent);
+        posIndex.appendChild(games);
+        // add vocals
+        let vocals = document.createElement("div");
+        let vocalsIco = this.mvc.app.getElementIcon("icon-Vocal", "auto");
+        vocalsIco.style.fontSize = "15px";
+        vocals.appendChild(vocalsIco);
+        vocals.style.display = "flex";
+        vocals.style.alignItems = "center";
+        let vocalsHead = document.createElement("h4");
+        vocalsHead.innerHTML= "Vocals :"
+        vocals.appendChild(vocalsHead);
+        let vocalsContent = document.createElement("div");
+        vocalsContent.style.width = "65%";
+        vocalsContent.style.display ="flex";
+        vocalsContent.style.flexDirection = "row"
+        profile.vocals.map(f =>{
+            let vocalDiv = document.createElement("div");
+            vocalDiv.style.marginLeft = "4px"
+            vocalsContent.appendChild(vocalDiv);
+            let icon = this.mvc.app.getElementIcon("icon-"+f, "auto");
+            vocalDiv.appendChild(icon);
+            let text = document.createElement("span");
+            vocalDiv.appendChild(text);
+            text.innerHTML = f
+        })
+        vocals.appendChild(vocalsContent);
+        posIndex.appendChild(vocals);
     }
 
+    addGameToDisplay(game, container){
+		// game div
+		let gameDiv = document.createElement("div");
+			gameDiv.setAttribute("class","game");
+            gameDiv
+			// game title
+			let gameName = document.createElement("span");
+				gameName.innerHTML = game.name;
+				gameName.style.textDecoration = "underline";
+				gameName.style.marginBottom = "5px";
+			gameDiv.appendChild(gameName);
+
+			//game property
+			let gameProperty = document.createElement("div");
+				gameProperty.setAttribute("class", "gameProperties");
+				gameProperty.style.display = "flex";
+				gameProperty.style.flexDirection = "column";
+
+				// platform
+				let platform = document.createElement("div");
+					platform.setAttribute("class","property");
+					platform.style.display = "flex";
+					platform.style.flexDirection ="row";
+					platform.style.justifyContent = "flex-start";
+					let labelPlatform = document.createElement("span");
+						labelPlatform.innerHTML = "Platform : "
+					platform.appendChild(labelPlatform);
+					let icon = this.mvc.app.getElementIcon("icon-"+game.platform.split(" ").join("-"), "auto");
+					icon.style.marginLeft = "5px";
+					icon.style.marginRight = "5px";
+					platform.appendChild(icon);
+					let namePlatform = document.createElement("span");
+						namePlatform.style.marginLeft = "3px";
+						namePlatform.innerHTML = game.platform;
+					platform.appendChild(namePlatform);
+				gameProperty.appendChild(platform);
+
+				// playstyle
+				let playstyle = document.createElement("div");
+					playstyle.setAttribute("class","property");
+					playstyle.style.display = "flex";
+					playstyle.style.flexDirection ="column";
+					playstyle.style.justifyContent = "flex-start";
+					let labelPlaystyle = document.createElement("span");
+						labelPlaystyle.innerHTML = "Playstyles : "
+					playstyle.appendChild(labelPlaystyle);
+
+					let playStyleNames = document.createElement("div");
+					game.playstyles.forEach((ps, _, psArray) => {
+						let playStyleSpan = document.createElement("span");
+						if (ps == psArray[psArray.length-1]) {
+							playStyleSpan.append(ps);
+						}else playStyleSpan.append(ps+", ");
+						//playStyleSpan.style.marginRight = "3px";
+						//playStyleSpan.style.alignSelf = "flex-end";
+						playStyleNames.appendChild(playStyleSpan);
+					});
+						playStyleNames.style.marginLeft = "10px";
+						playStyleNames.style.alignSelf = "flex-end";
+						//playStyleNames.innerHTML = game.playstyles.join(', ')
+					playstyle.appendChild(playStyleNames);
+
+				gameProperty.appendChild(playstyle);
+
+				// level of play
+				let level = document.createElement("div");
+					level.setAttribute("class","property");
+					level.style.display = "flex";
+					level.style.flexDirection = "row";
+					level.style.justifyContent = "flex-start";
+					let labelLevel = document.createElement("span");
+						labelLevel.innerHTML = "Level : "
+					level.appendChild(labelLevel);
+					let nameLevel = document.createElement("span");
+						nameLevel.style.marginLeft = "3px";
+						nameLevel.innerHTML = game.level;
+					level.appendChild(nameLevel);
+				gameProperty.appendChild(level);
+
+			gameDiv.appendChild(gameProperty);
+		container.appendChild(gameDiv);
+	}
 }
 
 class ResultController extends Controller {
@@ -421,36 +537,54 @@ class ResultController extends Controller {
 	initialize(mvc) {
 		super.initialize(mvc);
     }
-    /**
-     * @method menuClicked : destroys the current view and start the menu MVC
-     */
+
 	async menuClicked() {
+        this.mvc.view.curDiv.innerHTML = "";
+        this.mvc.view.nextDiv.innerHTML = "";
+        this.mvc.view.prevDiv.innerHTML = "";
+        this.mvc.view.deactivate()
 		this.mvc.view.destroy(); 						     // destroy current view
-		this.mvc.app.mvc = this.mvc.app.testMVC;		     // change current MVC to the target MVC : menu
-		this.mvc.app.testMVC.view.attach(document.body);     // attach view of menu MVC
-		this.mvc.app.testMVC.view.activate(); 			     // activate user interface of menu MVC
+		this.mvc.app.menuMVC.view.attach(document.body);     // attach view of menu MVC
+		this.mvc.app.menuMVC.view.activate(); 			     // activate user interface of menu MVC
     }
-    /**
-     * @method rightClicked : updates the view on the next user
-     */
+
     async rightClicked(){
         this.mvc.view.moveRight();
     }
-    /**
-     * @method leftClicked : updates the view on the previous user
-     */
+
     async leftClicked(){
         this.mvc.view.moveLeft();
     }
-    /**
-     * @method startTalk : pops the element from the list to view and continues to next user
-     */
+ 
     async startTalk(id){
         trace("engaging conversation with : ", id);
         // todo : pop
         this.mvc.view.moveLeft();
     }
-    async fetchProfile(ssid){
-        this.mvc.view.displayProfiles(await this.mvc.model.getProfile(ssid));
+
+    async fetchProfile(it){
+        if(it == -1){                                                                                                                      // initial fetch : get the two first ( [empty, A, B]...), a and b are new
+            this.mvc.view.displayProfile(1, 
+                                        await this.mvc.model.getProfile(this.mvc.view.searchResults[this.mvc.view.curIndex-1].user), 
+                                        this.mvc.view.searchResults[this.mvc.view.curIndex-1].score);                                        // display A on the visible div
+            this.mvc.view.displayProfile(2,
+                                         await this.mvc.model.getProfile(this.mvc.view.searchResults[this.mvc.view.curIndex].user),
+                                         this.mvc.view.searchResults[this.mvc.view.curIndex].score)                                    // put B on the invisible div on the right
+        }
+        if(it == 0){                                                                                                                       // move right : only ftech the next one (...[a, b, C]...), a and b are reused, C is newly fetched
+            this.mvc.view.displayProfile(2, 
+                                        await this.mvc.model.getProfile(this.mvc.view.searchResults[this.mvc.view.curIndex + 1].user),
+                                        this.mvc.view.searchResults[this.mvc.view.curIndex+1].score)                                     // put C on the right, ready for display at next swipe right
+        }
+        if(it == 1){          
+            this.mvc.view.displayProfile(0, 
+                                        await this.mvc.model.getProfile(this.mvc.view.searchResults[this.mvc.view.curIndex-2].user),
+                                        this.mvc.view.searchResults[this.mvc.view.curIndex-2].score);                                        // put A on visible div
+            if(this.mvc.view.curIndex > 0){
+               this.mvc.view.displayProfile(1, 
+                                           await this.mvc.model.getProfile(this.mvc.view.searchResults[this.mvc.view.curIndex-1].user),
+                                         this.mvc.view.searchResults[this.mvc.view.curIndex-1].score)// and if not at the end of the array, put D on left div
+           }
+        }
     }
 }
