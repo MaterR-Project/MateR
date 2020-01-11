@@ -37,7 +37,7 @@ class SearchView extends View {
     this.mainDiv.style.justifyContent = "center";
 		this.mainDiv.style.display = "flex";
 		this.mainDiv.style.justifyContent = "space-between";
-		this.mainDiv.style.height = "90%";
+		this.mainDiv.style.height = "100%";
 		this.mainDiv.style.width = "100%";
     this.mainDiv.style.flexDirection = "column";
     this.stage.appendChild(this.mainDiv);
@@ -346,6 +346,9 @@ class SearchView extends View {
 		this.searchBtn.setAttribute("type", "submit");
 		this.searchBtn.setAttribute("class", "icon-Search");
 		//this.searchBtn.style.alignSelf = "flex-end";
+		this.searchBtn.style.backgroundColor = "#080808";
+		this.searchBtn.style.color = "#999999";
+		this.searchBtn.style.border = 0;
 		this.searchBtn.style.fontSize = "45px";
 		this.searchBtn.style.marginRight="10px";
 		//this.searchBtn.innerHTML = "Search";
@@ -406,7 +409,7 @@ class SearchView extends View {
 		this.displayCustomFields = e => this.customSearchButtonClick();
 		this.customSearchButton.addEventListener("click", this.displayCustomFields);
 
-		this.prioSelectorHandler = (e) => {
+		this.prioSelectorHandler = e => {
 			trace(e)
 			trace(e.target.previousSibling.previousSibling)
 			this.prioRequiredHandler(e.target.selectedIndex, e.target.previousSibling.previousSibling)
@@ -431,7 +434,7 @@ class SearchView extends View {
 		this.comboName.removeEventListener("change", this.getGameSelectorHandler);
 
 		this.comboPrioList.forEach(elem => {
-			elem.removeEventListener("change", this.prioSelectorHandler());
+			elem.removeEventListener("change", this.prioSelectorHandler);
 		});
 
 		this.comboRegions.removeEventListener("change", this.getRegionSelector);
