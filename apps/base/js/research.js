@@ -471,9 +471,6 @@ class SearchView extends View {
 
 		this.getRegionSelector = e => this.displayCountriesForRegions();
 		this.comboRegions.addEventListener("change", this.getRegionSelector);
-
-		this.searchHandler = e => this.searchClick();
-		this.searchBtn.addEventListener("click", 	this.searchHandler);
 	}
 
 	removeListeners() {
@@ -490,11 +487,10 @@ class SearchView extends View {
 		this.comboRegions.removeEventListener("change", this.getRegionSelector);
 
 		this.customSearchButton.removeEventListener("click", this.displayCustomFields);
-
-		this.searchBtn.removeEventListener("click", 	this.searchHandler);
 	}
 
 	searchButtonClick(){
+		trace("searchButtonClick")
 		const FD = new FormData(this.form);
 		FD.append("originId", this.mvc.app.profileMVC.model.id)
 		this.mvc.controller.searchButtonWasClicked(FD);
@@ -527,11 +523,7 @@ class SearchView extends View {
 			trace("remove : ")//, this.comboPrioList, index)
 		}
 	}
-
-	searchClick(){
-		this.mvc.controller.searchButtonWasClicked();
-	}
-
+	
 	getGamesPlaformsList(data) {
 		let names = [];
 		let platforms = [];
@@ -637,10 +629,10 @@ class SearchController extends Controller {
 		});
 		result["response"] = await result["json"]();
 
-		if(result.response.return == 500){
-			trace("error: "+result.response.message);
-		}
-		else {
+		//if(result.response.return == 500){
+		//	trace("error: "+result.response.message);
+		//}
+		//else {
 			this.searchGameName = FD.get("game");
 			this.searchGamePlatform = FD.get("platform");
 			this.searchResults = result.response.return;
@@ -654,6 +646,6 @@ class SearchController extends Controller {
 			this.mvc.app.resultMVC.view.attach(document.body); // attach view
 			this.mvc.app.resultMVC.view.activate(); // activate result interface
 
-		}
+		//}
 	}
 }
