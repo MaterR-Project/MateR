@@ -262,7 +262,7 @@ class Base extends ModuleBase {
 			this.sendJSON(req, res, 200, {return : state}); 		// and send message confirmation to the sender
 
 			let file;
-			if(parseInt(source[1] < parseInt(destination[1]))){ // get the conversation file of the users using format lowesTag_higherTag
+			if(parseInt(source[1]) < parseInt(destination[1])){ // get the conversation file of the users using format lowesTag_higherTag
 				file = this._sendLatestConv(source[1], destination[1]);
 			} else {
 				file = this._sendLatestConv(destination[1], source[1]);
@@ -298,7 +298,13 @@ class Base extends ModuleBase {
 	 */
 	getConvFromId(req, res, ...param){
 		let conv = 404;
-		if(param[0] != -1 && param[1] != -1) conv = this._sendLatestConv(param[0], param[1]);
+		if(param[0] != -1 && param[1] != -1) {
+			if (param[0] < param[1]){
+				conv = this._sendLatestConv(param[0], param[1]);
+			}else{
+				conv = this._sendLatestConv(param[1], param[0]);
+			}
+		}
 		conv = JSON.parse(fs.readFileSync('database/tchats/' + conv, 'utf8'));
 		let data = conv;
 		this.sendJSON(req, res, 200, {return: data});	// send the conversation file to the user
