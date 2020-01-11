@@ -247,7 +247,9 @@ class TchatView extends View {
         let statusDiv = document.createElement("div");
         messageHeader.appendChild(statusDiv);
         messageHeader.innerHTML = state;
-        let timeStamp = document.createElement("div");
+        let timeStamp = document.createElement("span");
+				messageHeader.appendChild(timeStamp); //usefull empty span for style 
+				timeStamp = document.createElement("span");
         messageHeader.appendChild(timeStamp);
         var time = new Date();
 				let minutes = time.getMinutes();
@@ -313,13 +315,14 @@ class TchatController extends Controller {
     }
     // function to link to the model that gets the message history and update the view
     async fetchConv(myId, targetId){
-        if(myId > targetId){
+        /*if(myId > targetId){
             trace("asking for the conv : ", targetId, "_", myId);
             this.mvc.view.displayConv(await this.mvc.model.getConv(targetId, myId));
         }else{
             trace("asking for the conv : ", myId, "_", targetId);
             this.mvc.view.displayConv(await this.mvc.model.getConv(myId, targetId));
-        }
+        }*/
+				this.mvc.view.displayConv(await this.mvc.model.getConv(myId, targetId));
         this.mvc.view.setName(await this.mvc.model.getName(this.mvc.view.dest));
     }
     // function to link to the model that sends a message and update the view

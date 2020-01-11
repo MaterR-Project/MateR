@@ -259,7 +259,7 @@ class Base extends ModuleBase {
 			if(sock != undefined){
 				trace("emit message");
 				sock.emit('msg', tosend);						// emit it on the destination socket
-				state = "seen";
+				//state = "seen";
 			}
 			this.sendJSON(req, res, 200, {return : state}); 		// and send message confirmation to the sender
 
@@ -307,8 +307,14 @@ class Base extends ModuleBase {
 				conv = this._sendLatestConv(param[1], param[0]);
 			}
 		}
-		conv = JSON.parse(fs.readFileSync('database/tchats/' + conv, 'utf8'));
-		let data = conv;
+		let convJson = JSON.parse(fs.readFileSync('database/tchats/' + conv, 'utf8'));
+		convJson.forEach(e => {
+			if (e.Id == param[1]) e.State = "seen";
+		});
+		fs.writeFile('database/tchats/' + conv, JSON.stringify(convJson), "utf-8", (err) => {								// re write the fil
+			if(err) trace("could not rewrite the file");
+		});
+		let data = convJson;
 		this.sendJSON(req, res, 200, {return: data});	// send the conversation file to the user
 	}
 
