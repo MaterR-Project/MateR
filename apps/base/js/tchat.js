@@ -9,6 +9,20 @@ class TchatModel extends Model {
     }
     // get the conersation between two users from server
     async getConv(id1, id2){
+				trace("list conv : ", this.mvc.app.convMsgRecList);
+				if (this.myId == id1) {
+					trace("suppr elem : ", id1);
+					trace("type of elem suppr : ", typeof id1);
+					trace("delete  : ", this.mvc.app.convMsgRecList.delete(id2));
+					this.mvc.app.updateNotif();
+				}
+				else{
+					trace("suppr elem : ", id2);
+					trace("type of elem suppr : ", typeof id2);
+					trace("delete : ",this.mvc.app.convMsgRecList.delete(id1));
+					this.mvc.app.updateNotif();
+				}
+				trace("list conv : ", this.mvc.app.convMsgRecList);
         let request = "getConvFromId/" + id1 + "/" + id2;
         this.convList = await Comm.get(request);
         return this.convList.response.return;
@@ -17,7 +31,7 @@ class TchatModel extends Model {
     async pushMessage(content){
         let request = "sendMessage/";
         let data = {message : content, src : this.mvc.view.src, dest : this.mvc.view.dest};
-        let result = await Comm.post(request, data);
+        let result = await Commcontent.post(request, data);
 				trace("retour server : ", result.response);
         return result.response.return;
     }

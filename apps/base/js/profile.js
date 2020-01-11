@@ -413,22 +413,6 @@ class ProfileView extends View {
 
 	}
 
-	/*
-	deleteProfile() {
-		this.mail.innerHTML = "";
-		this.profileName.innerHTML = "";
-		this.mail.innerHTML = "";
-		this.bio.innerHTML = "";
-		this.gender.innerHTML = "";
-		this.age.innerHTML = "";
-		this.region.innerHTML = "";
-		this.country.innerHTML = "";
-		this.games.innerHTML = ""
-		this.vocals.innerHTML = ""
-		this.languages.innerHTML = "";
-	}
-	*/
-
 	addGameToDisplay(game){
 
 		trace(game);

@@ -12,6 +12,8 @@ class Base {
 
 	async initialize() {
 
+		this.convMsgRecList = new Map();
+
 		this.registrationMVC = new MVC("registrationMVC", this, new RegistrationModel(), new RegistrationView(), new RegistrationControler());
 		await this.registrationMVC.initialize(); // run init async tasks
 
@@ -66,8 +68,33 @@ class Base {
 					trace('msg a notifier : ', data);
 					let message =  JSON.parse(data);
 					this.tchatMVC.view.addMessage(message.message,message.src," ");
+					trace("type of : ", typeof message.src);
+					if (this.convMsgRecList.has(parseInt(message.src))) {
+						this.convMsgRecList.set(parseInt(message.src),this.convMsgRecList.get(message.src)+1);
+					}else {
+						this.convMsgRecList.set(parseInt(message.src),1);
+					}
+					this.updateNotif();
 				});
       });
+		}
+
+		/**
+		 * @method updateNotif : update number message not read
+		 */
+		updateNotif(){
+			//add notif message with menu
+			let count = 0;
+			this.convMsgRecList.forEach( (countConv, conv) =>{
+				count = count + countConv;
+			});
+			if (count == 0) {
+				this.profileMVC.view.menuButton.innerHTML = "";
+				this.tchatMVC.view.menuButton.innerHTML = "";
+			}else{
+				this.profileMVC.view.menuButton.innerHTML = count;
+				this.tchatMVC.view.menuButton.innerHTML = count;
+			}
 		}
 
 		/**
@@ -81,22 +108,4 @@ class Base {
 			iconSpan.style.fontSize = size;
 			return iconSpan;
 		}
-
-	/**
-	 * @method onIOConnect : socket is connected
-	 */
-	/*onIOConnect() {
-		trace("yay IO connected");
-		this.io.on("dummy", packet => this.onDummyData(packet)); // listen to "dummy" messages
-		this.io.emit("dummy", {value: "dummy data from client"}) // send test message
-	}*/
-
-	/**
-	 * @method onDummyData : dummy data received from io server
-	 * @param {Object} data
-	 */
-	/*onDummyData(data) {
-		trace("IO data", data);
-		this.testMVC.controller.ioDummy(data); // send it to controller
-	}*/
 }
