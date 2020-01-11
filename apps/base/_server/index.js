@@ -553,8 +553,9 @@ class Base extends ModuleBase {
 			}
 			let maxTotal = 0;
 			let userWeight = 0;
-			if (u.id == data[0][0]){					// if the candidate is the requesting user, dont match him
-				trace("disqualified - self - ", u.id);
+			trace("#######  vérif : ", this.users[data[0][0]].tchats, u.id);
+			if (u.id == data[0][0] || this.users[data[0][0]].tchats.indexOf(u.id) != -1 ){					// if the candidate is the requesting user, dont match him
+				trace("disqualified - self or already tchating");
 				return false;
 			}
 			// platform
