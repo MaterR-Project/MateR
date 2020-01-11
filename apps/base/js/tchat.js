@@ -176,7 +176,7 @@ class TchatView extends View {
             messageDiv.style.margin = "5px";
             messageDiv.style.border = "medium solid #303030";
             messageDiv.style.width = "50%";
-            let messageContent = document.createElement("span");
+            let messageContent = document.createElement("div");
             messageContent.style.width = "100%";
 						messageContent.style.marginLeft="5px";
             messageDiv.appendChild(messageContent);
@@ -231,6 +231,7 @@ class TchatView extends View {
         messageDiv.style.color = "#FFFFFF";
         let messageContent = document.createElement("div");
         messageDiv.appendChild(messageContent);
+				messageContent.style.marginLeft="5px";
         messageContent.style.fontSize = "15px";
         messageContent.innerHTML = content;
         let messageHeader = document.createElement("div");
@@ -322,7 +323,7 @@ class TchatController extends Controller {
         this.mvc.view.setName(await this.mvc.model.getName(this.mvc.view.dest));
     }
     // function to link to the model that sends a message and update the view
-    
+
     async sendMessage (content, src, dest){
       trace(content, src, dest)
       this.mvc.view.setStatus(await this.mvc.model.pushMessage(content, src, dest));
