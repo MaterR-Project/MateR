@@ -42,8 +42,8 @@ class Base extends ModuleBase {
 		let dest = param[1]
 		let src = this._getIdFromSessionId(ssid);
 		if(src != -1){
-			this.users[dest].tchats.push(src);
-			this.users[src].tchats.push(dest);
+			this.users[dest].tchats.push(parseInt(src));
+			this.users[src].tchats.push(parseInt(dest));
 			fs.writeFile("database/users.json", JSON.stringify(convText), "utf-8", (err) => {								// re write the fil
 				if(err) trace("could not rewrite the file");
 			});
