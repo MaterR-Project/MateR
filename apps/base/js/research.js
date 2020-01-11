@@ -641,17 +641,19 @@ class SearchController extends Controller {
 			trace("error: "+result.response.message);
 		}
 		else {
+			this.searchGameName = FD.get("game");
+			this.searchGamePlatform = FD.get("platform");
 			this.searchResults = result.response.return;
 			//this.mvc.view.fillErrorDisplay(result.response.message);
 			// Go to result
 			trace("go to result");
-			
+
 			this.mvc.view.deactivate();
 			this.mvc.view.destroy();
 			//this.mvc.app.resultMVC.view.updateWrongPsw(result.response.message);
 			this.mvc.app.resultMVC.view.attach(document.body); // attach view
 			this.mvc.app.resultMVC.view.activate(); // activate result interface
-			
+
 		}
 	}
 }

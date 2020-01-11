@@ -574,17 +574,20 @@ class ResultController extends Controller {
     }
 
     async startTalk(){
-				trace(this.mvc.view.searchResults);
-				trace(this.mvc.view.curIndex);
+				trace("searchResults : ",this.mvc.view.searchResults);
+				trace("curIndex : ",this.mvc.view.curIndex);
         let matchedUserId = await this.mvc.view.searchResults[this.mvc.view.curIndex - 1].user
-        trace(this.mvc.view.curIndex -1)
+				trace("matchedUserId : ",matchedUserId);
+        trace("curIndex - 1 : ",this.mvc.view.curIndex -1);
+				//let username = this.mvc.view.curDiv.childNodes[0].childNodes[0].innerHTML
         await this.mvc.view.searchResults.splice(this.mvc.view.curIndex-1, 1);
         this.mvc.view.curIndex--;
         this.mvc.view.moveRight();
-        let username = this.mvc.view.curDiv.childNodes[0].childNodes[0].innerHTML
         let src = this.mvc.app.profileMVC.model.id;
         //let dest = this.mvc.view.curDiv.childNodes[0].childNodes[1].innerHTML
-        let message = "This is the begining of your conversation with " + username + " who contacted you becaused you matched !"
+        let message = "---- Starting Tchat ----<br> I'm searching a mate to play "
+											+ this.mvc.app.searchMVC.controller.searchGameName
+											+ " on " + this.mvc.app.searchMVC.controller.searchGamePlatform;
         await this.mvc.model.addConvToUser(this.mvc.app.authenticationMVC.model.sessionId, matchedUserId);
         await this.mvc.model.createConv(src, matchedUserId);
         this.mvc.model.initConv(message, src, matchedUserId);
