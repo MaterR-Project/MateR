@@ -21,6 +21,23 @@ class ResultModel extends Model {
         }
         return this.profileList;
     }
+    async addConvToUser (ssid, dest){
+        let request = "addConvToUsers/" + ssid + "/" +dest;
+        let result = await Comm.get(request); 
+        trace(result)
+    }
+    async createConv(src, dest){
+        let request = "createConvForUsers/" + src + "/" + dest;
+        let result = await Comm.get(request);
+        trace(result)
+    }
+    async initConv(content, src, dest){
+        let request = "sendMessage/";
+        let data = {message : content, src : src, dest : dest};
+        let result = await Comm.post(request, data);
+				trace("retour server : ", result.response);
+        return result.response.return;
+    }
 
 }
 
@@ -101,7 +118,7 @@ class ResultView extends View {
             { score: 100, user: 1 },
             { score: 56.52173913043478, user: 2 },
             { score: 23.91304347826087, user: 3 },
-            { score: 15.217391304347826, user: 4 }
+            { score: 15.217391304347826, user: 5 }
           ] 
         this.mvc.controller.fetchProfile(-1);
 		this.addListeners(); // listen to events
@@ -198,7 +215,7 @@ class ResultView extends View {
     async keyPressed(event){
         if(event.which === 13){
             // start tchatting with this user
-            this.mvc.controller.startTalk("id");
+            this.mvc.controller.startTalk();
         }
         if(event.which === 37){
             // previous user
@@ -248,7 +265,7 @@ class ResultView extends View {
      */
     doubleTaped(){
         trace("was double tapped");
-        this.mvc.controller.startTalk("id");
+        this.mvc.controller.startTalk();
     }
 
     //build profiles
@@ -272,8 +289,13 @@ class ResultView extends View {
         nameDiv.style.flexDirection = "column";
         nameDiv.style.marginTop = "15%";
         let usernameSpan = document.createElement("h1");
+        usernameSpan.id = "username"
         usernameSpan.innerHTML = profile.username;
         nameDiv.appendChild(usernameSpan);
+        let tagSpan = document.createElement("span")
+        tagSpan.style.display ="none";
+        tagSpan.innerHTML = profile.id;
+        nameDiv.appendChild(tagSpan);
         let compSpan = document.createElement("span");
         nameDiv.appendChild(compSpan);
         compSpan.style.fontStyle = "italic";
@@ -556,13 +578,19 @@ class ResultController extends Controller {
         this.mvc.view.moveLeft();
     }
  
-    async startTalk(id){
-        trace("engaging conversation with : ", id);
+    async startTalk(){
         let a = await this.mvc.view.searchResults[this.mvc.view.curIndex - 1].user
         trace(a -1)
         await this.mvc.view.searchResults.splice(a-1, 1)
         this.mvc.view.curIndex--;
         this.mvc.view.moveRight();
+        let username = this.mvc.view.curDiv.childNodes[0].childNodes[0].innerHTML
+        let src = this.mvc.app.profileMVC.model.id;
+        let dest = this.mvc.view.curDiv.childNodes[0].childNodes[1].innerHTML
+        let message = "This is the begining of your conversation with " + username + " who contacted you becaused you matched !"
+        await this.mvc.model.addConvToUser(this.mvc.app.authenticationMVC.model.sessionId, dest);
+        await this.mvc.model.createConv(src, dest);
+        this.mvc.model.initConv(message, src, dest)
         //TODO : call server for notification sending to the other user and adding conv
     }
 
