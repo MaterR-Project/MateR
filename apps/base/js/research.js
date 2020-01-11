@@ -126,7 +126,7 @@ class SearchView extends View {
 
 		// Custom Search Fields
 		this.customSearchField = document.createElement("div");
-		this.customSearchField.style.display = "none";
+		this.customSearchField.style.visibility = "hidden";
 		this.customSearchField.style.flexDirection = "column";
 		this.customSearchField.style.alignItems = "center";
 		this.customSearchField.style.marginBottom = "5px";
@@ -455,8 +455,16 @@ class SearchView extends View {
 	}
 
 	customSearchButtonClick(){
-		this.gamesDiv.removeChild(this.customSearchButton);
-		this.customSearchField.style.display = "flex";
+		//this.gamesDiv.removeChild(this.customSearchButton);
+		if (this.customSearchField.style.visibility == "hidden"){
+			this.customSearchField.style.visibility = "";
+			this.customSearchField.style.display = "flex";
+		}
+		else{
+			this.customSearchField.style.visibility = "hidden";
+			this.customSearchField.style.display = "";
+		}
+
 	}
 
 	prioRequiredHandler(index, elem){
