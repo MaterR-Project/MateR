@@ -273,6 +273,41 @@ class SearchView extends View {
 		this.comboVocalsPrio.setAttribute("name", "vocalsPrio");
 		this.customSearchField.appendChild(this.comboVocalsPrio);
 
+		this.genderLabel = this.mvc.app.getElementIcon("icon-Gender", "auto");
+		this.genderLabel.style.width = "100%";
+		this.genderLabel.style.marginTop = "6px";
+		this.genderLabel.style.marginBottom = "6px";
+		this.genderLabel.innerHTML = " Gender :";
+		this.customSearchField.appendChild(this.genderLabel);
+
+		this.comboGender = document.createElement("select");
+		this.comboGender.setAttribute("name", "gender");
+		this.undefinedGender = document.createElement("option");
+		this.undefinedGender.value = "Gamer";
+		this.undefinedGender.appendChild (document.createTextNode("Gamer 8-)"));
+		this.maleGender = document.createElement("option");
+		this.maleGender.value = "Male";
+		this.maleGender.appendChild (document.createTextNode("Male"));
+		this.femaleGender = document.createElement("option");
+		this.femaleGender.value = "Female";
+		this.femaleGender.appendChild (document.createTextNode("Female"));
+		this.comboGender.appendChild(this.undefinedGender);
+		this.comboGender.appendChild(this.maleGender);
+		this.comboGender.appendChild(this.femaleGender);
+		this.comboGender.selectedIndex = -1;
+		this.customSearchField.appendChild(this.comboGender);
+
+		this.labelGenderPrio = document.createElement("span");
+		this.labelGenderPrio.style.marginTop = "6px";
+		this.labelGenderPrio.style.width = "100%";
+		this.labelGenderPrio.innerHTML = "Priority :";
+		this.labelGenderPrio.style.fontSize = "small";
+		this.customSearchField.appendChild(this.labelGenderPrio);
+		this.comboGenderPrio = document.createElement("select");
+		this.comboPrioList.push(this.comboGenderPrio);
+		this.comboGenderPrio.setAttribute("name", "genderPrio");
+		this.customSearchField.appendChild(this.comboGenderPrio);
+
 		this.ageLabel = this.mvc.app.getElementIcon("icon-Year", "auto");
 		this.ageLabel.style.width = "100%";
 		this.ageLabel.style.marginTop = "6px";
