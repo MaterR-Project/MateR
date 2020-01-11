@@ -551,66 +551,105 @@ class Base extends ModuleBase {
 				return false;
 			}
 			// play style
-			if (data[4][0].length != 0 &&  data[4][1] != "-1" && this._getStyleWeight(u, data[1][0], data[4][0]) == 0){ // user cares about playstyle, filled up the field but styles dont match
-				trace("disqualified - playstyle");
-				return false; //skip the user if playstyles dont match
+			if (data[4][0].length != 0){
+				if(this._getStyleWeight(u, data[1][0], [data[4][0]]) == 0){
+					trace("disqualified - playstyle", u.id);
+					return false; //skip the user if playstyles dont match
+				}
+			} else if (data[4][0].length == 0){						// user doesnt care
+				let playstyleArray = [];
+				this.users[data[0][0]].games.map(g =>{
+					if(g.name == data[1][0] && g.platform == data[2][0])
+						playstyleArray.push(g.playstyles);
+				})
+				if(this._getStyleWeight(u, data[1][0], playstyleArray) == 0){
+					trace("disqualified - playstyle", u.id);
+					return false; //skip the user if playstyles dont match
+				}
 			}
 			// game level
-			if(data[3][1] != "-1"){		// user cares about level
+			if(data[3][1] == "-1"){		// use user profile
+				let levelArray = [];
+				this.users[data[0][0]].games.map(g =>{
+					if(g.name == data[1][0]){
+						if(! levelArray.includes(g.level))
+							levelArray.push(g.level);
+					}
+				})
+				userWeight += parseInt(2 * this._getLevelWeight(u, data[1][0], levelArray))
+				maxTotal += 10;
+			} else {					// use given profile
 				userWeight += parseInt(data[3][1] * (2 * this._getLevelWeight(u, data[1][0], data[3][0]))); // 2* to set the importance of the level and multiply by priority
 				maxTotal += parseInt(data[3][1]) * 10;
 			}
 			// country
-			if(data[6][1] != "-1"){		// user cares about country, get the wight of the candidate's country
+			if(data[6][1] == "-1"){
+				if(this.users[data[0][0]].country != undefined){	// if user's country field was filled
+					userWeight += parseInt(6 * this._getCountryWeight(u, this.users[data[0][0]].country));
+					maxTotal += 6;
+				}
+			} else {
 				userWeight += parseInt(data[6][1] * 6 * this._getCountryWeight(u, data[6][0]));
 				maxTotal += parseInt(data[6][1]) * 6;
 			}
 			//region
-			if(data[5][1] != "-1"){		// user cares about region, get the weight of the candidate's region
+			if(data[5][1] == "-1"){
+				userWeight += parseInt(4 * this._getRegionWeight(u, this.users[data[0][0]].region));
+				maxTotal += 4;
+			} else {
 				userWeight += parseInt(data[5][1] * 4 * this._getRegionWeight(u, data[5][0]));
 				maxTotal += parseInt(data[5][1]) * 4;
 			}
 			//languages
-			if(data[7][1] != "-1"){		// user cares about languages, get the weight of candidate's languages
-				let tmp;
-				if(data[7][0].length == 0){																// empty array, aka no language given
-					tmp = parseInt(this._getLanguagesWeight(u, this.users[data[0][1[0]].languages]));	// use user's languages by default
-				} else{																					// else use the data provided by search
-					tmp = parseInt(this._getLanguagesWeight(u, data[7][0]));
-				}
-				if (tmp == -1){							// if candidate has no language in common, dont match him
-					trace("disqualified - language")
-					return false;
-				} else {								// else, append the weight
+			let tmp;
+			if(data[7][1] == "-1"){
+				let langArray = this.users[data[0][0]].languages;
+				tmp = parseInt(this._getLanguagesWeight(u, langArray));	// use user's languages by default
+			} else{
+				tmp = parseInt(this._getLanguagesWeight(u, data[7][0]));
+			}
+			if(tmp == - 1){
+				trace("disqualified - language")
+				return false;
+			} else{
+				if(data[7][1] == "-1"){
+					userWeight += parseInt(tmp * 0.75);
+					maxTotal += 3;
+				} else{
 					userWeight += parseInt(data[7][1] * tmp * 0.75)
 					maxTotal += parseInt(data[7][1]) * 3;
 				}
 			}
 			// ages
-			if(data[10][1] != "-1"){					// user cares about age, get the weight of the candidate's age
+			if(data[10][1] == "-1"){
 				let date = new Date();
-				let year = date.getFullYear();			// grab current year
-				if(data[10][0].length == 0){			// empty array, aka no age given, user user's age by default
-					userWeight += parseInt(data[10][1] * 0.8 * this._getAgeWeight(u, year - this.users[data[0][0]].year, year));
-				} else{									// else use the provided age
-					userWeight += parseInt(data[10][1] * 0.8 * this._getAgeWeight(u, data[10][0], year));
-				}
+				let year = date.getFullYear();	
+				let targetAgeRange = this._getAgeRange(year - this.users[data[0][0]].year);
+				userWeight += 0.8 * parseInt(this._getAgeWeight(u, targetAgeRange, year));
+				maxTotal += 4;
+			}else {
+				let date = new Date();
+				let year = date.getFullYear();	
+				userWeight += 0.8 * parseInt(data[10][1]* this._getAgeWeight(u, data[10][0], year));
 				maxTotal += parseInt(data[10][1]) * 4;
 			}
 			// gender
-			if(parseInt(data[9][1]) != "-1") {		// if the user gives importance to the gender of his mate
-				if(u.gender != data[9][0] && u.gender != "Gamer"){	// if candidate doesnt have the specified gender
-					trace("disqualified - gender")
-					return false;										// if gender is different, skip the user
+			if(data[9][1] != "-1"){
+				if(u.gender != data[9][0] && u.gender != "Gamer"){
+					trace("disqualified - gender");
+					return false;
 				}
 			}
 			// vocals
-			if(data[8][1] != "-1"){					// user cares about vocals, get wieght of candidate's vocals
-				if(data[8][0].length != 0){				// if vocals were given
-					userWeight += parseInt(data[8][1] * 0.75 * this._getVocalsWeight(u, data[8][0]));
-					maxTotal += parseInt(data[8][1]) * 3;
-				}
+			if(data[8][1] == "-1"){
+				userWeight += 0.75 * parseInt(this._getVocalsWeight(u, this.users[data[0][0]].vocals));
+				maxTotal += 3;
+			} else{
+				userWeight += 0.75 * parseInt(data[8][1] * this._getVocalsWeight(u, data[8][0]));
+				maxTotal += parseInt(data[8][1] * 3);
 			}
+			
+
 			trace("max score is : ",maxTotal);							// maximum of points avalaible with provided importances
 			let compatibility = (userWeight * 100) / maxTotal;
 			trace(compatibility, "%");									// percentage compatibility with the request
@@ -668,8 +707,7 @@ class Base extends ModuleBase {
 		let weight = 0;
 		candidate.games.map(g =>{		// for each games of the candidate
 			if(g.name == targetGame){	// if user plays the desired game
-				trace(this.levels.indexOf(g.level), this.levels.indexOf(targetLevel))
-				let delta = this.levels.indexOf(g.level) - this.levels.indexOf(targetLevel);
+				let delta = this.levels.indexOf(g.level) - this.levels.indexOf(targetLevel[0]);
 				delta = Math.abs(delta);// difference of level
 				if (delta == 0){		// same levels
 					weight = 5;
@@ -716,8 +754,12 @@ class Base extends ModuleBase {
 		candidate.games.map(g =>{						// for each game the candidate plays
 			if(g.name == targetGame){					// if user plays the desired game
 				g.playstyles.map(p =>{					// for each of candidate's playstyles on this game
-					if(p == targetstyle){				// if same as required playstyle
-						weight = 1;						// user has a mathing playstyle
+					var a = 0
+					while(a < targetstyle.length){
+						if(p == targetstyle[0][a]){				// if same as required playstyle
+							weight = 1;						// user has a mathing playstyle
+						}
+						a++;
 					}
 				})
 			}
@@ -783,23 +825,30 @@ class Base extends ModuleBase {
 	 * @param {*} targetAge : required Age
 	 * @param {*} year : current year
 	 */
-	_getAgeWeight(candidate, targetAge, year){
+	_getAgeWeight(candidate, ageRange, year){
 		if(candidate.year == -1)						// if the user didnt give any birth year, set the weight to 0
 			return 0;
 		let candidateAge =  year - candidate.year;			  // extract the age of the candidate using his birth year and curent year
 		let candidateRange = this._getAgeRange(candidateAge); // get the candicate's age area
-		let targetRange = this._getAgeRange(targetAge);		  // get target age area
-		let delta = candidateRange - targetRange;			  // get delta of this
-		switch (delta){
-			case 0 : return 5;							// same age area
-			case 1 : return 4;							// candidate is slightly older
-			case -1 : return 3;							// candidate is slightly younger
-			case 2 : return 3;							// candidate is older
-			case -2 : return 2;							// candidate is younger
-			case 3 : return 2;							// candidate is really older
-			case (delta <= -3) : return 1;				// candidate is extremely younger
-			case (delta >= 4) : return 1;				// candidate is extremely older
-		}
+		let delta = candidateRange - ageRange;			  // get delta of this
+		let ret;
+		if(delta == 0)
+			ret = 5;
+		if(delta == 1)
+			ret = 4;
+		if(delta == -1)
+			ret = 3;
+		if(delta == 2)
+			ret = 3;
+		if(delta == -2)
+			ret = 2;
+		if(delta == 3)
+			ret = 2
+		if(delta >= 4)
+			ret = 1
+		if(delta <= -3)
+			ret = 1
+		return ret
 	}
 
 	/**
@@ -812,6 +861,9 @@ class Base extends ModuleBase {
 			if(this.ages[i] > age){
 				candidateRange =  this.ages.indexOf(this.ages[i]) - 1; // grab the age area the candidate fits in
 				break;
+			}
+			if(this.ages[this.ages.length-1] < age){
+				candidateRange = this.ages.length - 1;
 			}
 		}
 		return candidateRange;
