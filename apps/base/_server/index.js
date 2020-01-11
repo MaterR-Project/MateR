@@ -37,7 +37,6 @@ class Base extends ModuleBase {
 		//trace(this.languages,"\n",this.languages.length);
 	}
 
-
 	addConvToUsers(req, res, ...param){
 		let ssid = param[0];
 		let dest = param[1]
@@ -45,6 +44,9 @@ class Base extends ModuleBase {
 		if(src != -1){
 			this.users[dest].tchats.push(src);
 			this.users[src].tchats.push(dest);
+			fs.writeFile("database/users.json", JSON.stringify(convText), "utf-8", (err) => {								// re write the fil
+				if(err) trace("could not rewrite the file");
+			});
 			this.sendJSON(req, res, 200, {return : "ok"});
 		}
 
@@ -282,7 +284,7 @@ class Base extends ModuleBase {
 				convText.push({Id : source[1], Message : content[1], State : state, Time : time, Date : date})	// add the message to it along with timestamp
 				fs.writeFile(file, JSON.stringify(convText), "utf-8", (err) => {								// re write the fil
 					if(err) trace("could not rewrite the file");
-				})
+				});
 			})
 		}else{
 			this.sendJSON(req, res, 200, {return : "failed to send"});	// return an error to the sender
