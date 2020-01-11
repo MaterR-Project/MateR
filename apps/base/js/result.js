@@ -23,7 +23,7 @@ class ResultModel extends Model {
     }
     async addConvToUser (ssid, dest){
         let request = "addConvToUsers/" + ssid + "/" +dest;
-        let result = await Comm.get(request); 
+        let result = await Comm.get(request);
         trace(result)
     }
     async createConv(src, dest){
@@ -185,7 +185,7 @@ class ResultView extends View {
             }
         }
     }
-    
+
     handleswipe(isrightswipe){
         if (isrightswipe == 0){
             this.moveLeft();
@@ -215,7 +215,7 @@ class ResultView extends View {
         if(event.which === 37){
             // previous user
             this.mvc.controller.leftClicked();
-        } 
+        }
         if(event.which === 39){
             // next user
             this.mvc.controller.rightClicked();
@@ -352,7 +352,7 @@ class ResultView extends View {
         genderContent.style.width = "65%";
         genderContent.innerHTML = profile.gender;
         gender.appendChild(genderContent);
-        posIndex.appendChild(gender); 
+        posIndex.appendChild(gender);
         // add Country
         let country = document.createElement("div");
         let countryIco = this.mvc.app.getElementIcon("icon-Country", "auto");
@@ -368,7 +368,7 @@ class ResultView extends View {
         countryContent.style.width = "65%";
         countryContent.innerHTML = profile.country;
         country.appendChild(countryContent);
-        posIndex.appendChild(country);  
+        posIndex.appendChild(country);
         //  add region
         let region = document.createElement("div");
         let regionIco = this.mvc.app.getElementIcon("icon-Region", "auto");
@@ -406,7 +406,7 @@ class ResultView extends View {
         languagesStr = languagesStr.substring(0, languagesStr.length - 2);
         languagesContent.innerHTML = languagesStr;
         languages.appendChild(languagesContent);
-        posIndex.appendChild(languages);  
+        posIndex.appendChild(languages);
         // add games
         let games = document.createElement("div");
         let gamesIco = this.mvc.app.getElementIcon("icon-Games", "auto");
@@ -572,28 +572,30 @@ class ResultController extends Controller {
     async leftClicked(){
         this.mvc.view.moveLeft();
     }
- 
+
     async startTalk(){
-        let a = await this.mvc.view.searchResults[this.mvc.view.curIndex - 1].user
-        trace(a -1)
-        await this.mvc.view.searchResults.splice(a-1, 1)
+				trace(this.mvc.view.searchResults);
+				trace(this.mvc.view.curIndex);
+        let matchedUserId = await this.mvc.view.searchResults[this.mvc.view.curIndex - 1].user
+        trace(this.mvc.view.curIndex -1)
+        await this.mvc.view.searchResults.splice(this.mvc.view.curIndex-1, 1);
         this.mvc.view.curIndex--;
         this.mvc.view.moveRight();
         let username = this.mvc.view.curDiv.childNodes[0].childNodes[0].innerHTML
         let src = this.mvc.app.profileMVC.model.id;
-        let dest = this.mvc.view.curDiv.childNodes[0].childNodes[1].innerHTML
+        //let dest = this.mvc.view.curDiv.childNodes[0].childNodes[1].innerHTML
         let message = "This is the begining of your conversation with " + username + " who contacted you becaused you matched !"
-        await this.mvc.model.addConvToUser(this.mvc.app.authenticationMVC.model.sessionId, dest);
-        await this.mvc.model.createConv(src, dest);
-        this.mvc.model.initConv(message, src, dest)
+        await this.mvc.model.addConvToUser(this.mvc.app.authenticationMVC.model.sessionId, matchedUserId);
+        await this.mvc.model.createConv(src, matchedUserId);
+        this.mvc.model.initConv(message, src, matchedUserId);
         //TODO : call server for notification sending to the other user and adding conv
     }
 
     async fetchProfile(it){
-        if(it == -1){    
+        if(it == -1){
             if(this.mvc.view.searchResults.length != 0){
-                this.mvc.view.displayProfile(1, 
-                                            await this.mvc.model.getProfile(this.mvc.view.searchResults[this.mvc.view.curIndex-1].user), 
+                this.mvc.view.displayProfile(1,
+                                            await this.mvc.model.getProfile(this.mvc.view.searchResults[this.mvc.view.curIndex-1].user),
                                             this.mvc.view.searchResults[this.mvc.view.curIndex-1].score);                                        // display A on the visible div
 
             }                                                                                                                  // initial fetch : get the two first ( [empty, A, B]...), a and b are new
@@ -604,16 +606,16 @@ class ResultController extends Controller {
             }
                     }
         if(it == 0){                                                                                                                       // move right : only ftech the next one (...[a, b, C]...), a and b are reused, C is newly fetched
-            this.mvc.view.displayProfile(2, 
+            this.mvc.view.displayProfile(2,
                                         await this.mvc.model.getProfile(this.mvc.view.searchResults[this.mvc.view.curIndex + 1].user),
                                         this.mvc.view.searchResults[this.mvc.view.curIndex].score)                                     // put C on the right, ready for display at next swipe right
         }
-        if(it == 1){          
-            this.mvc.view.displayProfile(0, 
+        if(it == 1){
+            this.mvc.view.displayProfile(0,
                                         await this.mvc.model.getProfile(this.mvc.view.searchResults[this.mvc.view.curIndex-2].user),
                                         this.mvc.view.searchResults[this.mvc.view.curIndex].score);                                        // put A on visible div
             if(this.mvc.view.curIndex > 0){
-               this.mvc.view.displayProfile(1, 
+               this.mvc.view.displayProfile(1,
                                            await this.mvc.model.getProfile(this.mvc.view.searchResults[this.mvc.view.curIndex-1].user),
                                          this.mvc.view.searchResults[this.mvc.view.curIndex-1].score)// and if not at the end of the array, put D on left div
            }
