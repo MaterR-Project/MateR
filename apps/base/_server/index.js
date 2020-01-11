@@ -65,7 +65,7 @@ class Base extends ModuleBase {
 			path = "database/tchats/" + id2 + "_" + id1 + timestamp + ".json"
 		} else {
 			path = "database/tchats/" + id1 + "_" + id2 + timestamp + ".json"
-		} 
+		}
 		if(fs.existsSync(path) != 1){
 			fs.writeFileSync(path, "[]");
 			fs.chmodSync(path, 0o666, (error) =>{
@@ -530,7 +530,7 @@ class Base extends ModuleBase {
 		return researchObject;
 	}
 	/**
-	 * @method getMatchingProfile : array of compatible users
+	 * @method getMatchingProfiles : array of compatible users
 	 * @param {*} req
 	 * @param {*} res
 	 */
@@ -629,13 +629,13 @@ class Base extends ModuleBase {
 			// ages
 			if(data[10][1] == "-1"){
 				let date = new Date();
-				let year = date.getFullYear();	
+				let year = date.getFullYear();
 				let targetAgeRange = this._getAgeRange(year - this.users[data[0][0]].year);
 				userWeight += 0.8 * parseInt(this._getAgeWeight(u, targetAgeRange, year));
 				maxTotal += 4;
 			}else {
 				let date = new Date();
-				let year = date.getFullYear();	
+				let year = date.getFullYear();
 				userWeight += 0.8 * parseInt(data[10][1]* this._getAgeWeight(u, data[10][0], year));
 				maxTotal += parseInt(data[10][1]) * 4;
 			}
@@ -654,7 +654,7 @@ class Base extends ModuleBase {
 				userWeight += 0.75 * parseInt(data[8][1] * this._getVocalsWeight(u, data[8][0]));
 				maxTotal += parseInt(data[8][1] * 3);
 			}
-			
+
 
 			trace("max score is : ",maxTotal);							// maximum of points avalaible with provided importances
 			let compatibility = (userWeight * 100) / maxTotal;
@@ -675,7 +675,7 @@ class Base extends ModuleBase {
 	getProfileFromId(req, res, ...param) {
 		trace(param)
 		let id = [...param].join(" ");
-		let profile = 404; 
+		let profile = 404;
 		trace(this.users[id])								// error case
 		if (id != -1) {
 			profile = this._returnCopyOfObject(this.users[id]);
