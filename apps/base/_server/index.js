@@ -75,6 +75,17 @@ class Base extends ModuleBase {
 		this.sendJSON(req, res, 200, {return : "ok"})
 	}
 	/**
+	 * @method getAgesFromDatabase : array of age
+	 * @param {*} req
+	 * @param {*} res
+	 */
+	getAgesFromDatabase(req, res) {
+		// list of game names from games database
+		let data =  this.ages;
+		this.sendJSON(req, res, 200, {return: data}); // answer JSON
+	}
+
+	/**
 	 * @method getGameNamesFromDatabase : array of game names
 	 * @param {*} req
 	 * @param {*} res
@@ -467,86 +478,137 @@ class Base extends ModuleBase {
 	}
 
 	/**
+	 * @method search : handle search
+	 * @param {*} req
+	 * @param {*} res
+	 */
+	async _research(req, res) {
+		let data = await this._getDataFromFormDataPost(req);
+		//trace(data);
+		let researchObject = {};
+		data.forEach(elem => {
+			let addValue = (prop, value) => {
+				if(researchObject.hasOwnProperty(prop)){
+					researchObject[prop][0].push(value);
+				}
+				else{
+					researchObject[prop] = [[value]];
+				}
+			}
+			let addPrio = (prio, value) =>{
+				let prop = prio.substring(0, prio.length-4);
+				if(researchObject.hasOwnProperty(prop)){
+					researchObject[prop].push(value);
+				}
+				else{
+					researchObject[prop] = [[], value];
+				}
+			}
+			if (elem[0] == "game"){
+				researchObject.game = [elem[1], "suppr"]
+			}
+			else if (elem[0] == "platform"){
+				researchObject.platform = [elem[1], "suppr"]
+			}
+			else if (elem[0] == "originId"){
+				researchObject.originId = [elem[1], "suppr"]
+			}
+			else if (elem[0].includes("Prio")){
+				addPrio(elem[0], elem[1]);
+			}
+			else {
+				addValue(elem[0], elem[1]);
+			}
+		});
+		//trace(researchObject)
+		return researchObject;
+	}
+	/**
 	 * @method getMatchingProfile : array of compatible users
 	 * @param {*} req
 	 * @param {*} res
 	 */
 	async getMatchingProfiles(req, res){				// get a list of matching users to a specific search
 		trace("---- algo start ----");
-		let data = await this._getDataFromSearch(req);	// collect data from post request
+		let data = await this._research(req);		// collect data from post request
+		data = Object.values(data);
+		//let data = await this._getDataFromSearch(req);
+		data.unshift(data.pop());
 		trace(data);
+		//trace(this.users)
+
 		let matchingArray = [];
 		this.users.map(u =>{							// for each existing user, generate a matching score
 			let maxTotal = 0;
 			let userWeight = 0;
-			if (u.id == data[0][1][0]){					// if the candidate is the requesting user, dont match him
+			if (u.id == data[0][0]){					// if the candidate is the requesting user, dont match him
 				trace("disqualified - self");
 				return false;
 			}
 			// platform
-			if(this._getPlatformWeight(u, data[1][1][0], data[2][1][0]) == 0){	// if candidate plays the same game but not on the same platform dont match him
+			if(this._getPlatformWeight(u, data[1][0], data[2][0]) == 0){	// if candidate plays the same game but not on the same platform dont match him
 				trace("desqualified - platform");
 				return false;
 			}
 			// play style
-			if (data[4][1][0] != "" &&  data[4][2][0] != "-1" && this._getStyleWeight(u, data[1][1][0], data[4][1][0]) == 0){ // user cares about playstyle, filled up the field but styles dont match
+			if (data[4][0].length != 0 &&  data[4][1] != "-1" && this._getStyleWeight(u, data[1][0], data[4][0]) == 0){ // user cares about playstyle, filled up the field but styles dont match
 				trace("disqualified - playstyle");
 				return false; //skip the user if playstyles dont match
 			}
 			// game level
-			if(data[3][2][0] != "-1"){		// user cares about level
-				userWeight += parseInt(data[3][2][0] * (2 * this._getLevelWeight(u, data[1][1][0], data[3][1][0]))); // 2* to set the importance of the level and multiply by priority
-				maxTotal += parseInt(data[3][2][0]) * 10;
+			if(data[3][1] != "-1"){		// user cares about level
+				userWeight += parseInt(data[3][1] * (2 * this._getLevelWeight(u, data[1][0], data[3][0]))); // 2* to set the importance of the level and multiply by priority
+				maxTotal += parseInt(data[3][1]) * 10;
 			}
 			// country
-			if(data[6][2][0] != "-1"){		// user cares about country, get the wight of the candidate's country
-				userWeight += parseInt(data[6][2][0] * 6 * this._getCountryWeight(u, data[6][1][0]));
-				maxTotal += parseInt(data[6][2][0]) * 6;
+			if(data[6][1] != "-1"){		// user cares about country, get the wight of the candidate's country
+				userWeight += parseInt(data[6][1] * 6 * this._getCountryWeight(u, data[6][0]));
+				maxTotal += parseInt(data[6][1]) * 6;
 			}
 			//region
-			if(data[5][2][0] != "-1"){		// user cares about region, get the weight of the candidate's region
-				userWeight += parseInt(data[5][2][0] * 4 * this._getRegionWeight(u, data[5][1][0]));
-				maxTotal += parseInt(data[5][2][0]) * 4;
+			if(data[5][1] != "-1"){		// user cares about region, get the weight of the candidate's region
+				userWeight += parseInt(data[5][1] * 4 * this._getRegionWeight(u, data[5][0]));
+				maxTotal += parseInt(data[5][1]) * 4;
 			}
 			//languages
-			if(data[7][2][0] != "-1"){		// user cares about languages, get the weight of candidate's languages
+			if(data[7][1] != "-1"){		// user cares about languages, get the weight of candidate's languages
 				let tmp;
-				if(data[7][1].length == 0){																// empty array, aka no language given
+				if(data[7][0].length == 0){																// empty array, aka no language given
 					tmp = parseInt(this._getLanguagesWeight(u, this.users[data[0][1[0]].languages]));	// use user's languages by default
 				} else{																					// else use the data provided by search
-					tmp = parseInt(this._getLanguagesWeight(u, data[7][1]));
+					tmp = parseInt(this._getLanguagesWeight(u, data[7][0]));
 				}
 				if (tmp == -1){							// if candidate has no language in common, dont match him
 					trace("disqualified - language")
 					return false;
 				} else {								// else, append the weight
-					userWeight += parseInt(data[7][2][0] * tmp * 0.75)
-					maxTotal += parseInt(data[7][2][0]) * 3;
+					userWeight += parseInt(data[7][1] * tmp * 0.75)
+					maxTotal += parseInt(data[7][1]) * 3;
 				}
 			}
 			// ages
-			if(data[10][2][0] != "-1"){					// user cares about age, get the weight of the candidate's age
+			if(data[10][1] != "-1"){					// user cares about age, get the weight of the candidate's age
 				let date = new Date();
 				let year = date.getFullYear();			// grab current year
-				if(data[10][1].length == 0){			// empty array, aka no age given, user user's age by default
-					userWeight += parseInt(data[10][2][0] * 0.8 * this._getAgeWeight(u, year - this.users[data[0][1][0]].year, year));
+				if(data[10][0].length == 0){			// empty array, aka no age given, user user's age by default
+					userWeight += parseInt(data[10][1] * 0.8 * this._getAgeWeight(u, year - this.users[data[0][0]].year, year));
 				} else{									// else use the provided age
-					userWeight += parseInt(data[10][2][0] * 0.8 * this._getAgeWeight(u, data[10][1][0], year));
+					userWeight += parseInt(data[10][1] * 0.8 * this._getAgeWeight(u, data[10][0], year));
 				}
-				maxTotal += parseInt(data[10][2][0]) * 4;
+				maxTotal += parseInt(data[10][1]) * 4;
 			}
 			// gender
-			if(parseInt(data[9][2][0]) != "-1") {		// if the user gives importance to the gender of his mate
-				if(u.gender != data[9][1][0] && u.gender != "Gamer"){	// if candidate doesnt have the specified gender
+			if(parseInt(data[9][1]) != "-1") {		// if the user gives importance to the gender of his mate
+				if(u.gender != data[9][0] && u.gender != "Gamer"){	// if candidate doesnt have the specified gender
 					trace("disqualified - gender")
 					return false;										// if gender is different, skip the user
 				}
 			}
 			// vocals
-			if(data[8][2][0] != "-1"){					// user cares about vocals, get wieght of candidate's vocals
-				if(data[8][1].length != 0){				// if vocals were given
-					userWeight += parseInt(data[8][2][0] * 0.75 * this._getVocalsWeight(u, data[8][1]));
-					maxTotal += parseInt(data[8][2][0]) * 3;
+			if(data[8][1] != "-1"){					// user cares about vocals, get wieght of candidate's vocals
+				if(data[8][0].length != 0){				// if vocals were given
+					userWeight += parseInt(data[8][1] * 0.75 * this._getVocalsWeight(u, data[8][0]));
+					maxTotal += parseInt(data[8][1]) * 3;
 				}
 			}
 			trace("max score is : ",maxTotal);							// maximum of points avalaible with provided importances
@@ -560,7 +622,7 @@ class Base extends ModuleBase {
 	}
 
 	/**
-	 * @method getProfileFromId : object profile
+	 * @method _getProfileFromId : object profile
 	 * @param {*} req
 	 * @param {*} res
 	 * @param  {...*} param : Id name
@@ -606,6 +668,7 @@ class Base extends ModuleBase {
 		let weight = 0;
 		candidate.games.map(g =>{		// for each games of the candidate
 			if(g.name == targetGame){	// if user plays the desired game
+				trace(this.levels.indexOf(g.level), this.levels.indexOf(targetLevel))
 				let delta = this.levels.indexOf(g.level) - this.levels.indexOf(targetLevel);
 				delta = Math.abs(delta);// difference of level
 				if (delta == 0){		// same levels

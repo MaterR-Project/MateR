@@ -21,6 +21,7 @@ class ProfileModel extends Model {
 			//alert("Invalid Cookie - You'll need to reconnect");
     	location.reload();
 		}
+		this.games = result.response.return.games;
 		trace(this.id, result.response.return);
 		return result.response.return;
 	}
@@ -68,12 +69,13 @@ class ProfileView extends View {
     this.mainDiv.style.justifyContent = "center";
 		this.mainDiv.style.display = "flex";
 		this.mainDiv.style.justifyContent = "space-between";
-		this.mainDiv.style.height = "90%";
+		this.mainDiv.style.height = "100%";
 		this.mainDiv.style.width = "100%";
     this.mainDiv.style.flexDirection = "column";
     this.stage.appendChild(this.mainDiv);
 
 		this.topBtnDiv = document.createElement("div");
+		this.topBtnDiv.style.marginTop = "5px";
 		this.mainDiv.appendChild(this.topBtnDiv);
 
 		this.topBtnDiv.style.display = "flex";
@@ -88,6 +90,7 @@ class ProfileView extends View {
 		// create disconnect btn
 		this.logoutButton = document.createElement("span");
 		this.logoutButton.setAttribute("class", "icon-disconnect");
+		this.logoutButton.style.marginTop = "7px";
 		//this.logoutButton.innerHTML = "Disconnect";
 		this.logoutButton.style.fontSize = "45px";
 		this.logoutButton.style.marginRight="10px";
@@ -300,6 +303,7 @@ class ProfileView extends View {
     	this.mainDiv.appendChild(this.profileData);
 
 		this.footer = document.createElement("div");
+		this.footer.style.marginBottom = "10px";
 		this.footer.setAttribute("class", "footer");
 			//button for change profil infos
 			this.changeBtn = document.createElement("span");
@@ -512,13 +516,13 @@ class ProfileController extends Controller {
 
 	}
 
-	async searchClicked(params){
-		this.searchResult = await this.mvc.model.dummyRequest();
-		trace(this.searchResult);
+	searchClicked(params){
+		trace("search btn click", params);
 		this.mvc.view.deactivate();
+		//this.mvc.view.deleteProfile();
 		this.mvc.view.destroy();						// destroy current view
-		this.mvc.app.resultMVC.view.attach(document.body);// attach view of search MVC
-		this.mvc.app.resultMVC.view.activate();			// activate user interface of search MVC
+		this.mvc.app.searchMVC.view.attach(document.body);// attach view of search MVC
+		this.mvc.app.searchMVC.view.activate();			// activate user interface of search MVC
 	}
 
 	logoutClicked(params) {

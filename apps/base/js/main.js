@@ -62,7 +62,8 @@ class Base {
         this.io.on('authConfirm', data =>{
           console.log("authentication : "+data);
           if (data == "not ok") {
-						alert("authentication failed plz reload your browser");
+						//alert("authentication failed plz reload your browser");
+						location.reload();
           }
         });
 				this.io.on('msg', data => {
