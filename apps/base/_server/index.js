@@ -44,7 +44,7 @@ class Base extends ModuleBase {
 		if(src != -1){
 			this.users[dest].tchats.push(parseInt(src));
 			this.users[src].tchats.push(parseInt(dest));
-			fs.writeFile("database/users.json", JSON.stringify(convText), "utf-8", (err) => {								// re write the fil
+			fs.writeFile("database/users.json", JSON.stringify(this.users), "utf-8", (err) => {								// re write the fil
 				if(err) trace("could not rewrite the file");
 			});
 			this.sendJSON(req, res, 200, {return : "ok"});
