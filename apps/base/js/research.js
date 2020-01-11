@@ -639,11 +639,9 @@ class SearchController extends Controller {
 
 		if(result.response.return == 500){
 			trace("error: "+result.response.message);
-			//this.mvc.view.fillErrorDisplay(result.response.message);
 		}
 		else {
 			trace(result.response);
-			//this.mvc.view.fillErrorDisplay(result.response.message);
 			// Go to result
 			trace("go to result");
 			/*
