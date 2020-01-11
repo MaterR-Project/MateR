@@ -445,43 +445,8 @@ class Base extends ModuleBase {
 	 * @param {*} res
 	 */
 	async _research(req, res) {
-
 		let data = await this._getDataFromFormDataPost(req);
-		trace(data);
-		/*
-		[
-			[ 'game', 'Apex Legends' ],
-			[ 'platform', 'Windows' ],
-			[ 'levels', 'Casual' ],
-			[ 'levels', 'Experienced' ],
-			[ 'levelsPrio', '2' ],
-			[ 'playstyles', 'Serious Business' ],
-			[ 'playstylesPrio', '1' ],
-			[ 'region', 'Northern America' ],
-			[ 'regionsPrio', '3' ],
-			[ 'countries', 'Mexico' ],
-			[ 'countriesPrio', '2' ],
-			[ 'languages', 'English' ],
-			[ 'languagesPrio', '4' ],
-			[ 'vocals', 'Discord' ],
-			[ 'vocalsPrio', '3' ],
-			[ 'age', '14' ],
-			[ 'agePrio', '1' ]
-		] 		::index:487
-
-		[
-		  [ 'game', 'Apex Legends' ],
-		  [ 'platform', 'Windows' ],
-		  [ 'levelsPrio', '-1' ],
-		  [ 'playstylesPrio', '-1' ],
-		  [ 'regionsPrio', '-1' ],
-		  [ 'countriesPrio', '-1' ],
-		  [ 'languagesPrio', '-1' ],
-		  [ 'vocalsPrio', '-1' ],
-		  [ 'agePrio', '-1' ],
-		  [ 'originId', '1' ]
-		]
-		*/
+		//trace(data);
 		let researchObject = {};
 		data.forEach(elem => {
 			let addValue = (prop, value) => {
@@ -517,10 +482,8 @@ class Base extends ModuleBase {
 				addValue(elem[0], elem[1]);
 			}
 		});
-		trace(researchObject)
+		//trace(researchObject)
 		return researchObject;
-		// Call algo with object
-		//this.sendJSON(req, res, 200, {return: 500, message: "C'est normal"});
 	}
 	/**
 	 * @method getMatchingProfile : array of compatible users
@@ -529,10 +492,9 @@ class Base extends ModuleBase {
 	 */
 	async getMatchingProfiles(req, res){				// get a list of matching users to a specific search
 		trace("---- algo start ----");
-		let data = await this._research(req);
-		trace(Object.values(data));
+		let data = await this._research(req);		// collect data from post request
 		data = Object.values(data);
-		//let data = await this._getDataFromSearch(req);	// collect data from post request
+		//let data = await this._getDataFromSearch(req);
 		data.unshift(data.pop());
 		trace(data);
 		//trace(this.users)
@@ -551,7 +513,6 @@ class Base extends ModuleBase {
 				return false;
 			}
 			// play style
-			trace(data[4][0], data[4][1])
 			if (data[4][0].length != 0 &&  data[4][1] != "-1" && this._getStyleWeight(u, data[1][0], data[4][0]) == 0){ // user cares about playstyle, filled up the field but styles dont match
 				trace("disqualified - playstyle");
 				return false; //skip the user if playstyles dont match
