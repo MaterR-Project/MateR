@@ -37,6 +37,43 @@ class Base extends ModuleBase {
 		//trace(this.languages,"\n",this.languages.length);
 	}
 
+
+	addConvToUsers(req, res, ...param){
+		let ssid = param[0];
+		let dest = param[1]
+		let src = this._getIdFromSessionId(ssid);
+		if(src != -1){
+			this.users[dest].tchats.push(src);
+			this.users[src].tchats.push(dest);
+			this.sendJSON(req, res, 200, {return : "ok"});
+		}
+
+	}
+
+	createConvForUsers(req, res, ...param){
+		let id1 = param[0];
+		let id2 = param[1];
+		let time = new Date();
+		let month = time.getMonth() + 1;
+		if (month < 10) month = "0"+month;
+		let date = time.getDate()
+		if (date < 10) date = "0"+date;
+		let year = time.getFullYear();
+		let timestamp = "_" + date.toString() + month.toString() + year.toString();
+		let path;
+		if(id1 > id2){
+			path = "database/tchats/" + id2 + "_" + id1 + timestamp + ".json"
+		} else {
+			path = "database/tchats/" + id1 + "_" + id2 + timestamp + ".json"
+		} 
+		if(fs.existsSync(path) != 1){
+			fs.writeFileSync(path, "[]");
+			fs.chmodSync(path, 0o666, (error) =>{
+				console.log("changed file permissions")
+			})
+		}
+		this.sendJSON(req, res, 200, {return : "ok"})
+	}
 	/**
 	 * @method getGameNamesFromDatabase : array of game names
 	 * @param {*} req
@@ -222,6 +259,7 @@ class Base extends ModuleBase {
 			file = "database/tchats/" + file;					// get path to this file
 			fs.readFile(file, "utf-8", (err, data) => {		// read it
 				if(err) trace("error reading file, ", file, " : ", err);
+				trace(data);
 				var convText = JSON.parse(data);
 				let temp = new Date();
 				let minutes = temp.getMinutes();
@@ -530,7 +568,8 @@ class Base extends ModuleBase {
 	getProfileFromId(req, res, ...param) {
 		trace(param)
 		let id = [...param].join(" ");
-		let profile = 404; 								// error case
+		let profile = 404; 
+		trace(this.users[id])								// error case
 		if (id != -1) {
 			profile = this._returnCopyOfObject(this.users[id]);
 			delete profile["password"];
@@ -819,7 +858,8 @@ class Base extends ModuleBase {
 	 */
 	_sendLatestConv(id1, id2){
 		var fs = require("fs");
-		var regex = new RegExp(id1 + "_" +id2);			// create regexp with the two ID (sorted with format smallestID_biggestId)
+		if(id1 < id2) var regex = new RegExp(id1 + "_" +id2);			// create regexp with the two ID (sorted with format smallestID_biggestId)
+		if(id2 < id1) var regex = new RegExp(id2 + "_" +id1);			// create regexp with the two ID (sorted with format smallestID_biggestId)
 		var dir = fs.readdirSync("database/tchats");	// parse the chat directory
 		var list = [];
 		dir.forEach( i => {								// for each file in directory
