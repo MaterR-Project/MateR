@@ -14,9 +14,9 @@ class TchatModel extends Model {
         return this.convList.response.return;
     }
     // send a message to the server with the destination id and the source id
-    async pushMessage(content){
+    async pushMessage(content, src, dest){
         let request = "sendMessage/";
-        let data = {message : content, src : this.mvc.view.src, dest : this.mvc.view.dest};
+        let data = {message : content, src : src, dest : dest};
         let result = await Comm.post(request, data);
 				trace("retour server : ", result.response);
         return result.response.return;
@@ -147,7 +147,7 @@ class TchatView extends View {
         // call controller func to send this string to the dest;
         if(content !=""){
             this.addMessage(content, this.src, "sending...");
-            this.mvc.controller.sendMessage(content);
+            this.mvc.controller.sendMessage(content, this.src, this.dest);
             this.textInput.value = "";
         }
     }
@@ -322,8 +322,9 @@ class TchatController extends Controller {
         this.mvc.view.setName(await this.mvc.model.getName(this.mvc.view.dest));
     }
     // function to link to the model that sends a message and update the view
-    async sendMessage (content){
-        this.mvc.view.setStatus(await this.mvc.model.pushMessage(content));
-
+    
+    async sendMessage (content, src, dest){
+      trace(content, src, dest)
+      this.mvc.view.setStatus(await this.mvc.model.pushMessage(content, src, dest));
     }
 }
