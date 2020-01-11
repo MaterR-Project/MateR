@@ -523,7 +523,7 @@ class SearchView extends View {
 			trace("remove : ")//, this.comboPrioList, index)
 		}
 	}
-	
+
 	getGamesPlaformsList(data) {
 		let names = [];
 		let platforms = [];
@@ -639,7 +639,7 @@ class SearchController extends Controller {
 			//this.mvc.view.fillErrorDisplay(result.response.message);
 			// Go to result
 			trace("go to result");
-
+			this.mvc.view.quitViewUpdate();
 			this.mvc.view.deactivate();
 			this.mvc.view.destroy();
 			//this.mvc.app.resultMVC.view.updateWrongPsw(result.response.message);
