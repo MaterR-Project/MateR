@@ -12,7 +12,7 @@
     "tchats": [
       1, 2
     ],
-    "languages" : ["English, French"],
+    "languages" : ["English", "French"],
     "games": [
       {
         "name": "Apex Legends",
