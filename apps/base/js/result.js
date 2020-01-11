@@ -111,15 +111,10 @@ class ResultView extends View {
 	// activate UI
 	activate() {
         super.activate();
-        //this.mvc.controller.fetchProfile(this.mvc.app.searchMVC.model.searchResults);
+        this.searchResults = this.mvc.app.searchMVC.controller.searchResults;
+        trace(this.searchResults)
         this.last = 0;
         this.curIndex = 1;
-        this.searchResults = [
-            { score: 100, user: 1 },
-            { score: 56.52173913043478, user: 2 },
-            { score: 23.91304347826087, user: 3 },
-            { score: 15.217391304347826, user: 5 }
-          ] 
         this.mvc.controller.fetchProfile(-1);
 		this.addListeners(); // listen to events
 	}
@@ -595,14 +590,19 @@ class ResultController extends Controller {
     }
 
     async fetchProfile(it){
-        if(it == -1){                                                                                                                      // initial fetch : get the two first ( [empty, A, B]...), a and b are new
-            this.mvc.view.displayProfile(1, 
-                                        await this.mvc.model.getProfile(this.mvc.view.searchResults[this.mvc.view.curIndex-1].user), 
-                                        this.mvc.view.searchResults[this.mvc.view.curIndex-1].score);                                        // display A on the visible div
-            this.mvc.view.displayProfile(2,
-                                         await this.mvc.model.getProfile(this.mvc.view.searchResults[this.mvc.view.curIndex].user),
-                                         this.mvc.view.searchResults[this.mvc.view.curIndex].score)                                    // put B on the invisible div on the right
-        }
+        if(it == -1){    
+            if(this.mvc.view.searchResults.length != 0){
+                this.mvc.view.displayProfile(1, 
+                                            await this.mvc.model.getProfile(this.mvc.view.searchResults[this.mvc.view.curIndex-1].user), 
+                                            this.mvc.view.searchResults[this.mvc.view.curIndex-1].score);                                        // display A on the visible div
+
+            }                                                                                                                  // initial fetch : get the two first ( [empty, A, B]...), a and b are new
+            if(this.mvc.view.searchResults.length > 1){
+                this.mvc.view.displayProfile(2,
+                                            await this.mvc.model.getProfile(this.mvc.view.searchResults[this.mvc.view.curIndex].user),
+                                            this.mvc.view.searchResults[this.mvc.view.curIndex].score)                                    // put B on the invisible div on the right
+            }
+                    }
         if(it == 0){                                                                                                                       // move right : only ftech the next one (...[a, b, C]...), a and b are reused, C is newly fetched
             this.mvc.view.displayProfile(2, 
                                         await this.mvc.model.getProfile(this.mvc.view.searchResults[this.mvc.view.curIndex + 1].user),
