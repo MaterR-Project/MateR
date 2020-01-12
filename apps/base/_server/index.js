@@ -760,7 +760,7 @@ class Base extends ModuleBase {
 				}
 				this.games.map(a =>{
 					if(a.name == targetGame){
-						if(e.crossplay == true){
+						if(a.crossplay == true){
 							weight = 1;
 						}
 					}
