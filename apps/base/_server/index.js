@@ -758,7 +758,7 @@ class Base extends ModuleBase {
 					weight = 1;							// user has a mathing platform
 				}
 				this.games.map(a =>{
-					if(e.name == targetGame){
+					if(a.name == targetGame){
 						if(e.crossplay == true){
 							weight = 1;
 						}
