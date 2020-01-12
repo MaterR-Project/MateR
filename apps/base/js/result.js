@@ -80,7 +80,7 @@ class ResultView extends View {
         this.profileDiv.style.alignItems ="center";
         this.profileDiv.style.height = "85%";
         this.profileDiv.style.width = "100%";
-        this.profileDiv.style.justifyContent = "space-between";
+        this.profileDiv.style.justifyContent = "stretch";
         this.mainDiv.appendChild(this.profileDiv);
         // div displayed on the left of the dislayed div
         this.prevDiv = document.createElement("div");
@@ -93,9 +93,10 @@ class ResultView extends View {
         this.profileDiv.appendChild(this.leftBtn);
         // displayed div
         this.curDiv = document.createElement("div");
-        this.curDiv.style.overflow = "auto";
+				this.curDiv.setAttribute("class","profil");
+        //this.curDiv.style.overflow = "auto";
         this.curDiv.style.width = "100%";
-        this.curDiv.style.height = "90%";
+        //this.curDiv.style.height = "90%";
         this.profileDiv.appendChild(this.curDiv);
         //right btn
         this.rightBtn = document.createElement("a");
@@ -279,7 +280,7 @@ class ResultView extends View {
         // set name
         let nameDiv = document.createElement("div");
         nameDiv.style.display = "flex";
-		nameDiv.style.alignItems = "center";
+				nameDiv.style.alignItems = "center";
         nameDiv.style.justifyContent = "space-evenly";
         nameDiv.style.flexDirection = "column";
         nameDiv.style.marginTop = "15%";
@@ -461,6 +462,54 @@ class ResultView extends View {
         posIndex.appendChild(vocals);
     }
 
+		displayProfile2(index, profile, score){
+			trace(profile)
+			trace("display 2")
+			let posIndex;
+			profile = profile[0];
+			if(index == 0){
+					posIndex = this.prevDiv;
+			} else if(index == 1){
+					posIndex = this.curDiv;
+			} else{
+					posIndex = this.nextDiv;
+			}
+			posIndex.innerHTML = "";
+
+			let nameDiv = document.createElement("div");
+			nameDiv.style.display = "flex";
+			nameDiv.style.alignItems = "center";
+			nameDiv.style.justifyContent = "space-evenly";
+			nameDiv.style.flexDirection = "column";
+			nameDiv.style.marginBottom = "35px";
+			let usernameSpan = document.createElement("h1");
+			usernameSpan.id = "username"
+			usernameSpan.innerHTML = profile.username;
+			nameDiv.appendChild(usernameSpan);
+			let tagSpan = document.createElement("span")
+			tagSpan.style.display ="none";
+			tagSpan.innerHTML = profile.id;
+			nameDiv.appendChild(tagSpan);
+			let compSpan = document.createElement("span");
+			nameDiv.appendChild(compSpan);
+			compSpan.style.fontStyle = "italic";
+			compSpan.innerHTML = "Matching Score: " + Math.round(score) + "%"
+			posIndex.appendChild(nameDiv);
+
+			this.mvc.app.profileMVC.view.updateProfile(profile);
+
+			[...this.mvc.app.profileMVC.view.profileData.childNodes].map(elem => {
+				trace(elem);
+				if (elem != this.mvc.app.profileMVC.view.mailDiv
+					&& elem != this.mvc.app.profileMVC.view.newPswDiv
+					&& elem != this.mvc.app.profileMVC.view.confPswDiv
+					&& elem != this.mvc.app.profileMVC.view.oldPswDiv){
+					let clone = elem.cloneNode(true);
+					posIndex.appendChild(clone);
+				}
+			});
+		}
+
     addGameToDisplay(game, container){
 		// game div
 		let gameDiv = document.createElement("div");
@@ -597,28 +646,28 @@ class ResultController extends Controller {
     async fetchProfile(it){
         if(it == -1){
             if(this.mvc.view.searchResults.length != 0){
-                this.mvc.view.displayProfile(1,
+                this.mvc.view.displayProfile2(1,
                                             await this.mvc.model.getProfile(this.mvc.view.searchResults[this.mvc.view.curIndex-1].user),
                                             this.mvc.view.searchResults[this.mvc.view.curIndex-1].score);                                        // display A on the visible div
 
             }                                                                                                                  // initial fetch : get the two first ( [empty, A, B]...), a and b are new
             if(this.mvc.view.searchResults.length > 1){
-                this.mvc.view.displayProfile(2,
+                this.mvc.view.displayProfile2(2,
                                             await this.mvc.model.getProfile(this.mvc.view.searchResults[this.mvc.view.curIndex].user),
                                             this.mvc.view.searchResults[this.mvc.view.curIndex].score)                                    // put B on the invisible div on the right
             }
                     }
         if(it == 0){                                                                                                                       // move right : only ftech the next one (...[a, b, C]...), a and b are reused, C is newly fetched
-            this.mvc.view.displayProfile(2,
+            this.mvc.view.displayProfile2(2,
                                         await this.mvc.model.getProfile(this.mvc.view.searchResults[this.mvc.view.curIndex + 1].user),
                                         this.mvc.view.searchResults[this.mvc.view.curIndex].score)                                     // put C on the right, ready for display at next swipe right
         }
         if(it == 1){
-            this.mvc.view.displayProfile(0,
+            this.mvc.view.displayProfile2(0,
                                         await this.mvc.model.getProfile(this.mvc.view.searchResults[this.mvc.view.curIndex-2].user),
                                         this.mvc.view.searchResults[this.mvc.view.curIndex].score);                                        // put A on visible div
             if(this.mvc.view.curIndex > 0){
-               this.mvc.view.displayProfile(1,
+               this.mvc.view.displayProfile2(1,
                                            await this.mvc.model.getProfile(this.mvc.view.searchResults[this.mvc.view.curIndex-1].user),
                                          this.mvc.view.searchResults[this.mvc.view.curIndex-1].score)// and if not at the end of the array, put D on left div
            }
