@@ -631,7 +631,15 @@ class ResultController extends Controller {
 				//let username = this.mvc.view.curDiv.childNodes[0].childNodes[0].innerHTML
         await this.mvc.view.searchResults.splice(this.mvc.view.curIndex-1, 1);
         this.mvc.view.curIndex--;
-        this.mvc.view.moveRight();
+        trace(this.mvc.view.curIndex);
+        trace(this.mvc.view.searchResults)
+        if(this.mvc.view.curIndex == this.mvc.view.searchResults.length){
+            this.mvc.view.moveLeft();
+            this.mvc.view.moveLeft();
+            this.mvc.view.moveRight();
+        }else{
+            this.mvc.view.moveRight();
+        }
         let src = this.mvc.app.profileMVC.model.id;
         //let dest = this.mvc.view.curDiv.childNodes[0].childNodes[1].innerHTML
         let message = "---- Starting Tchat ----<br> I'm searching a mate to play "
