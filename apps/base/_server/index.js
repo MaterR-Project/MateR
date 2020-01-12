@@ -757,6 +757,13 @@ class Base extends ModuleBase {
 				if(g.platform == targetPlatform){		// and on the correct platform
 					weight = 1;							// user has a mathing platform
 				}
+				this.games.map(a =>{
+					if(e.name == targetGame){
+						if(e.crossplay == true){
+							weight = 1;
+						}
+					}
+				})
 			}
 		})
 		return parseInt(weight);						// 1 if plays game and same platform, 0 otherwise
