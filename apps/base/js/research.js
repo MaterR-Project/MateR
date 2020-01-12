@@ -128,6 +128,11 @@ class SearchView extends View {
 		this.customSearchButton.innerHTML = "Custom Search Fields";
 		this.gamesDiv.appendChild(this.customSearchButton);
 
+		this.loading = this.mvc.app.getElementIcon("icon-Loading", "45px");
+		this.loading.style.display = "none";
+		this.loading.style.marginTop = "50px"
+		this.gamesDiv.appendChild(this.loading);
+
 		// Custom Search Fields
 		this.customSearchField = document.createElement("div");
 		this.customSearchField.style.overflow = "auto";
@@ -436,8 +441,8 @@ class SearchView extends View {
 			}else{
 				this.updateComboWithList(e, this.prioList);
 			}
+			this.prioRequiredHandler(e.selectedIndex, e.previousSibling.previousSibling);
 		});
-
 	}
 
 	addListeners() {
@@ -595,8 +600,18 @@ class SearchView extends View {
 	}
 
 	quitViewUpdate(){
+		this.loading.style.display = "none";
+		this.customSearchField.style.display = "flex";
+		this.searchBtn.style.display = "flex";
 		this.updateComboWithList(this.comboPlatform, []);
 		this.customSearchField.style.visibility = "hidden";
+		this.loading.style.display = "none";
+	}
+
+	displayLoading(){
+		this.loading.style.display = "flex";
+		this.customSearchField.style.display = "none";
+		this.searchBtn.style.display = "none";
 	}
 
 }
@@ -623,6 +638,7 @@ class SearchController extends Controller {
 	}
 
 	async searchButtonWasClicked(FD){
+		this.mvc.view.displayLoading();
 		let result = await fetch('getMatchingProfiles/', {
 		  method: 'POST',
 		  body: FD
