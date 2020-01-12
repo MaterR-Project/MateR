@@ -63,7 +63,8 @@ class Base extends ModuleBase {
 		let year = time.getFullYear();
 		let timestamp = "_" + date.toString() + month.toString() + year.toString();
 		let path;
-		if(id1 > id2){
+		trace("createConvForUsers : true == ", (parseInt(id1) > parseInt(id2)), id1, id2);
+		if(parseInt(id1) > parseInt(id2)){
 			path = "database/tchats/" + id2 + "_" + id1 + timestamp + ".json"
 		} else {
 			path = "database/tchats/" + id1 + "_" + id2 + timestamp + ".json"
@@ -998,9 +999,9 @@ class Base extends ModuleBase {
 	 * @param {string} id2 : id of second user
 	 */
 	_sendLatestConv(id1, id2){
-		var fs = require("fs");
-		if(id1 < id2) var regex = new RegExp(id1 + "_" +id2);			// create regexp with the two ID (sorted with format smallestID_biggestId)
-		if(id2 < id1) var regex = new RegExp(id2 + "_" +id1);			// create regexp with the two ID (sorted with format smallestID_biggestId)
+		trace("sendLatestConv : ", id1, id2);
+		if(parseInt(id1) < parseInt(id2)) var regex = new RegExp(""+id1 + "_" +id2);			// create regexp with the two ID (sorted with format smallestID_biggestId)
+		if(parseInt(id2) < parseInt(id1)) var regex = new RegExp(""+id2 + "_" +id1);			// create regexp with the two ID (sorted with format smallestID_biggestId)
 		var dir = fs.readdirSync("database/tchats");	// parse the chat directory
 		var list = [];
 		dir.forEach( i => {								// for each file in directory
