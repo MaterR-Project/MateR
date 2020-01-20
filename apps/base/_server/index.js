@@ -544,36 +544,31 @@ class Base extends ModuleBase {
 	 * @param {*} res
 	 */
 	async getMatchingProfiles(req, res){				// get a list of matching users to a specific search
-		trace("---- algo start ----");
 		let data = await this._research(req);		// collect data from post request
 		data = Object.values(data);
-		//let data = await this._getDataFromSearch(req);
 		data.unshift(data.pop());
-		trace(data);
-		//trace(this.users)
 
 		let matchingArray = [];
 		this.users.map(u =>{							// for each existing user, generate a matching score
 			if(this.users[data[0][0]].tchats.includes(u.id)){
-				trace("desqualified - allready in conv - ", u.id)
+				trace("disqualified - allready in conv - ", u.id)
 				return false;
 			}
 			let maxTotal = 0;
 			let userWeight = 0;
-			trace("#######  vérif : ", this.users[data[0][0]].tchats, u.id);
 			if (u.id == data[0][0] || this.users[data[0][0]].tchats.indexOf(u.id) != -1 ){					// if the candidate is the requesting user, dont match him
-				trace("disqualified - self or already tchating");
+				trace("disqualified - self or already tchating - ", u.id);
 				return false;
 			}
 			// platform
 			if(this._getPlatformWeight(u, data[1][0], data[2][0]) == 0){	// if candidate plays the same game but not on the same platform dont match him
-				trace("desqualified - platform - ", u.id);
+				trace("disqualified - platform - ", u.id);
 				return false;
 			}
 			// play style
 			if (data[4][0].length != 0){
 				if(this._getStyleWeight(u, data[1][0], [data[4][0]]) == 0){
-					trace("disqualified - playstyle", u.id);
+					trace("disqualified - playstyle - ", u.id);
 					return false; //skip the user if playstyles dont match
 				}
 			} else if (data[4][0].length == 0){						// user doesnt care
@@ -583,7 +578,7 @@ class Base extends ModuleBase {
 						playstyleArray.push(g.playstyles);
 				})
 				if(this._getStyleWeight(u, data[1][0], playstyleArray) == 0){
-					trace("disqualified - playstyle", u.id);
+					trace("disqualified - playstyle - ", u.id);
 					return false; //skip the user if playstyles dont match
 				}
 			}
@@ -653,6 +648,7 @@ class Base extends ModuleBase {
 				userWeight += 0.8 * parseInt(data[10][1]* this._getAgeWeight(u, data[10][0], year));
 				maxTotal += parseInt(data[10][1]) * 4;
 			}
+
 			// gender
 			if(data[9][1] != "-1"){
 				if(u.gender != data[9][0] && u.gender != "Gamer"){
@@ -668,7 +664,6 @@ class Base extends ModuleBase {
 				userWeight += 0.75 * parseInt(data[8][1] * this._getVocalsWeight(u, data[8][0]));
 				maxTotal += parseInt(data[8][1] * 3);
 			}
-
 
 			trace("max score is : ",maxTotal);							// maximum of points avalaible with provided importances
 			let compatibility = (userWeight * 100) / maxTotal;
@@ -687,10 +682,8 @@ class Base extends ModuleBase {
 	 * @param  {...*} param : Id name
 	 */
 	getProfileFromId(req, res, ...param) {
-		trace(param)
 		let id = [...param].join(" ");
 		let profile = 404;
-		trace(this.users[id])								// error case
 		if (id != -1) {
 			profile = this._returnCopyOfObject(this.users[id]);
 			delete profile["password"];
@@ -724,22 +717,20 @@ class Base extends ModuleBase {
 	 * @param {*} targetLevel : required level
 	 */
 	_getLevelWeight(candidate, targetGame, targetLevel){
-		let weight = 0;
+		let weight = -1;
 		candidate.games.map(g =>{		// for each games of the candidate
 			if(g.name == targetGame){	// if user plays the desired game
 				let delta = this.levels.indexOf(g.level) - this.levels.indexOf(targetLevel[0]);
 				delta = Math.abs(delta);// difference of level
 				if (delta == 0){		// same levels
 					weight = 5;
-				}else if(delta == 1 ){	// almost same level
+				}else if(delta == 1){	// almost same level
 					weight = 2;
 				}else if (delta == 2){	// not really same level
 					weight = 1;
 				}else if (delta == 3){	// not same level at all
 					weight = 0;
 				}
-			}else {
-				weight = -1;			// user doesnt play the same game, elimination case
 			}
 		})
 		return parseInt(weight);
@@ -875,6 +866,8 @@ class Base extends ModuleBase {
 			ret = 1
 		if(delta <= -3)
 			ret = 1
+		if(candidate.id == 8264)
+			trace(candidateAge, candidateRange)
 		return ret
 	}
 
@@ -889,7 +882,7 @@ class Base extends ModuleBase {
 				candidateRange =  this.ages.indexOf(this.ages[i]) - 1; // grab the age area the candidate fits in
 				break;
 			}
-			if(this.ages[this.ages.length-1] < age){
+			if(this.ages[this.ages.length-1] <= age){
 				candidateRange = this.ages.length - 1;
 			}
 		}
