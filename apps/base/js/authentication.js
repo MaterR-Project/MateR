@@ -38,7 +38,6 @@ class AutenticationView extends View {
 
 		this.mainDiv = document.createElement("div");
 		this.mainDiv.style.display = "flex";
-		//this.mainDiv.style.justifyContent = "center";
 		this.mainDiv.style.alignItems = "center";
 		this.mainDiv.style.flexDirection = "column";
 
@@ -55,8 +54,6 @@ class AutenticationView extends View {
 		this.pseudoDiv.style.display = "flex";
     this.pseudoDiv.style.flexDirection = "column";
 		this.pseudoDiv.style.marginBottom = "10px";
-
-		//this.pseudoLabel = document.createElement("label");
 		this.pseudoLabel = this.mvc.app.getElementIcon("icon-Profile", "auto");
 		this.pseudoLabel.setAttribute("for","username");
 		this.pseudoLabel.style.fontSize = "20px";
@@ -77,7 +74,6 @@ class AutenticationView extends View {
 		this.passwordDiv.style.display = "flex";
     this.passwordDiv.style.flexDirection = "column";
 
-		//this.passwordLabel = document.createElement("label");
 		this.passwordLabel = this.mvc.app.getElementIcon("icon-Password", "auto");
 		this.passwordLabel.setAttribute("for","password");
 		this.passwordLabel.style.fontSize = "20px";
@@ -153,7 +149,6 @@ class AutenticationView extends View {
 	removeListeners() {
     this.connectBtn.removeEventListener("click", this.connectBtnHandler);
     this.createAccountBtn.removeEventListener("click", this.createAccountBtnHandler);
-		//trace("REMOVE !!!!!!!!!!!!!")
 	}
 
   connectClick(event) {
@@ -181,9 +176,7 @@ class AutenticationController extends Controller {
 		trace(["truc",2,{"bidule":"chouette"}]);
 	}
 
-	// TODO with profile.js
   async connectBtnWasClicked(pseudo, password) {
-		trace("btn click", pseudo, password);
 		if (this.verifyPassword(password)) {
 			let cryptPassword = sha512(password);
 			let response = await this.mvc.model.login(pseudo,cryptPassword)
@@ -191,7 +184,6 @@ class AutenticationController extends Controller {
 				this.mvc.view.updateWrongPsw(response.return);
 			}else{
 				document.cookie = "ssid="+this.mvc.model.sessionId+";";
-				trace("cookie : ", document.cookie);
 				this.mvc.app.initSocket(this.mvc.model.sessionId);
 				this.mvc.view.deactivate();
 				this.mvc.view.destroy();
