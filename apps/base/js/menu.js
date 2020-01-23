@@ -29,23 +29,20 @@ class MenuView extends View {
     }
 
 	initialize(mvc) {
-        trace("------------------ init")
         super.initialize(mvc);
         this.stage.style.display ="flex";
         this.stage.style.alignItems = "center";
-        //this.stage.justifiyContent = "space-between";
         this.mainDiv = document.createElement("div");
         this.mainDiv.style.display = "flex";
         this.mainDiv.style.flexDirection = "column";
-		//this.mainDiv.style.justifyContent = "space-between";
 		this.mainDiv.style.height = "100%";
 		this.mainDiv.style.width = "100%";
         this.stage.appendChild(this.mainDiv);
+
         // profile header
         this.profileDiv = document.createElement("div");
         this.mainDiv.appendChild(this.profileDiv);
         this.profileDiv.style.display = "flex";
-        //this.profileDiv.style.justifyContent = "space-around";
         this.profileDiv.style.alignItems = "center";
         this.profileDiv.style.height = "15%"
         this.profileDiv.style.border = "solid #999999";
@@ -56,11 +53,11 @@ class MenuView extends View {
         this.nameDiv = document.createElement("h2");
         this.profileDiv.appendChild(this.nameDiv);
         this.nameDiv.innerHTML = "My Profile";
+
         // search header
         this.searchDiv = document.createElement("div");
         this.mainDiv.appendChild(this.searchDiv);
         this.searchDiv.style.display = "flex";
-        //this.searchDiv.style.justifyContent = "space-around";
         this.searchDiv.style.alignItems = "center";
         this.searchDiv.style.height = "15%";
         this.searchDiv.style.border = "solid #999999";
@@ -71,11 +68,11 @@ class MenuView extends View {
         this.searchText = document.createElement("h2");
         this.searchDiv.appendChild(this.searchText);
         this.searchText.innerHTML = "Find some mates !";
+
         // conv header
         this.headerDiv = document.createElement("div");
         this.mainDiv.appendChild(this.headerDiv);
         this.headerDiv.style.display = "flex";
-        //this.headerDiv.style.justifyContent = "space-around";
         this.headerDiv.style.alignItems = "center";
         this.headerDiv.style.height = "15%"
         this.headerDiv.style.border = "solid #999999";
@@ -86,6 +83,7 @@ class MenuView extends View {
         this.msgDiv = document.createElement("h2");
         this.headerDiv.appendChild(this.msgDiv);
         this.msgDiv.innerHTML = "Tchats";
+
         // conversation summury div
         this.convDiv = document.createElement("div");
         this.mainDiv.appendChild(this.convDiv);
@@ -95,7 +93,6 @@ class MenuView extends View {
         this.convDiv.style.display = "flex";
         this.convDiv.style.flexDirection = "column";
         this.convDiv.style.alignItems = "center";
-        //this.convDiv.style.justifyContent = "center";
         this.convDiv.style.marginBottom = "15px"
 
     }
@@ -128,28 +125,28 @@ class MenuView extends View {
     }
     async displayShortConv(data){
         data.map(async e =>{
-            //trace(e);
+            // main div for each conversation
             let shortDiv = document.createElement("div");
             this.convDiv.appendChild(shortDiv);
-            //shortDiv.style.marginLeft = "10px";
-            //shortDiv.style.marginBottom = "15px";
             shortDiv.style.display = "flex";
             shortDiv.style.flexDirection = "column";
             shortDiv.style.width ="100%";
             shortDiv.style.border = "thin solid #999999"
+
             // notif
             let notifSpan = document.createElement("span");
             shortDiv.appendChild(notifSpan);    // display # of notifications, defaults to 0
             notifSpan.style.display = "none";
+
             // user name
             let userNameDiv = document.createElement("span");
             userNameDiv.style.fontSize = "20px";
             userNameDiv.style.fontWeight = "bold";
             userNameDiv.style.margin = "5px";
             shortDiv.appendChild(userNameDiv);
-            trace(e.message.Id);
             let name = await this.mvc.controller.goName(e.id);
             userNameDiv.innerHTML = name;
+
             // body
             let messageBody = document.createElement("span");
             messageBody.style.marginRight = "5px";
@@ -194,7 +191,6 @@ class MenuController extends Controller{
         this.mvc.app.profileMVC.view.activate();
     }
     goSearch(){
-        //trace("uncomment the lines below me !!");
         this.mvc.view.convDiv.innerHTML = "";
         this.mvc.view.deactivate();
         this.mvc.view.destroy();
@@ -203,13 +199,11 @@ class MenuController extends Controller{
     }
     async fetchConv(myId){
         this.convList = await this.mvc.model.getConv(myId);
-        trace("convList : ", this.convList);
         await this.mvc.view.displayShortConv(this.convList); // get the conersation list of this user
 
     }
     async goName(id){
         let name = await this.mvc.model.getName(id);
-        trace(name)
         return name;
     }
     goToConv(id){
