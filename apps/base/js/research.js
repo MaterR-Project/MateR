@@ -64,18 +64,13 @@ class SearchView extends View {
 
 		// form
 		this.form = document.createElement("form");
-		//this.form.style.overflow = "auto";
 		this.form.style.display = "flex";
 		this.form.style.alignItems = "center";
-		//this.form.style.justifyContent = "stretch";
 		this.form.style.alignContent = "stretch";
-		//this.form.style.justifyContent = "center";
 		this.form.style.flexDirection = "column";
 		this.form.style.marginBottom = "15px";
-		//this.form.style.top = "50px";
 		this.form.style.width = "100%";
 		this.form.style.height = "100%";
-		//this.form = document.createElement("div");
 		this.form.style.fontSize = "20px";
 		this.mainDiv.appendChild(this.form);
 
@@ -84,8 +79,6 @@ class SearchView extends View {
 		//games section
 		this.gamesDiv = document.createElement("div");
 		this.gamesDiv.style.display = "flex";
-		//this.gamesDiv.style.height = "15%";
-		//this.gamesDiv.style.height = "25%";
 		this.gamesDiv.style.flexDirection = "column";
 		this.gamesDiv.style.alignItems = "center";
 		this.gamesDiv.style.marginBottom = "10px";
@@ -151,15 +144,11 @@ class SearchView extends View {
 		this.gameLevel.style.display = "flex";
 		this.gameLevel.style.flexDirection = "column";
 		this.gameLevel.style.marginTop = "6px";
-		//this.gameLevel.style.fontSize = "small";
-		//this.gameLevel.style.display = "none";
 		this.customSearchField.appendChild(this.gameLevel);
 
 		this.comboLevels = document.createElement("select");
-		//this.comboLevels.size = "19";
 		this.comboLevels.setAttribute("multiple", "multiple");
 		this.comboLevels.setAttribute("name", "levels");
-		//this.comboLevels.style.display = "none";
 		this.gameLevel.appendChild(this.comboLevels);
 
 		this.labelLevelPrio = document.createElement("span");
@@ -180,7 +169,6 @@ class SearchView extends View {
 		this.playstylesLabel.style.flexDirection = "column";
 		this.playstylesLabel.style.marginTop = "10px";
 		this.customSearchField.appendChild(this.playstylesLabel);
-		//this.playstylesLabel.style.display = "none";
 		this.comboPlaystyles = document.createElement("select");
 		this.comboPlaystyles.setAttribute("name", "playstyles");
 		this.comboPlaystyles.setAttribute("multiple", "multiple");
@@ -384,7 +372,6 @@ class SearchView extends View {
 
 		this.footer = document.createElement("div");
 		this.footer.style.height = "57px";
-		//this.footer.style.alignSelf = "flex-end";
 		this.footer.setAttribute("class", "footer");
 		this.footer.style.justifyContent = "space-between";
 
@@ -395,13 +382,11 @@ class SearchView extends View {
 		this.searchBtn = document.createElement("button");
 		this.searchBtn.setAttribute("type", "submit");
 		this.searchBtn.setAttribute("class", "icon-Search");
-		//this.searchBtn.style.alignSelf = "flex-end";
 		this.searchBtn.style.backgroundColor = "#080808";
 		this.searchBtn.style.color = "#999999";
 		this.searchBtn.style.border = 0;
 		this.searchBtn.style.fontSize = "45px";
 		this.searchBtn.style.marginRight="10px";
-		//this.searchBtn.innerHTML = "Search";
 		this.footer.appendChild(this.searchBtn);
 
 		this.form.appendChild(this.footer);
@@ -425,7 +410,6 @@ class SearchView extends View {
 		super.attach(parent);
 		this.prioList = ["Very Low", "Low", "High", "Very High"];
 		this.particularPrio = ["Custom"];
-		//this.updategamePlatformWithGames(this.mvc.app.profileMVC.model.games);
 		this.gamesPlaformsList = this.getGamesPlaformsList(this.mvc.app.profileMVC.model.games);
 		this.updateComboWithList(this.comboName, this.gamesPlaformsList[0]);
 
@@ -465,12 +449,9 @@ class SearchView extends View {
 		this.customSearchButton.addEventListener("click", this.displayCustomFields);
 
 		this.prioSelectorHandler = e => {
-			trace(e)
-			trace(e.target.previousSibling.previousSibling)
 			this.prioRequiredHandler(e.target.selectedIndex, e.target.previousSibling.previousSibling)
 		};
 		this.comboPrioList.forEach((elem, index) => {
-			//this.indexPrio = index;
 			elem.addEventListener("change", this.prioSelectorHandler);
 		});
 
@@ -495,7 +476,6 @@ class SearchView extends View {
 	}
 
 	searchButtonClick(){
-		trace("searchButtonClick")
 		const FD = new FormData(this.form);
 		FD.append("originId", this.mvc.app.profileMVC.model.id)
 		this.mvc.controller.searchButtonWasClicked(FD);
@@ -506,26 +486,20 @@ class SearchView extends View {
 	}
 
 	customSearchButtonClick(){
-		//this.gamesDiv.removeChild(this.customSearchButton);
 		if (this.customSearchField.style.visibility == "hidden"){
 			this.customSearchField.style.visibility = "";
-			//this.customSearchField.style.display = "flex";
 		}
 		else{
 			this.customSearchField.style.visibility = "hidden";
-			//this.customSearchField.style.display = "flex";
 		}
 
 	}
 
 	prioRequiredHandler(index, elem){
-		trace("selectedIndex : ", elem.selectedIndex)
 		if(index != 0){
 			elem.setAttribute("required", "");
-			trace("add : ")//,this.comboPrioList, this.comboLevels, index)
 		}else{
 			elem.removeAttribute("required", "");
-			trace("remove : ")//, this.comboPrioList, index)
 		}
 	}
 
@@ -548,10 +522,7 @@ class SearchView extends View {
 	}
 
 	async displayCountriesForRegions(){
-		trace("truc");
-		//trace(arg);
 		let arg = this.comboRegions.options[this.comboRegions.selectedIndex].value.split(" ").join("/");
-		trace(arg);
 		let result = await Comm.get("getRegionCountriesFromRegionName/"+arg); // call server method to get country list
 		this.updateComboWithList(this.comboCountries, result.response.return);
 	}
@@ -628,10 +599,8 @@ class SearchController extends Controller {
 	}
 
 	menuClicked() {
-		trace("menu btn click");
 		this.mvc.view.quitViewUpdate();
 		this.mvc.view.deactivate();
-		//this.mvc.view.deleteProfile();
 		this.mvc.view.destroy(); 						 // destroy current view
 		this.mvc.app.menuMVC.view.attach(document.body); // attach view of menu MVC
 		this.mvc.app.menuMVC.view.activate(); 			 // activate user interface of menu MVC
@@ -645,23 +614,14 @@ class SearchController extends Controller {
 		});
 		result["response"] = await result["json"]();
 
-		//if(result.response.return == 500){
-		//	trace("error: "+result.response.message);
-		//}
-		//else {
 			this.searchGameName = FD.get("game");
 			this.searchGamePlatform = FD.get("platform");
 			this.searchResults = result.response.return;
-			//this.mvc.view.fillErrorDisplay(result.response.message);
 			// Go to result
-			trace("go to result");
 			this.mvc.view.quitViewUpdate();
 			this.mvc.view.deactivate();
 			this.mvc.view.destroy();
-			//this.mvc.app.resultMVC.view.updateWrongPsw(result.response.message);
 			this.mvc.app.resultMVC.view.attach(document.body); // attach view
 			this.mvc.app.resultMVC.view.activate(); // activate result interface
-
-		//}
 	}
 }
