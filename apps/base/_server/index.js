@@ -537,24 +537,24 @@ class Base extends ModuleBase {
 		let matchingArray = [];
 		this.users.map(u =>{							// for each existing user, generate a matching score
 			if(this.users[data[0][0]].tchats.includes(u.id)){
-				trace("disqualified - allready in conv - ", u.id)
+				//trace("disqualified - allready in conv - ", u.id)
 				return false;
 			}
 			let maxTotal = 0;
 			let userWeight = 0;
 			if (u.id == data[0][0] || this.users[data[0][0]].tchats.indexOf(u.id) != -1 ){					// if the candidate is the requesting user, dont match him
-				trace("disqualified - self or already tchating - ", u.id);
+				//trace("disqualified - self or already tchating - ", u.id);
 				return false;
 			}
 			// platform
 			if(this._getPlatformWeight(u, data[1][0], data[2][0]) == 0){	// if candidate plays the same game but not on the same platform dont match him
-				trace("disqualified - platform - ", u.id);
+				//trace("disqualified - platform - ", u.id);
 				return false;
 			}
 			// play style
 			if (data[4][0].length != 0){
 				if(this._getStyleWeight(u, data[1][0], [data[4][0]]) == 0){
-					trace("disqualified - playstyle - ", u.id);
+					//trace("disqualified - playstyle - ", u.id);
 					return false; //skip the user if playstyles dont match
 				}
 			} else if (data[4][0].length == 0){						// user doesnt care
@@ -564,7 +564,7 @@ class Base extends ModuleBase {
 						playstyleArray.push(g.playstyles);
 				})
 				if(this._getStyleWeight(u, data[1][0], playstyleArray) == 0){
-					trace("disqualified - playstyle - ", u.id);
+					//trace("disqualified - playstyle - ", u.id);
 					return false; //skip the user if playstyles dont match
 				}
 			}
@@ -610,7 +610,7 @@ class Base extends ModuleBase {
 				tmp = parseInt(this._getLanguagesWeight(u, data[7][0]));
 			}
 			if(tmp == - 1){
-				trace("disqualified - language - ", u.id)
+				//trace("disqualified - language - ", u.id)
 				return false;
 			} else{
 				if(data[7][1] == "-1"){
@@ -638,7 +638,7 @@ class Base extends ModuleBase {
 			// gender
 			if(data[9][1] != "-1"){
 				if(u.gender != data[9][0] && u.gender != "Gamer"){
-					trace("disqualified - gender - ", u.id);
+					//trace("disqualified - gender - ", u.id);
 					return false;
 				}
 			}
