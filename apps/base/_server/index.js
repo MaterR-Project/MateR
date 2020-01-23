@@ -18,19 +18,16 @@ class Base extends ModuleBase {
 		this.vocals = JSON.parse(fs.readFileSync('database/vocals.json', 'utf8'));
 		this.ages = JSON.parse(fs.readFileSync('database/ages.json', 'utf-8'));
 		this.sessions = new Map();
-		//trace(this.users,this.languages,this.levels,this.locals,this.playstyles,this.vocals);
 
 		// Create game names list
 		this.gamesName = new Array();
 		this.games.map(game => {this.gamesName.push(game.name)});
-		//trace(this.gamesName,"\n\n");
 
 		// Create region names list
 		this.regions = new Array();
 		this.locals.map(local => {this.regions.push(local.name)});
-		//trace(this.regions,"\n\n");
 
-		// Tests
+		// Debug Tests
 		//this.gamesName.map(name => {trace(name,"\n")});
 		//trace(this.games[0],"\n",this.games[0].crossplay);
 		//trace(this.users.length,"\n",this.users[2]);
@@ -192,7 +189,6 @@ class Base extends ModuleBase {
 	 * @param  {...*} param : ssId name
 	 */
 	getProfileFromSessionId(req, res, ...param) {
-		trace(param)
 		let ssId = [...param].join(" ");
 		let id = this._getIdFromSessionId(ssId); 		// profile id of session id
 		let profile = 404; 								// error case
@@ -236,7 +232,6 @@ class Base extends ModuleBase {
 	 */
 	async sendMessage(req, res){
 		let result = await this._getDataFromFormDataPost(req);
-		trace("message", result)
 		let content = result[0];						// extract message from data
 		let source = result[1];							// extract sender id from data
 		let destination = result[2];					// extract destination id from data
@@ -255,12 +250,9 @@ class Base extends ModuleBase {
 			}
 			let state = "not seen";
 			let tosend = JSON.stringify({message : content[1], src : source[1], dest : destination[1]}); // generate object to be sent to both users
-			//trace("sessions : ", this.sessions);
-			//trace("id : ", destination[1]);
 			if(sock != undefined){
 				trace("emit message");
 				sock.emit('msg', tosend);						// emit it on the destination socket
-				//state = "seen";
 			}
 			this.sendJSON(req, res, 200, {return : state}); 		// and send message confirmation to the sender
 
@@ -329,13 +321,9 @@ class Base extends ModuleBase {
 	login(req, res, username, password){
 		trace(username, password);
 		let profile = this.users.find(profile => profile.username == username && profile.password == password);	// get corresponding profile based on password and username
-		//trace("profile", profile);
-		//trace('users', this.users);
 		if (profile != undefined) {
 			let sessionId = this._createSessionId();			// generate a SSID and assign it to the user
 			this.sessions.set(sessionId, [profile.id, undefined]);
-			//trace(sessionId);
-			trace('session : ', this.sessions);
 			this.sendJSON(req, res, 200, {return: sessionId});	// return the SSID to the user or an error
 		}else{
 			this.sendJSON(req, res, 401, {return: "Wrong Login or Password"});
@@ -380,7 +368,6 @@ class Base extends ModuleBase {
   	getNameFromId(req, res, ...param){					// get name field from user ID
 	  let id = [...param].join(" ");
 	  let name = 404; // error
-	  trace(id);
 	  if(id != -1) name = this.users[id].username;
 	  let data = name;
 	  this.sendJSON(req, res, 200, {return : data}); //send JSON
@@ -481,12 +468,12 @@ class Base extends ModuleBase {
 			this.sendJSON(req, res, 200, {return: 200, message: "New Account Created"});
 			newProfile.id = this.users.length;
 			newProfile.tchats = [];
-			trace(newProfile);
+			trace("created user : ", newProfile);
 			this.users.push(newProfile);
 			//TODO UPDATE JSON In NEW FILE
 			fs.writeFile("database/users.json", JSON.stringify(this.users), function(err){
 				if(err) trace("couldnt write file");
-				trace( "write complete");
+				trace( "SUCCESS - write ew user on user file");
 			});
 
 		}
@@ -499,7 +486,6 @@ class Base extends ModuleBase {
 	 */
 	async _research(req, res) {
 		let data = await this._getDataFromFormDataPost(req);
-		//trace(data);
 		let researchObject = {};
 		data.forEach(elem => {
 			let addValue = (prop, value) => {
@@ -535,7 +521,6 @@ class Base extends ModuleBase {
 				addValue(elem[0], elem[1]);
 			}
 		});
-		//trace(researchObject)
 		return researchObject;
 	}
 	/**
@@ -544,6 +529,7 @@ class Base extends ModuleBase {
 	 * @param {*} res
 	 */
 	async getMatchingProfiles(req, res){				// get a list of matching users to a specific search
+		trace("---- BEGIN : match people ----")
 		let data = await this._research(req);		// collect data from post request
 		data = Object.values(data);
 		data.unshift(data.pop());
@@ -671,6 +657,7 @@ class Base extends ModuleBase {
 			matchingArray.push({score : Math.round(compatibility), user : u.id});	// create objetcs with score and id
 			matchingArray.sort((a, b) => (a.score > b.score) ? -1 : 1);	// sort the array of matching users biggest value first
 		})
+		trace("---- END : matching done ----");
 		trace(matchingArray);
 		this.sendJSON(req, res, 200, {return : matchingArray}); 		// send array to user
 	}
@@ -944,7 +931,7 @@ class Base extends ModuleBase {
 			var customWeight = valcpy.slice(valcpy.length - 1, valcpy.length);
 			// remove last element from values
 			valcpy.pop();
-			//send all formated data
+			// send all formated data
 			form.push([fieldname, valcpy, customWeight]);
     	});
     	busboy.on('finish', function() {
