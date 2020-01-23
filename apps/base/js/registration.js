@@ -39,27 +39,22 @@ class RegistrationModel extends Model {
 	}
 
 	loadLanguages(){
-		//trace(this.languges)
 		return this.languages;
 	}
 
 	loadGameNames(){
-		//trace(this.gameNames)
 		return this.gameNames;
 	}
 
 	loadPlaystyles(){
-		//trace(this.playstyles)
 		return this.playstyles;
 	}
 
 	loadLevels(){
-		//trace(this.levels)
 		return this.levels;
 	}
 
 	loadVocals(){
-		//trace(this.vocals)
 		return this.vocals;
 	}
 
@@ -87,8 +82,6 @@ class RegistrationView extends View {
 	initialize(mvc) {
 		super.initialize(mvc);
 
-
-		//
 		this.stage.style.display = "flex";
 		// axe y
 		this.stage.style.alignItems = "center";
@@ -117,36 +110,14 @@ class RegistrationView extends View {
 
 		// form
 		this.form = document.createElement("form");
-		//this.form.setAttribute("action", "register/");
-		//this.form.setAttribute("method", "POST");
 		this.form.style.overflow = "auto";
 		this.form.style.display = "flex";
 		this.form.style.alignItems = "center";
-		//this.form.style.justifyContent = "center";
 		this.form.style.flexDirection = "column";
 		this.form.style.marginBottom = "15px";
-		//this.form.style.top = "50px";
 
-
-		//this.form = document.createElement("div");
 		this.form.style.fontSize = "20px";
-		//this.form.style.overflow = "auto";
-		//this.form.style.marginBottom = "15%";
 		this.form.style.width = "100%";
-		//this.form.style.height = "50%";
-		// set the scroll box height depending on device resolution
-		//this.form.style.width = "70%";
-		/*if (sizeWidth > 1200) {
-			  this.form.style.width = "80%";
-			  this.form.style.height = "100%";
-			  this.mainDiv.style.height = "100%";
-		}
-		else if (sizeWidth > 992) {
-			this.form.style.width = "55%";
-		}
-		else if (sizeWidth > 768){
-			this.form.style.width = "60%";
-		}*/
 
 		// ask mail
 		this.mailDiv =document.createElement("div");
@@ -155,14 +126,12 @@ class RegistrationView extends View {
 		this.mailDiv.style.alignItems = "center";
 		this.mailDiv.style.marginBottom = "3%";
 		this.mailLabel = this.mvc.app.getElementIcon("icon-Mail", "auto");
-		//this.mailLabel = document.createElement("span");
 		this.mailLabel.style.margin = "2%";
 		this.mailLabel.style.width = "100%";
 		this.mailLabel.innerHTML = " E-Mail* :";
 		this.mailInput = document.createElement("input");
 		this.mailInput.setAttribute("name", "mail");
 		this.mailInput.setAttribute("required", "");
-		//this.mailDiv.appendChild(this.iconMail);
 		this.mailDiv.appendChild(this.mailLabel);
 		this.mailDiv.appendChild(this.mailInput);
 		this.form.appendChild(this.mailDiv);
@@ -171,11 +140,8 @@ class RegistrationView extends View {
 		this.usernameDiv =document.createElement("div");
 		this.usernameDiv.style.display = "flex";
 		this.usernameDiv.style.flexDirection = "column";
-		//this.usernameDiv.style.height = "35%";
 		this.usernameDiv.style.alignItems = "center";
 		this.usernameDiv.style.marginBottom = "3%";
-		//this.usernameDiv.style.justifyContent ="space-between";
-		//this.usernameLabel = document.createElement("span");
 		this.usernameLabel = this.mvc.app.getElementIcon("icon-Profile", "auto");
 		this.usernameLabel.style.margin = "2%";
 		this.usernameLabel.style.width = "100%";
@@ -186,15 +152,13 @@ class RegistrationView extends View {
 		this.usernameDiv.appendChild(this.usernameLabel);
 		this.usernameDiv.appendChild(this.usernameInput);
 		this.form.appendChild(this.usernameDiv);
+
 		// new password
 		this.passwordDiv =document.createElement("div");
 		this.passwordDiv.style.display = "flex";
-		//this.passwordDiv.style.height = "35%";
 		this.passwordDiv.style.flexDirection = "column";
 		this.passwordDiv.style.alignItems = "center";
 		this.passwordDiv.style.marginBottom = "3%";
-		//this.passwordDiv.style.justifyContent ="space-between";
-		//this.passwordLabel = document.createElement("span");
 		this.passwordLabel = this.mvc.app.getElementIcon("icon-Password", "auto");
 		this.passwordLabel.style.width = "100%";
 		this.passwordLabel.style.margin = "2%";
@@ -214,15 +178,13 @@ class RegistrationView extends View {
 		this.passwordDiv.appendChild(this.passwordLabelIntel);
 		this.passwordDiv.appendChild(this.passwordInput);
 		this.form.appendChild(this.passwordDiv);
+
 		// new password confirmation
 		this.confirmPasswordDiv =document.createElement("div");
 		this.confirmPasswordDiv.style.display = "flex";
-		//this.confirmPasswordDiv.style.height = "35%";
 		this.confirmPasswordDiv.style.flexDirection = "column";
 		this.confirmPasswordDiv.style.alignItems = "center";
 		this.confirmPasswordDiv.style.marginBottom = "3%";
-		//this.confirmPasswordDiv.style.justifyContent ="space-between";
-		//this.confirmPasswordLabel = document.createElement("span");
 		this.confirmPasswordLabel = this.mvc.app.getElementIcon("icon-Password", "auto");
 		this.confirmPasswordLabel.style.width = "100%";
 		this.confirmPasswordLabel.style.margin = "2%";
@@ -237,15 +199,10 @@ class RegistrationView extends View {
 		// bio section
 		this.bioDiv = document.createElement("div");
 		this.bioDiv.style.display = "flex";
-		//this.bioDiv.style.height = "15%";
 		this.bioDiv.style.flexDirection = "column";
 		this.bioDiv.style.alignItems = "center";
 		this.bioDiv.style.marginBottom = "3%";
-		//this.bioDiv.style.justifyContent = "space-between";
-		//this.bioLabel = document.createElement("span");
 		this.bioLabel = this.mvc.app.getElementIcon("icon-Bio", "auto");
-
-		//this.bioLabel.style.width = "100%";
 		this.bioLabel.style.margin = "2%";
 		this.bioLabel.innerHTML =" Bio :";
 		this.bioDiv.appendChild(this.bioLabel);
@@ -261,18 +218,16 @@ class RegistrationView extends View {
 		// Gender section
 		this.genderDiv = document.createElement("div");
 		this.genderDiv.style.display = "flex";
-		//this.genderDiv.style.height = "15%";
 		this.genderDiv.style.flexDirection = "column";
 		this.genderDiv.style.alignItems = "center";
 		this.genderDiv.style.marginBottom = "3%";
-		//this.genderDiv.style.justifyContent = "space-between";
-		//this.genderLabel = document.createElement("span");
 		this.genderLabel = this.mvc.app.getElementIcon("icon-Gender", "auto");
 		this.genderLabel.style.width = "100%";
 		this.genderLabel.innerHTML = " Gender :";
 		this.genderLabel.style.margin = "2%";
 		this.comboGender = document.createElement("select");
 		this.comboGender.setAttribute("name", "gender");
+
 		// add undefined male and female options
 		this.undefinedGender = document.createElement("option");
 		this.undefinedGender.value = "Gamer";
@@ -293,25 +248,22 @@ class RegistrationView extends View {
 		// Year section (brith year)
 		this.yearDiv = document.createElement("div");
 		this.yearDiv.style.display = "flex";
-		//this.yearDiv.style.height = "15%";
 		this.yearDiv.style.flexDirection = "column";
 		this.yearDiv.style.alignItems = "center";
 		this.yearDiv.style.marginBottom = "3%";
-		//this.yearDiv.style.justifyContent = "space-between";
-		//this.yearLabel = document.createElement("span");
 		this.yearLabel = this.mvc.app.getElementIcon("icon-Year", "auto");
 		this.yearLabel.style.width = "100%";
 		this.yearLabel.innerHTML = " Birth Year :";
 		this.yearLabel.style.margin = "2%";
 		this.comboYear = document.createElement("select");
 		this.comboYear.setAttribute("name", "year");
+
 		// add an entry for earch 120 year before now
 		var currentYear = new Date().getFullYear();
 		for (var i = currentYear-120 ; i <= currentYear; i++) {
 			let option = document.createElement("option");
 			option.text = i;
 			option.value = i;
-			//if (i == currentYear) option.setAttribute("selected", "");
 			this.comboYear.appendChild(option);
 		}
 		let optionUnfefined = document.createElement("option");
@@ -326,12 +278,9 @@ class RegistrationView extends View {
 		// Regions section
 		this.regionsDiv = document.createElement("div");
 		this.regionsDiv.style.display = "flex";
-		//this.regionsDiv.style.height = "15%";
 		this.regionsDiv.style.flexDirection = "column";
 		this.regionsDiv.style.alignItems = "center";
 		this.regionsDiv.style.marginBottom = "3%";
-		//this.regDiv.style.justifyContent = "space-between";
-		//this.regionsLabel = document.createElement("span");
 		this.regionsLabel = this.mvc.app.getElementIcon("icon-Region", "auto");
 		this.regionsLabel.style.width = "100%";
 		this.regionsLabel.style.margin = "2%";
@@ -346,15 +295,11 @@ class RegistrationView extends View {
 
 		// Country section
 		this.countDiv = document.createElement("div");
-		//this.countDiv.style.visibility = "hidden";
 		this.countDiv.style.display = "none";
 		this.countDiv.setAttribute("id", "countries");
-		//this.countDiv.style.height = "15%";
 		this.countDiv.style.flexDirection = "column";
 		this.countDiv.style.alignItems = "center";
 		this.countDiv.style.marginBottom = "3%";
-		//this.countDiv.style.justifyContent = "space-between";
-		//this.countryLabel = document.createElement("span");
 		this.countryLabel = this.mvc.app.getElementIcon("icon-Country", "auto");
 		this.countryLabel.style.width = "100%";
 		this.countryLabel.style.margin = "2%";
@@ -368,12 +313,9 @@ class RegistrationView extends View {
 		// Lang section
 		this.langDiv = document.createElement("div");
 		this.langDiv.style.display = "flex";
-		//this.langDiv.style.height = "15%";
 		this.langDiv.style.flexDirection = "column";
 		this.langDiv.style.alignItems = "center";
 		this.langDiv.style.marginBottom = "3%";
-		//this.langDiv.style.justifyContent = "space-between";
-		//this.langLabel = document.createElement("span");
 		this.langLabel = this.mvc.app.getElementIcon("icon-bubble", "auto");
 		this.langLabel.style.margin = "2%";
 		this.langLabel.style.width = "100%";
@@ -389,12 +331,9 @@ class RegistrationView extends View {
 		//games section
 		this.gamesDiv = document.createElement("div");
 		this.gamesDiv.style.display = "flex";
-		//this.gamesDiv.style.height = "15%";
 		this.gamesDiv.style.flexDirection = "column";
 		this.gamesDiv.style.alignItems = "center";
 		this.gamesDiv.style.marginBottom = "3%";
-		//this.gamesDiv.style.justifyContent = "space-between";
-		//this.gamesLabel = document.createElement("span");
 		this.gamesLabel = this.mvc.app.getElementIcon("icon-Games", "auto");
 		this.gamesLabel.style.width = "100%";
 		this.gamesLabel.style.display = "flex";
@@ -475,12 +414,9 @@ class RegistrationView extends View {
 		// vocals section
 		this.vocalsDiv = document.createElement("div");
 		this.vocalsDiv.style.display = "flex";
-		//this.vocalsDiv.style.height = "15%";
 		this.vocalsDiv.style.flexDirection = "column";
 		this.vocalsDiv.style.alignItems = "center";
 		this.vocalsDiv.style.marginBottom = "3%";
-		//this.vocalsDiv.style.justifyContent = "space-between";
-		//this.vocalsLabel = document.createElement("span");
 		this.vocalsLabel = this.mvc.app.getElementIcon("icon-Vocal", "auto");
 		this.vocalsLabel.style.width = "100%";
 		this.vocalsLabel.style.margin = "2%";
@@ -502,14 +438,12 @@ class RegistrationView extends View {
 		this.createAccountButton = document.createElement("button");
 		this.createAccountButton.setAttribute("type", "submit");
 		this.createAccountButton.innerHTML = "Create Account";
-		//this.createAccountButton.style.alignSelf = "center";
 		this.createAccountButton.style.width = "60%";
 		this.createAccountButton.style.fontSize = "30px";
 		this.createAccountButton.style.marginTop = "15px";
 		this.createAccountButton.style.marginBottom = "15px";
 		this.form.appendChild(this.createAccountButton);
 
-  	//this.createAccountForm.appendChild(this.form);
 
 		// Form append
 		this.mainDiv.appendChild(this.form);
@@ -576,18 +510,12 @@ class RegistrationView extends View {
 	removeListeners() {
 
 		this.form.removeEventListener("submit", this.createButtonHandler);
-
 		this.loginButton.removeEventListener("click", this.loginButtonHandler);
-
 		this.addGameButton.removeEventListener("click", this.addGameButtonHandler);
-
 		[...this.gamesAddField.childNodes].map(child => {
 			child.removeEventListener("change", this.gamesAddFieldHandle);
 		});
-
 		this.comboRegions.removeEventListener("change", this.regionHandler);
-
-		//trace("remove register");
 	}
 
 	refreshListeners(){
@@ -598,7 +526,6 @@ class RegistrationView extends View {
 	createAccountButtonClick(){
 		if (this.passwordInput.value == this.confirmPasswordInput.value){
 			const FD = new FormData(this.form);
-			trace(FD, FD.password);
 			FD.set("password", sha512(this.passwordInput.value));
 			this.mvc.controller.createAccountButtonWasClicked(FD);
 		}
@@ -735,7 +662,6 @@ class RegistrationView extends View {
 	}
 
 	destroyNewGameEntry(gameAddFieldArray){
-		trace(gameAddFieldArray)
 		this.gamesAddField.removeChild(gameAddFieldArray);
 	}
 
@@ -772,7 +698,6 @@ class RegistrationControler extends Controller {
 	}
 
 	async gameComboWasChoosed(gameAddFieldArray, gameName){
-		//trace(gameAddFieldArray[1].options[gameAddFieldArray[1].selectedIndex].value)
 		this.mvc.view.updateComboWithList(gameAddFieldArray[3], await this.mvc.model.loadGamePlatforms(gameName));
 		this.mvc.view.updateComboWithList(gameAddFieldArray[5], this.mvc.model.loadPlaystyles());
 		this.mvc.view.updateComboWithList(gameAddFieldArray[7], this.mvc.model.loadLevels());
@@ -790,11 +715,6 @@ class RegistrationControler extends Controller {
 	}
 
 	async createAccountButtonWasClicked(FD){
-		//trace(FD.getAll("vocals"));
-		//let result = await Comm.post("register/", {vocals: "Discord"});
-		//let result = await Comm.post("register/", FD);
-		//let result = await fetch("/register", FD);
-		//const form = new FormData(document.getElementById('login-form'));
 		let result = await fetch('register/', {
 		  method: 'POST',
 		  body: FD
@@ -802,23 +722,15 @@ class RegistrationControler extends Controller {
 		result["response"] = await result["json"]();
 
 		if(result.response.return == 500){
-			trace("error: "+result.response.message);
 			this.mvc.view.fillErrorDisplay(result.response.message);
 		}
 		else {
-			trace(result.response);
-			//this.mvc.view.fillErrorDisplay(result.response.message);
 			// Go to authentication
 			this.mvc.view.deactivate();
 			this.mvc.view.destroy();
 			this.mvc.app.authenticationMVC.view.updateWrongPsw(result.response.message);
 			this.mvc.app.authenticationMVC.view.attach(document.body); // attach view
 			this.mvc.app.authenticationMVC.view.activate(); // activate auth interface
-			/*
-			this.mvc.view.destroy();
-			this.mvc.app.profileMVC.view.attach(document.body); // attach view
-			this.mvc.app.profileMVC.view.activate(); // activate profile interface
-			*/
 		}
 	}
 
