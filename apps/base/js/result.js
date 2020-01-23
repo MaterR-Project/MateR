@@ -15,7 +15,6 @@ class ResultModel extends Model {
         this.idList = id.split(",");
         for(var i = 0; i < this.idList.length; i++){
             let request = "getProfileFromId/" + this.idList[i];
-            trace(request);
             let result = await Comm.get(request);
             this.profileList.push(result.response.return);
         }
@@ -24,18 +23,15 @@ class ResultModel extends Model {
     async addConvToUser (ssid, dest){
         let request = "addConvToUsers/" + ssid + "/" +dest;
         let result = await Comm.get(request);
-        trace(result)
     }
     async createConv(src, dest){
         let request = "createConvForUsers/" + src + "/" + dest;
         let result = await Comm.get(request);
-        trace(result)
     }
     async initConv(content, src, dest){
         let request = "sendMessage/";
         let data = {message : content, src : src, dest : dest};
         let result = await Comm.post(request, data);
-				trace("retour server : ", result.response);
         return result.response.return;
     }
 
@@ -94,9 +90,7 @@ class ResultView extends View {
         // displayed div
         this.curDiv = document.createElement("div");
 				this.curDiv.setAttribute("class","profil");
-        //this.curDiv.style.overflow = "auto";
         this.curDiv.style.width = "100%";
-        //this.curDiv.style.height = "90%";
         this.profileDiv.appendChild(this.curDiv);
         //right btn
         this.rightBtn = document.createElement("a");
@@ -113,7 +107,6 @@ class ResultView extends View {
 	activate() {
         super.activate();
         this.searchResults = this.mvc.app.searchMVC.controller.searchResults;
-        trace(this.searchResults)
         this.last = 0;
         this.curIndex = 1;
         this.mvc.controller.fetchProfile(-1);
@@ -260,14 +253,11 @@ class ResultView extends View {
      * @method doubleTaoed : triggers the controller for a double tap
      */
     doubleTaped(){
-        trace("was double tapped");
         this.mvc.controller.startTalk();
     }
 
     //build profiles
 	displayProfile2(index, profile, score){
-			trace(profile)
-			trace("display 2")
 			let posIndex;
 			profile = profile[0];
 			if(index == 0){
@@ -302,7 +292,6 @@ class ResultView extends View {
 			this.mvc.app.profileMVC.view.updateProfile(profile);
 
 			[...this.mvc.app.profileMVC.view.profileData.childNodes].map(elem => {
-				trace(elem);
 				if (elem != this.mvc.app.profileMVC.view.mailDiv
 					&& elem != this.mvc.app.profileMVC.view.newPswDiv
 					&& elem != this.mvc.app.profileMVC.view.confPswDiv
@@ -426,16 +415,9 @@ class ResultController extends Controller {
     }
 
     async startTalk(){
-				trace("searchResults : ",this.mvc.view.searchResults);
-				trace("curIndex : ",this.mvc.view.curIndex);
         let matchedUserId = await this.mvc.view.searchResults[this.mvc.view.curIndex - 1].user
-				trace("matchedUserId : ",matchedUserId);
-        trace("curIndex - 1 : ",this.mvc.view.curIndex -1);
-				//let username = this.mvc.view.curDiv.childNodes[0].childNodes[0].innerHTML
         await this.mvc.view.searchResults.splice(this.mvc.view.curIndex-1, 1);
         this.mvc.view.curIndex--;
-        trace(this.mvc.view.curIndex);
-        trace(this.mvc.view.searchResults)
         if(this.mvc.view.curIndex == this.mvc.view.searchResults.length){
             this.mvc.view.moveLeft();
             this.mvc.view.moveLeft();
@@ -444,10 +426,9 @@ class ResultController extends Controller {
             this.mvc.view.moveRight();
         }
         let src = this.mvc.app.profileMVC.model.id;
-        //let dest = this.mvc.view.curDiv.childNodes[0].childNodes[1].innerHTML
         let message = "---- Starting Tchat ----<br> I'm searching a mate to play "
 											+ this.mvc.app.searchMVC.controller.searchGameName
-											+ " on " + this.mvc.app.searchMVC.controller.searchGamePlatform;
+											+ " on " + this.mvc.app.searchMVC.controller.searchGamePlatform + " are you up ?";
         await this.mvc.model.addConvToUser(this.mvc.app.authenticationMVC.model.sessionId, matchedUserId);
         await this.mvc.model.createConv(src, matchedUserId);
         this.mvc.model.initConv(message, src, matchedUserId);
