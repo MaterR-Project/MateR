@@ -58,8 +58,6 @@ class TchatView extends View {
         this.headDiv.style.height = "15%";
         this.headDiv.style.borderBottom ="thick solid #303030";
         this.menuButton = this.mvc.app.getElementIcon("icon-Menu", "45px");
-        //this.menuButton.innerHTML = "Menu";
-				//this.menuButton.style.fontSize = "15px";
         this.headDiv.appendChild(this.menuButton);
         // profile display
         this.profileDiv = document.createElement("span");
@@ -92,19 +90,15 @@ class TchatView extends View {
         this.textInput.setAttribute("maxlength", "2000");
         this.textInput.style.width = "100%";
         this.inputDiv.appendChild(this.textInput);
-        //this.sendBtn = document.createElement("button");
 				this.sendBtn = this.mvc.app.getElementIcon("icon-paper-plane", "45px");
-        //this.sendBtn.style.width = "15%";
 				this.sendBtn.style.justifyContent = "center";
 				this.sendBtn.style.marginLeft = "10px";
 				this.sendBtn.style.marginRight = "10px";
 				this.sendBtn.style.marginTop = "8px";
         this.inputDiv.appendChild(this.sendBtn);
-        //this.sendBtn.innerHTML = "Send";
     }
     // atatch the view and collects the user's ID
     attach(parent, id){
-        //this.targetId = id; // get the id of the person you want to speak with
         this.dest = id;
         this.myId = this.mvc.app.profileMVC.model.id; // get my own id from the profile mvc
         this.src = this.myId;
@@ -191,8 +185,6 @@ class TchatView extends View {
             messageHeader.style.justifyContent = "space-between";
             messageHeader.style.color = "#b5b5b5";
             let statusDiv = document.createElement("span");
-            //let statusDiv = document.createElement("div");
-						//trace(e.State == "seen", this.src == e.Id)
             if(e.State == "seen" && this.src == e.Id){
                 statusDiv = this.mvc.app.getElementIcon("icon-seen", "auto");// e.State;
 								messageHeader.style.marginLeft="5px";
@@ -200,7 +192,6 @@ class TchatView extends View {
 						messageHeader.appendChild(statusDiv);
             let timeStamp = document.createElement("span");
 						timeStamp.innerHTML = e.Time;
-						//timeStamp.style.width = "100%";
 						timeStamp.style.justifyContent = "flex-end";
             messageHeader.appendChild(timeStamp);
         })
@@ -209,8 +200,6 @@ class TchatView extends View {
     }
     // adds a message to the view
     addMessage(content, src, state){
-        trace("adding message : ", content, "from user : ", src);
-
 				let lastMessage = document.getElementById("latest");
 				if (lastMessage){
 					lastMessage.removeAttribute("id"); // clear the id
@@ -268,9 +257,7 @@ class TchatView extends View {
 
 		// updates the latest sent message to set the message status
     setStatus(data){
-				trace("data setStatus : ",data);
         let lastMessage = document.getElementById("latest");
-				trace("lasr message : ", lastMessage);
 				lastMessage.removeAttribute("id"); // clear the id
 				lastMessage.innerHTML = "";
 				let statusDiv = document.createElement("span");
@@ -315,20 +302,12 @@ class TchatController extends Controller {
     }
     // function to link to the model that gets the message history and update the view
     async fetchConv(myId, targetId){
-        /*if(myId > targetId){
-            trace("asking for the conv : ", targetId, "_", myId);
-            this.mvc.view.displayConv(await this.mvc.model.getConv(targetId, myId));
-        }else{
-            trace("asking for the conv : ", myId, "_", targetId);
-            this.mvc.view.displayConv(await this.mvc.model.getConv(myId, targetId));
-        }*/
 				this.mvc.view.displayConv(await this.mvc.model.getConv(myId, targetId));
         this.mvc.view.setName(await this.mvc.model.getName(this.mvc.view.dest));
     }
     // function to link to the model that sends a message and update the view
 
     async sendMessage (content, src, dest){
-      trace(content, src, dest)
       this.mvc.view.setStatus(await this.mvc.model.pushMessage(content, src, dest));
     }
 }
