@@ -10,40 +10,18 @@ class ProfileModel extends Model {
 	}
 
 	async getProfile(){
-		//trace("get session id");
 		let result = await Comm.get("getProfileFromSessionId/"+this.mvc.app.authenticationMVC.model.sessionId);
-
 		this.id = result.response.return.id;
 
 		if (this.id == undefined){
 			this.mvc.view.stage.innerHTML = "";
 			document.cookie = "ssid=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
-			//alert("Invalid Cookie - You'll need to reconnect");
     	location.reload();
 		}
 		this.games = result.response.return.games;
-		trace(this.id, result.response.return);
 		return result.response.return;
 	}
 
-	async dummyRequest(){
-		//let data = {OriginId : "0", Game :"Apex Legends", Level : "Pro Player", Playstyle : "Try Hard", Country : "France", Region: "Western Europe", Languages: ["French", "English", "Arabic"], Age : "25", Genre : "", Vocals : ["Discord", "Skype"]}
-		let data = {
-			"originId" : ["0", "suppr"],
-			"game": ["Apex Legends", "suppr"],
-			"platform": ["Windows", "suppr"],
-			"level": ["Pro Player", "4"],
-			"playstyle": [["Try Hard"], "2"],
-			"region" : ["Northern America", "4"],
-			"pays" : ["Canada", "4"],
-			"languages": [["French", "English"], "4"],
-			"vocals": [["Discord", "Skype"], "-1"],
-			"genre": ["Male", "-1"],
-			"age": ["34", "-1"]
-		  }
-		let result = await Comm.post("getMatchingProfiles/", data);
-		return result.response.return;
-	}
 }
 
 class ProfileView extends View {
@@ -81,24 +59,24 @@ class ProfileView extends View {
 		this.topBtnDiv.style.display = "flex";
 		this.topBtnDiv.style.justifyContent = "space-between";
 		this.topBtnDiv.style.width ="100%";
+
 		// create search btn to open the conversation slide tab
 		this.menuButton = document.createElement("span");
 		this.menuButton.setAttribute("class", "icon-Menu");
 		this.menuButton.style.fontSize = "45px";
 		this.menuButton.style.marginLeft="10px";
 		this.topBtnDiv.appendChild(this.menuButton);
+
 		// create disconnect btn
 		this.logoutButton = document.createElement("span");
 		this.logoutButton.setAttribute("class", "icon-disconnect");
 		this.logoutButton.style.marginTop = "7px";
-		//this.logoutButton.innerHTML = "Disconnect";
 		this.logoutButton.style.fontSize = "45px";
 		this.logoutButton.style.marginRight="10px";
 		this.topBtnDiv.appendChild(this.logoutButton);
 
 		// header
 		this.header = document.createElement("div");
-			// create search btn to open the conversation slide tab
 
 			// create disconnect btn
 		this.mainDiv.appendChild(this.header);
@@ -119,15 +97,12 @@ class ProfileView extends View {
 			// Mail
 			this.mailDiv = document.createElement("div");
 			this.mailLabel = document.createElement("h4");
-			//this.mailLabel.style.display = "flex";
-			//this.mailLabel.style.justifyContent = "space-between";
 			this.mailIcon = this.mvc.app.getElementIcon("icon-Mail", "auto");
 			this.mailIcon.style.marginRight = "5px";
 			this.mailLabel.appendChild(this.mailIcon);
 			this.mailLabel.append(" E-mail :");
 			this.mailLabel.setAttribute("class","profil-label");
 			this.mailLabel.style.alignSelf = "flex-start";
-
 			this.mailDiv.appendChild(this.mailLabel);
 			this.mail = document.createElement("div");
 			this.mail.setAttribute("class","profil-element");
@@ -305,12 +280,11 @@ class ProfileView extends View {
 		this.footer = document.createElement("div");
 		this.footer.style.marginBottom = "10px";
 		this.footer.setAttribute("class", "footer");
-			//button for change profil infos
+			//button to change profil infos
 			this.changeBtn = document.createElement("span");
 			this.changeBtn.setAttribute("class", "icon-checkmark-no-changes");
 			this.changeBtn.style.fontSize = "45px";
 			this.changeBtn.style.marginLeft="10px";
-			//this.changeBtn.innerHTML = "Apply Changes";
 			this.footer.appendChild(this.changeBtn);
 
 			//button for search
@@ -318,7 +292,6 @@ class ProfileView extends View {
 			this.searchBtn.setAttribute("class", "icon-Search");
 			this.searchBtn.style.fontSize = "45px";
 			this.searchBtn.style.marginRight="10px";
-			//this.searchBtn.innerHTML = "Search";
 			this.footer.appendChild(this.searchBtn);
 
 		this.mainDiv.appendChild(this.footer);
@@ -327,13 +300,11 @@ class ProfileView extends View {
 
 	attach(parent){
 		super.attach(parent);
-		trace("init profile");
 		this.mvc.controller.initProfile();
 	}
 
 	// activate UI
 	activate() {
-		//this.mvc.controller.grabRegions();
 		super.activate();
 		this.addListeners(); // listen to events
 	}
@@ -359,7 +330,6 @@ class ProfileView extends View {
 	}
 
 	removeListeners() {
-		trace("remove profile")
 		this.logoutButton.removeEventListener("click", 	this.logoutHandler);
 		this.searchBtn.removeEventListener("click", 	this.searchHandler);
 		this.changeBtn.removeEventListener("click", 	this.applyHandler);
@@ -375,6 +345,7 @@ class ProfileView extends View {
 		this.mvc.controller.searchClicked();
 	}
 	applyClick(event) {
+		// TODO - modifiy profile
 		console.log("apply");					// link to the apply part of the controller
 
 	}
@@ -384,7 +355,6 @@ class ProfileView extends View {
 	/* -------------------------------------------------------------------- */
 
 	updateProfile(data) {
-		//console.log(data);
 		this.mail.innerHTML = data.mail;
 		this.profileName.innerHTML = data.username;
 		this.mail.innerHTML = data.mail;
@@ -418,9 +388,6 @@ class ProfileView extends View {
 	}
 
 	addGameToDisplay(game){
-
-		trace(game);
-
 		// game div
 		let gameDiv = document.createElement("div");
 			gameDiv.setAttribute("class","game");
@@ -473,13 +440,10 @@ class ProfileView extends View {
 						if (ps == psArray[psArray.length-1]) {
 							playStyleSpan.append(ps);
 						}else playStyleSpan.append(ps+", ");
-						//playStyleSpan.style.marginRight = "3px";
-						//playStyleSpan.style.alignSelf = "flex-end";
 						playStyleNames.appendChild(playStyleSpan);
 					});
 						playStyleNames.style.marginLeft = "10px";
 						playStyleNames.style.alignSelf = "flex-end";
-						//playStyleNames.innerHTML = game.playstyles.join(', ')
 					playstyle.appendChild(playStyleNames);
 
 				gameProperty.appendChild(playstyle);
@@ -517,22 +481,16 @@ class ProfileController extends Controller {
 	}
 
 	searchClicked(params){
-		trace("search btn click", params);
 		this.mvc.view.deactivate();
-		//this.mvc.view.deleteProfile();
 		this.mvc.view.destroy();						// destroy current view
 		this.mvc.app.searchMVC.view.attach(document.body);// attach view of search MVC
 		this.mvc.app.searchMVC.view.activate();			// activate user interface of search MVC
 	}
 
 	logoutClicked(params) {
-		trace("logout btn click", params);
-		//this.mvc.app.io.disconnect();
 		this.mvc.app.io.emit('logout', this.mvc.app.authenticationMVC.model.sessionId);
 		this.mvc.app.authenticationMVC.model.sessionId = undefined;
-		//trace(this.mvc.app.authenticationMVC.model.sessionId);
 		this.mvc.view.deactivate();
-		//this.mvc.view.deleteProfile();
 		document.cookie = "ssid=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
 		this.mvc.view.destroy(); 						 // destroy current view
 		this.mvc.app.authenticationMVC.view.attach(document.body); // attach view of authenticate MVC
@@ -540,9 +498,7 @@ class ProfileController extends Controller {
 	}
 
 	menuClicked() {
-		trace("menu btn click");
 		this.mvc.view.deactivate();
-		//this.mvc.view.deleteProfile();
 		this.mvc.view.destroy(); 						 // destroy current view
 		this.mvc.app.menuMVC.view.attach(document.body); // attach view of menu MVC
 		this.mvc.app.menuMVC.view.activate(); 			 // activate user interface of menu MVC
