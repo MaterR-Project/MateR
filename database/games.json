@@ -9,6 +9,15 @@
     "crossplay": false
   },
   {
+    "name" : "Borderlands 3",
+    "platforms" : [
+      "Windows",
+      "PS4",
+      "Xbox One"
+    ],
+    "crossplay" : false
+  },
+  {
     "name": "CS - GO",
     "platforms": [
       "Windows",
@@ -48,6 +57,15 @@
       "iOS"
     ],
     "crossplay": true
+  },
+  {
+    "name" : "Tom Clancy - The Division 2",
+    "platforms" : [
+      "Windows",
+      "PS4",
+      "Xbox One"
+    ],
+    "crossplay" : false
   },
   {
     "name": "GTA V",
@@ -141,6 +159,30 @@
       "iOS"
     ],
     "crossplay": false
+  },
+  {
+    "name" : "Raid : Shadow Legends",
+    "platforms" : [
+      "Android",
+      "iOS"
+    ],
+    "crossplay" : true
+  },
+  {
+    "name" : "Rainbow Six Siege",
+    "platforms" : [
+      "Windows",
+      "PS4",
+      "Xbox One"
+    ],
+    "crossplay" : false
+  },
+  {
+    "name" : "Tetris 99",
+    "platforms" : [
+      "Switch"
+    ],
+    "crossplay" : false
   },
   {
     "name": "World of Warcraft",
