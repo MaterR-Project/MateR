@@ -998,6 +998,3 @@ class Base extends ModuleBase {
 }
 
 module.exports = Base; // export app class
-
-
-// Iamgron was here
